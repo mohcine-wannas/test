@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.2.RELEASE</version>
+		<relativePath />
+	</parent>
+
+	<groupId>com.ayouris</groupId>
+	<artifactId>tawassol</artifactId>
+	<version>2.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>TAWASSOL : POM parent of all modules</name>
+	<description>TAWASSOL POM Parent</description>
+
+	<scm>
+		<url>http://192.168.0.125:7000/SalamGaz/tawassol-web</url>
+		<connection>scm:git:http://192.168.0.125:7000/SalamGaz/tawassol-web.git</connection>
+		<developerConnection>scm:git:http://192.168.0.125:7000/SalamGaz/tawassol-web.git</developerConnection>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<java.version>1.8</java.version>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.compiler.source>${maven.compiler.target}</maven.compiler.source>
+
+		<lombok.version>1.16.10</lombok.version>
+		<oracle.version>11.2.0</oracle.version>
+
+		<commons-lang3.version>3.3.1</commons-lang3.version>
+		<commons-collections4.version>4.1</commons-collections4.version>
+		<commons-configuration.version>1.9</commons-configuration.version>
+
+		<cxf.version>3.1.7</cxf.version>
+
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- tawassol project -->
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tawassol-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tawassol-repository</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tawassol-security</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tawassol-business</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tawassol-resource</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tawassol-reporting</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tawassol-messaging</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-spring-boot-starter-jaxrs</artifactId>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.cxf</groupId>
+						<artifactId>cxf-spring-boot-autoconfigure</artifactId>
+					</exclusion>
+				</exclusions>
+				<version>${cxf.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<!-- <optional>true</optional> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${commons-collections4.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>${commons-configuration.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<modules>
+		<module>tawassol-common</module>
+		<module>tawassol-resource</module>
+		<module>tawassol-repository</module>
+		<module>tawassol-security</module>
+		<module>tawassol-batch</module>
+		<module>tawassol-reporting</module>
+		<module>tawassol-messaging</module>
+		<module>tawassol-business</module>
+		<module>tawassol-rest</module>
+	</modules>
+
+</project>

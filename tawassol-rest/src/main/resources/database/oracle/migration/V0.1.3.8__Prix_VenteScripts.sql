@@ -1,0 +1,19 @@
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Janvier');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Février');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Mars');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Avril');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Mai');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Juin');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Juillet');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Août');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Septembre');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Octobre');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Novembre');
+Insert into MOIS (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'Décembre');
+
+Insert into ANNEE (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'2014');
+Insert into ANNEE (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'2015');
+Insert into ANNEE (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'2016');
+Insert into ANNEE (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'2017');
+Insert into ANNEE (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'2018');
+Insert into ANNEE (ID,CREATED_BY,CREATED_ON,UPDATED_BY,UPDATED_ON,LIBELLE) values (TAWASSOL.REF_DATA_SEQ.nextval,null,null,null,null,'2019');
