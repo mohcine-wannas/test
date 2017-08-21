@@ -1,1 +1,0 @@
-alter table "TAWASSOL"."PIECE_REGLEMENT" rename to "TYPE_PIECE_REGLEMENT";

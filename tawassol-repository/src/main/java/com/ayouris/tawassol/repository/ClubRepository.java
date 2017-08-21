@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
  * Created by chamakh on 06/01/2017.
  */
 @Repository
-public interface ClubRepository { //extends JpaRepository<Club, Long> {
+public interface ClubRepository extends JpaRepository<Club, Long> {
 
 }

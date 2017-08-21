@@ -1,7 +1,11 @@
 package com.ayouris.tawassol.security.config;
 
+import com.ayouris.tawassol.security.filter.SimpleCORSFilter;
+import com.ayouris.tawassol.security.filter.StatelessAuthenticationFilter;
+import com.ayouris.tawassol.security.filter.StatelessLoginFilter;
+import com.ayouris.tawassol.security.service.TokenAuthenticationService;
+import com.ayouris.tawassol.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,63 +17,60 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.ayouris.tawassol.security.filter.Http401UnauthorizedEntryPoint;
-import com.ayouris.tawassol.security.filter.TokenAuthenticationFilter;
-import com.ayouris.tawassol.security.service.UserService;
-
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan(basePackages = {"com.ayouris.tawassol", "org.springframework.security"})
 @Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
-    private final TokenAuthenticationFilter tokenAuthenticationFilter;
-
-    
     @Autowired
-    public SecurityConfig(UserService userService) {
+    private UserService userService;
+
+    @Autowired
+    private TokenAuthenticationService tokenAuthenticationService;
+
+    @Autowired
+    private SimpleCORSFilter simplecorsfilter;
+
+    public SecurityConfig() {
         super(true);
-        this.userService = userService;
-        this.tokenAuthenticationFilter = new TokenAuthenticationFilter();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // we use jwt so that we can disable csrf protection
         http.csrf().disable();
-        
-        http.antMatcher("/resources/**");
-        
+
         http
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.exceptionHandling().and()
-			.anonymous().and()
-			.servletApi().and()
-			.headers().cacheControl()
-        ;
-        
-        http.authorizeRequests()
-			.antMatchers("/tawassol/**").authenticated()
-			.antMatchers(HttpMethod.POST, "/tawassol/service/auth").permitAll()
-			.anyRequest().authenticated()
-			.and()
-			.anonymous().disable()
-			.exceptionHandling()
-			.authenticationEntryPoint(new Http401UnauthorizedEntryPoint())
+                .exceptionHandling().and()
+                .anonymous().and()
+                .servletApi().and()
+                .headers().frameOptions().disable().and()
+                .headers().cacheControl()
         ;
 
-        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
-        http.logout().logoutSuccessUrl("/").permitAll();
+        http.authorizeRequests()
+                .antMatchers("/", "/swagger-resources").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/sms/**").hasRole("USER")
+        ;
+
+        http.addFilterBefore(
+                new StatelessLoginFilter(
+                        "/login",
+                        tokenAuthenticationService,
+                        userService,
+                        authenticationManager()),
+                UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(
+                new StatelessAuthenticationFilter(tokenAuthenticationService),
+                UsernamePasswordAuthenticationFilter.class).addFilterBefore(simplecorsfilter, ChannelProcessingFilter.class);
     }
 
     @Bean
@@ -78,19 +79,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    /**
-     * Prevent TokenAuthenticationFilter will be added to Spring Boot filter chain.
-     * Only Spring Security must use it.
-     */
-    @Bean
-    public FilterRegistrationBean registration(TokenAuthenticationFilter filter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-        registration.setEnabled(true);
-        return registration;
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        System.out.print((new BCryptPasswordEncoder()).encode("123"));
         auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
@@ -99,3 +90,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return userService;
     }
 }
+
+

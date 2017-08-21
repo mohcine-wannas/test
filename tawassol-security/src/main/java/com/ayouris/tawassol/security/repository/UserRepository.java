@@ -1,17 +1,14 @@
 package com.ayouris.tawassol.security.repository;
 
-import java.util.List;
-
+import com.ayouris.tawassol.security.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.ayouris.tawassol.admin.model.entity.User;
-import com.ayouris.tawassol.common.repository.CommonRepository;
+import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CommonRepository<User>, CustomUserRepository  {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-	List<User> findBySiteId(Long userId);
-	List<User> findByUsername(String login);
-	List<User> findByMatricule(String matricule);
-	
+    Optional<User> findOneByUsername(String username);
+
 }

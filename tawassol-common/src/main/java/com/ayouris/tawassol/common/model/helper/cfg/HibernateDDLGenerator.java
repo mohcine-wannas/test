@@ -67,7 +67,7 @@ public class HibernateDDLGenerator {
 //        PoolProperties poolProperties = new PoolProperties();
 //
 //        poolProperties.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//        poolProperties.setUrl("jdbc:mysql://localhost:3316/frmsaf_db?autoReconnect=true&useUnicode=yes");
+//        poolProperties.setUrl("jdbc:mysql://localhost:3316/tawassol_db?autoReconnect=true&useUnicode=yes");
 //        poolProperties.setUsername("tifawin");
 //        poolProperties.setPassword("tifwork");
 //

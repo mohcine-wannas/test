@@ -18,7 +18,7 @@ import javax.persistence.SequenceGenerator;
  * @version 1.2
  */
 
-
+@Entity
 @Getter
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = EntityIdResolver.class, scope = CategorieSport.class)

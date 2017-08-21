@@ -19,7 +19,7 @@ import java.util.List;
  * @version 1.2
  */
 
-
+@Entity
 @Getter
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = EntityIdResolver.class, scope = Club.class)

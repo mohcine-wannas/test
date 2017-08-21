@@ -9,7 +9,7 @@ import com.ayouris.tawassol.common.model.helper.bean.EntityIdResolver;
 
 import javax.persistence.*;
 
-
+@Entity
 @Getter
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id", resolver = EntityIdResolver.class, scope = Categorie.class)

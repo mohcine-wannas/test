@@ -14,8 +14,8 @@ import static springfox.documentation.builders.PathSelectors.regex;
 /**
  * Created by chamakh on 18/03/2017.
  */
-//@Configuration
-//@EnableSwagger2
+@Configuration
+@EnableSwagger2
 public class SwaggerConfig {
     @Bean
     public Docket productApi() {
@@ -30,10 +30,10 @@ public class SwaggerConfig {
     private ApiInfo metaData() {
         ApiInfo apiInfo = new ApiInfo(
                 "Spring Boot REST API",
-                "Spring Boot REST API for SALAM GAZ",
+                "Spring Boot REST API for AYOURIS",
                 "1.0",
                 "Terms of service",
-                new Contact("Khalid CHAMAKH", "http://www.salamgaz.ma", "k.chamakh@salamgaz.ma"),
+                new Contact("Khalid CHAMAKH", "http://www.ayouris.com", "k.chamakh@ayouris.com"),
                 "",
                 "");
         return apiInfo;

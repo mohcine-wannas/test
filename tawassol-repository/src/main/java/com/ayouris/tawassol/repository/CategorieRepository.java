@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 /**
  * Created by chamakh on 06/01/2017.
  */
-public interface CategorieRepository { //extends JpaRepository<Categorie, Long> {
+@Repository
+public interface CategorieRepository extends JpaRepository<Categorie, Long> {
 
 }

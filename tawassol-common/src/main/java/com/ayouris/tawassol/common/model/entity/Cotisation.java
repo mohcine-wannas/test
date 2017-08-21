@@ -19,7 +19,7 @@ import java.util.Date;
  * @version 1.2
  */
 
-
+@Entity
 @Getter
 @Setter
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", resolver = EntityIdResolver.class, scope = Cotisation.class)
@@ -51,8 +51,7 @@ public class Cotisation extends BusinessObject {
     /**
      * Club
      */
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIdentityReference(alwaysAsId = true)
-    @Transient
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIdentityReference(alwaysAsId = true)
     private Club club;
 }
