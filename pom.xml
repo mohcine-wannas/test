@@ -11,18 +11,18 @@
 		<relativePath />
 	</parent>
 
-	<groupId>ma.gwic</groupId>
-	<artifactId>gwic</artifactId>
+	<groupId>ma.tawassol</groupId>
+	<artifactId>tawassol</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>GWIC : POM parent of all modules</name>
-	<description>GWIC POM Parent</description>
+	<name>TAWASSOL : POM parent of all modules</name>
+	<description>TAWASSOL POM Parent</description>
 
 	<scm>
-		<url>http://192.168.0.125:7000/SalamGaz/gwic-web</url>
-		<connection>scm:git:http://192.168.0.125:7000/SalamGaz/gwic-web.git</connection>
-		<developerConnection>scm:git:http://192.168.0.125:7000/SalamGaz/gwic-web.git</developerConnection>
+		<url>http://192.168.0.125:7000/SalamGaz/tawassol-web</url>
+		<connection>scm:git:http://192.168.0.125:7000/SalamGaz/tawassol-web.git</connection>
+		<developerConnection>scm:git:http://192.168.0.125:7000/SalamGaz/tawassol-web.git</developerConnection>
 	</scm>
 
 	<properties>
@@ -49,42 +49,42 @@
 	<dependencyManagement>
 		<dependencies>
 
-			<!-- gwic project -->
+			<!-- tawassol project -->
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>gwic-common</artifactId>
+				<artifactId>tawassol-common</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>gwic-repository</artifactId>
+				<artifactId>tawassol-repository</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>gwic-security</artifactId>
+				<artifactId>tawassol-security</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>gwic-business</artifactId>
+				<artifactId>tawassol-business</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>gwic-resource</artifactId>
-				<version>${project.version}</version>
-				<type>jar</type>
-			</dependency>
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>gwic-reporting</artifactId>
+				<artifactId>tawassol-resource</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>gwic-messaging</artifactId>
+				<artifactId>tawassol-reporting</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tawassol-messaging</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>
 			</dependency>
@@ -144,15 +144,15 @@
 	</dependencies>
 
 	<modules>
-		<module>gwic-common</module>
-		<module>gwic-resource</module>
-		<module>gwic-repository</module>
-		<module>gwic-security</module>
-		<module>gwic-batch</module>
-		<module>gwic-reporting</module>
-		<module>gwic-messaging</module>
-		<module>gwic-business</module>
-		<module>gwic-rest</module>
+		<module>tawassol-common</module>
+		<module>tawassol-resource</module>
+		<module>tawassol-repository</module>
+		<module>tawassol-security</module>
+		<module>tawassol-batch</module>
+		<module>tawassol-reporting</module>
+		<module>tawassol-messaging</module>
+		<module>tawassol-business</module>
+		<module>tawassol-rest</module>
 	</modules>
 
 </project>

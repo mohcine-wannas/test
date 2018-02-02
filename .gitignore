@@ -1,11 +1,11 @@
 target
 **/target/
 **/*/target/
-gwic-rest/src/main/webapp/
-!gwic-rest/src/main/webapp/WEB-INF/
+tawassol-rest/src/main/webapp/
+!tawassol-rest/src/main/webapp/WEB-INF/
 
 ## Database migration ##
-!/gwic-rest/target/classes/database/oracle/migration/
+!/tawassol-rest/target/classes/database/oracle/migration/
 
 ### STS ###
 .project
