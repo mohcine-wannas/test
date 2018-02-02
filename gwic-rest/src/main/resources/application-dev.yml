@@ -1,0 +1,46 @@
+server:
+  port: 9000
+  
+spring:
+  main:
+    banner-mode: 'OFF'
+  profiles: dev
+  datasource:
+    hikari:
+      maximumPool-size: 10
+      idleTimeout: 30000
+    #driverClassName: oracle.jdbc.pool.OracleDataSource
+    #jdbcUrl: jdbc:oracle:thin:@localhost:1521:xe
+    #jdbcUrl: jdbc:oracle:thin:@172.20.2.212:1521:xe
+    #java -cp jasypt-1.9.2.jar org.jasypt.intf.cli.JasyptPBEStringEncryptionCLI input=gwic password=ayowork
+    username: admin
+    password: admin
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/tawassol
+    driverClassName: com.mysql.jdbc.Driver
+    #type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    database: MYSQL
+    hibernate:
+      # Supported values include create, create-drop, update, and validate.
+      ddl-auto: update
+      naming:
+        implicit-strategy: ma.salamgaz.gwic.common.model.helper.cfg.CustomNamingStrategy
+
+
+  mail:
+    default-encoding: UTF-8
+    host: 127.0.0.1
+    #jndi-name:
+    username:
+    password:
+    port: 1025
+    properties.*:
+    protocol: smtp
+    test-connection: false
+    
+  logging: # logging directory path configuration
+    application.directory: /appli/gwic/logs
+    mail.directory: /appli/gwic/logs/mail 
+  
+logging:
+  config: classpath:logback.xml    

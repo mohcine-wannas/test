@@ -1,0 +1,36 @@
+spring:
+  profiles: prod
+  datasource:
+    hikari:
+      maximumPool-size: 10
+      idleTimeout: 30000
+    driverClassName: oracle.jdbc.pool.OracleDataSource  
+    jdbcUrl: jdbc:oracle:thin:@localhost:1521:xe
+    username: ENC(y7qVIjmZxcpgJiFRRCGtIA==)
+    password: ENC(qnmHKOjs3y5iaulTwEJlBA==)
+  jpa:
+    database: ORACLE
+    hibernate:
+      ddl-auto: validate
+      naming:
+        implicit-strategy: ma.salamgaz.gwic.common.model.helper.cfg.CustomNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle9iDialect
+  mail:
+    default-encoding: UTF-8
+    host: 127.0.0.1
+    jndi-name:
+    username:
+    password:
+    port: 1025
+    properties.*:
+    protocol: smtp
+    test-connection: false
+ 
+  logging: # logging directory path configuration
+    application.directory: /appli/gwic/logs
+    mail.directory: /appli/gwic/logs/mail   
+
+logging:
+  config: classpath:logback-prod.xml

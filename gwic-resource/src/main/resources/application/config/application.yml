@@ -1,0 +1,84 @@
+spring:
+  main:
+    banner-mode: 'OFF'
+  profiles:
+    active: dev
+  messages:
+    encoding: UTF-8
+    basename: messages
+security:
+  basic:
+    enabled: false
+endpoints:
+  enabled: false
+  health.enabled: true
+management:
+  context-path: /manage
+# JWT Configuration
+jwt:
+  header: Authorization
+  secret: qwerty
+  expiration: 3600
+  bearer-token: true
+---
+spring:
+  profiles: dev
+  datasource:
+    driverClassName: oracle.jdbc.pool.OracleDataSource
+    jdbcUrl: jdbc:oracle:thin:@localhost:1521:xe
+    username: gwic
+    password: gwic
+    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    database: ORACLE
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: ma.salamgaz.gwic.common.model.helper.cfg.CustomNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle9iDialect
+  thymeleaf:
+    cache: false
+  mail:
+    default-encoding: UTF-8
+    host: 127.0.0.1
+    jndi-name:
+    username:
+    password:
+    port: 1025
+    properties.*:
+    protocol: smtp
+    test-connection: false
+  freemarker:
+    template-loader-path: classpath:/templates/
+flyway:
+  enabled: false
+---
+spring:
+  profiles: prod
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3316/gwic?autoReconnect=true&useUnicode=yes
+    username: tifawin
+    password: ENC(VqLLaSOT8v1SBkGIBxTbMA==)
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: validate
+      naming:
+        implicit-strategy: ma.salamgaz.gwic.common.model.helper.cfg.CustomNamingStrategy
+  mail:
+    default-encoding: UTF-8
+    host: 127.0.0.1
+    jndi-name:
+    username:
+    password:
+    port: 1025
+    properties.*:
+    protocol: smtp
+    test-connection: false
+  freemarker:
+    template-loader-path: classpath:/templates/
+logging:
+  config: classpath:logback-prod.xml

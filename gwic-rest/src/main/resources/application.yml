@@ -1,0 +1,52 @@
+spring:
+  profiles:
+    active: dev
+    
+  thymeleaf:
+    cache: false  
+  jmx:
+    enabled: false
+  freemarker:
+    template-loader-path: classpath:/templates/     
+
+security:
+  basic:
+    enabled: false
+    
+endpoints:
+  enabled: false
+  health.enabled: true
+  
+management:
+  context-path: /manage
+  
+# JWT Configuration
+jwt:
+  header: Authorization
+  secret: qwerty
+  expiration: 3600
+  bearer-token: true
+    
+jasypt:
+  encryptor:
+    password: ayowork
+
+gwic:
+  messages:
+    basenames:
+      list:
+        - classpath:i18n/request-status-messages
+        - classpath:i18n/csv-file-messages
+        - classpath:i18n/error-messages
+    defaultEncoding: UTF-8
+    fileEncodings: UTF-8
+    cacheSeconds: -1
+
+flyway:
+  enabled: true
+  init-method: migrate
+  baseline-on-migrate: true
+  validate-on-migrate: false
+  baseline-version: 0.0.1.0
+  encoding: UTF-8
+  locations: database/oracle/migration       

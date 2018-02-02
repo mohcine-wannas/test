@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>gwic</artifactId>
+        <groupId>ma.gwic</groupId>
+        <version>0.1.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>gwic-resource</artifactId>
+    
+    <name>GWIC : Resource Module</name>
+
+    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<flywayBaseLine>*</flywayBaseLine>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+				<plugins>
+
+<!-- 					<plugin> -->
+<!-- 						<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 						<artifactId>maven-install-plugin</artifactId> -->
+<!-- 						<executions> -->
+<!-- 							<execution> -->
+<!-- 								<phase>initialize</phase> -->
+<!-- 								<goals> -->
+<!-- 									<goal>install-file</goal> -->
+<!-- 								</goals> -->
+<!-- 								<configuration> -->
+<!-- 									<file>src/main/resources/database/oracle/driver/ojdbc6-11.2.0.jar</file> -->
+<!-- 									<groupId>com.oracle</groupId> -->
+<!-- 									<artifactId>ojdbc6</artifactId> -->
+<!-- 									<version>${oracle.version}</version> -->
+<!-- 									<packaging>jar</packaging> -->
+<!-- 								</configuration> -->
+<!-- 							</execution> -->
+<!-- 						</executions> -->
+<!-- 					</plugin> -->
+
+<!-- 					<plugin> -->
+<!-- 						<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 						<artifactId>maven-assembly-plugin</artifactId> -->
+
+<!-- 						<executions> -->
+<!-- 							<execution> -->
+<!-- 								<id>resource-db</id> -->
+<!-- 								<phase>package</phase> -->
+<!-- 								<goals> -->
+<!-- 									<goal>single</goal> -->
+<!-- 								</goals> -->
+
+<!-- 								<configuration> -->
+<!-- 									<appendAssemblyId>false</appendAssemblyId> -->
+<!-- 									<descriptor>src/assembly/db.xml</descriptor> -->
+<!-- 									<finalName>gwic-db-resource-${project.version}</finalName> -->
+<!-- 								</configuration> -->
+<!-- 							</execution> -->
+<!-- 							<execution> -->
+<!-- 								<id>resource-app</id> -->
+<!-- 								<phase>package</phase> -->
+<!-- 								<goals> -->
+<!-- 									<goal>single</goal> -->
+<!-- 								</goals> -->
+
+<!-- 								<configuration> -->
+<!-- 									<appendAssemblyId>false</appendAssemblyId> -->
+<!-- 									<descriptor>src/assembly/app.xml</descriptor> -->
+<!-- 									<finalName>gwic-app-resource-${project.version}</finalName> -->
+<!-- 								</configuration> -->
+<!-- 							</execution> -->
+<!-- 						</executions> -->
+<!-- 					</plugin> -->
+				</plugins>
+
+			</build>
+		</profile>
+	</profiles>
+
+</project>
