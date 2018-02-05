@@ -34,14 +34,10 @@ import ma.salamgaz.tawassol.resource.MarqueResource;
 import ma.salamgaz.tawassol.resource.PrestationResource;
 import ma.salamgaz.tawassol.resource.TransporteurResource;
 import ma.salamgaz.tawassol.resource.TypeFileAttenteResource;
-import ma.salamgaz.tawassol.security.resource.impl.AuthenticateResourceImpl;
-//import ma.salamgaz.tawassol.security.resource.impl.UserResourceImpl;
 
 @Configuration
 public class RestSecurityConfig {
 
-	@Autowired
-	private AuthenticateResourceImpl authenticateRestService;
 //	@Autowired
 //	private UserResourceImpl userResource;
 	
@@ -94,7 +90,6 @@ public class RestSecurityConfig {
 
 		JAXRSServerFactoryBean jAXRSServerFactoryBean = getJAXRSServerFactoryBean();
 		jAXRSServerFactoryBean.setAddress("/service");
-		jAXRSServerFactoryBean.setServiceBean(authenticateRestService);
 		
 		jAXRSServerFactoryBean.setServiceBean(enumResource);
 		jAXRSServerFactoryBean.setServiceBean(banqueResource);
