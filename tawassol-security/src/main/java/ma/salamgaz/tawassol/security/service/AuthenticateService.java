@@ -1,21 +1,14 @@
 package ma.salamgaz.tawassol.security.service;
 
-import ma.salamgaz.tawassol.common.model.bean.UserDataAuthenticate;
-
-import java.net.UnknownHostException;
-
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import ma.salamgaz.tawassol.admin.model.entity.User;
 import ma.salamgaz.tawassol.security.exception.AuthorizationException;
 import ma.salamgaz.tawassol.security.model.UserData;
-import ma.salamgaz.tawassol.security.utils.UserAuthentication;
 
 public interface AuthenticateService {
 
-    UserData authenticateForm(String username, String password);
-
-    UserData authenticate(UserDataAuthenticate user);
+    UserData authenticateForm(String username, String password, HttpServletRequest request);
 
     UserData authenticateToken(String token);
 
@@ -27,5 +20,5 @@ public interface AuthenticateService {
 
     UserData logout();
     
-    void addAuthentication(HttpServletResponse response, UserAuthentication authentication) throws UnknownHostException;
+
 }

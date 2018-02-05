@@ -2,15 +2,11 @@ package ma.salamgaz.tawassol.security.service.impl;
 
 import java.net.UnknownHostException;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -19,13 +15,10 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import ma.salamgaz.tawassol.common.exception.ErrorMessageType;
-import ma.salamgaz.tawassol.common.model.bean.UserDataAuthenticate;
 import ma.salamgaz.tawassol.admin.model.entity.User;
-
+import ma.salamgaz.tawassol.common.exception.ErrorMessageType;
 import ma.salamgaz.tawassol.security.exception.AuthorizationException;
 import ma.salamgaz.tawassol.security.model.UserContextResponse;
 import ma.salamgaz.tawassol.security.model.UserData;
@@ -35,7 +28,6 @@ import ma.salamgaz.tawassol.security.utils.AuthenticationChecker;
 import ma.salamgaz.tawassol.security.utils.RequestUtil;
 import ma.salamgaz.tawassol.security.utils.SecurityUtils;
 import ma.salamgaz.tawassol.security.utils.TokenUtils;
-import ma.salamgaz.tawassol.security.utils.UserAuthentication;
 
 //@Configuration
 @Service("authenticateSecurityService")
@@ -51,14 +43,14 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 	private AuthenticationManager authManager;
 
 	@Override
-	public UserData authenticateForm(String username, String password) {
+	public UserData authenticateForm(String username, String password,HttpServletRequest request) {
 
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
 				password);
 		String remoteAddr = null;
 		try {
 
-			remoteAddr = RequestUtil.getCurrentIpAddress();
+			remoteAddr = RequestUtil.getCurrentIpAddress(request);
 
 			Authentication authentication = this.authManager.authenticate(authenticationToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -87,11 +79,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 
 	}
 
-	@Override
-	public UserData authenticate(UserDataAuthenticate user) {
 
-		return authenticateForm(user.getUsername(), new String(user.getPassword()));
-	}
 
 	@Override
 	public UserData authenticateToken(String token) {
@@ -175,9 +163,9 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 		return new UserData(false, null, null);
 	}
 
-	public void addAuthentication(HttpServletResponse response, UserAuthentication authentication) throws UnknownHostException {
-		final UserDetails user = authentication.getDetails();
-		response.setHeader(RequestUtil.HEADER_TOKEN, TokenUtils.createToken(RequestUtil.getCurrentIpAddress(), user));
-	}
+
+
+
+
 
 }
