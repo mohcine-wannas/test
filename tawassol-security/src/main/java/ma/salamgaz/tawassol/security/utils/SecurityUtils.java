@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import ma.salamgaz.tawassol.admin.model.entity.Organization;
 import ma.salamgaz.tawassol.admin.model.entity.User;
-import ma.salamgaz.tawassol.common.enums.ContactType;
 import ma.salamgaz.tawassol.security.model.MemberDetails;
 import ma.salamgaz.tawassol.security.model.PermissionModel;
 import ma.salamgaz.tawassol.security.model.UserContext;
@@ -182,7 +181,7 @@ public final class SecurityUtils {
         MemberDetails details = new MemberDetails();
 
         // Organisation info
-        Organization organization = member.getOrganization();
+       // Organization organization = member.getOrganization();
         
 //        details.setAdresse(organization.getAddress());
 //        details.setAdditionalAddress(organization.getAdditionalAddress());
@@ -199,7 +198,7 @@ public final class SecurityUtils {
         details.setEmail(member.getEmail());
 
         PermissionModel model = new PermissionModelImpl();
-        ContactType type = getOrganizationType(member.getOrganization());
+        //ContactType type = getOrganizationType(member.getOrganization());
         /*if (member.getOrganization() instanceof Customer) {
             Customer customer = (Customer) member.getOrganization();
             model = PermissionUtils.createPermissionModel(member.getId(), ContactType.FILLING_CENTER.name(),
@@ -214,39 +213,24 @@ public final class SecurityUtils {
                 member.getFirstname().toUpperCase(), member.getLastname().toUpperCase(), details, model);
     }
 
-    private static ContactType getOrganizationType(Organization orga) {
-        ContactType result = null;
-        /*
-        if (orga instanceof FillingCenter) {
-            result = ContactType.FILLING_CENTER;
-        } else if (orga instanceof Dealer) {
-            result = ContactType.DEALER;
-        } else if (orga instanceof CustomerRef) {
-            result = ContactType.CUSTOMS;
-        }
-        */
-        return result;
-    }
-
     public static UserContextResponse getCurrentUserContextResponse() {
         return getCurrentUserContextResponse(getCurrentUser());
     }
 
     public static Organization getCurrentUserOrganization() {
-        return getCurrentUser().getOrganization();
+        return null;
     }
 
     public static PermissionModel getCurrentUserPermissionModel() {
         User member = getCurrentUser();
-        ContactType type = getOrganizationType(member.getOrganization());
+        //ContactType type = getOrganizationType(member.getOrganization());
         /*if (member.getOrganization() instanceof Customer) {
         Customer customer = (Customer) member.getOrganization();
         model = PermissionUtils.createPermissionModel(member.getId(), ContactType.FILLING_CENTER.name(),
                 member.getRoles(), type);
     	} else {
         */
-        return PermissionUtils.createPermissionModel(member.getId(), member.getContactType().name(), member.getRoles(),
-                type);
+        return PermissionUtils.createPermissionModel(member.getId(), member.getContactType().name(), member.getRoles());
     }
 
     public static boolean checkEnableAccount(UserDetails user) {

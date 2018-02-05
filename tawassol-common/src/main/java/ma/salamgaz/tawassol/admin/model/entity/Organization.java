@@ -174,7 +174,8 @@ public class Organization extends CoordinatesEntity {
     }
 
    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "organization", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @Transient
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "organization", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     public Set<User> getUsers() {
         return users;
     }

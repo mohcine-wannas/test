@@ -48,7 +48,6 @@ public class User extends CoordinatesEntity implements UserDetails {
     private String username;
     private String password;
     private boolean enabled;
-    private Organization organization;
 
     private Set<Role> roles = new HashSet<Role>(0);
 
@@ -106,13 +105,6 @@ public class User extends CoordinatesEntity implements UserDetails {
     public String getDescription() {
 		return description;
 	}
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id")
-    public Organization getOrganization() {
-        return organization;
-    }
 
     @Transient
     @Override

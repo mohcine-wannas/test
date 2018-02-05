@@ -10,20 +10,18 @@ import java.util.Set;
 
 import ma.salamgaz.tawassol.admin.model.entity.PermissionRight;
 import ma.salamgaz.tawassol.admin.model.entity.Role;
-import ma.salamgaz.tawassol.common.enums.ContactType;
 import ma.salamgaz.tawassol.common.util.RoleInfo;
 import ma.salamgaz.tawassol.security.model.PermissionModel;
 import ma.salamgaz.tawassol.security.model.ResourceOperationModel;
 
 public final class PermissionUtils {
 
-    public static PermissionModel createPermissionModel(Long aUserId, String organization, Set<Role> aRoles,
-            ContactType type) {
-        return createPermissionModel(aUserId, organization, aRoles, type, null, null);
+    public static PermissionModel createPermissionModel(Long aUserId, String organization, Set<Role> aRoles) {
+        return createPermissionModel(aUserId, organization, aRoles, null, null);
     }
 
     public static PermissionModel createPermissionModel(Long aUserId, String organization, Set<Role> aRoles,
-            ContactType type, Boolean importer, Boolean exporter) {
+             Boolean importer, Boolean exporter) {
         if (aRoles == null || aRoles.isEmpty()) {
             return null;
         }

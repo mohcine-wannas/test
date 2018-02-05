@@ -53,9 +53,6 @@ public class UserPredicate extends BasePredicate {
                 case lastname:
                     localBooleanExpression = QUser.user.lastname.startsWithIgnoreCase(filter.getValue());
                     break;
-                case organizationname:
-                    localBooleanExpression = QUser.user.organization.name.containsIgnoreCase(filter.getValue());
-                    break;
                 case status:
                     localBooleanExpression = QUser.user.enabled.eq("True".equalsIgnoreCase(filter.getValue()));
                     break;

@@ -11,7 +11,7 @@
 	<fileSets>
 
 		<fileSet>
-			<directory>src/main/resources/database/oracle/migration</directory>
+			<directory>src/main/resources/database/mysql/migration</directory>
 			<includes>
 				<include>${flywayBaseLine}*</include>
 			</includes>
@@ -19,7 +19,7 @@
 		</fileSet>
 
 		<fileSet>
-			<directory>src/main/resources/database/oracle/reference_data</directory>
+			<directory>src/main/resources/database/mysql/reference_data</directory>
 			<outputDirectory>/data</outputDirectory>
 		</fileSet>
 

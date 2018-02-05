@@ -10,7 +10,6 @@ import javax.persistence.SequenceGenerator;
 
 import org.hibernate.proxy.HibernateProxy;
 
-import lombok.Getter;
 import lombok.Setter;
 import ma.salamgaz.tawassol.common.repository.util.PersistenceUtils;
 

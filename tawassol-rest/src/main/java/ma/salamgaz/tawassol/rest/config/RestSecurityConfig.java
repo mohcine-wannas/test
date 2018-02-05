@@ -95,11 +95,6 @@ public class RestSecurityConfig {
 		JAXRSServerFactoryBean jAXRSServerFactoryBean = getJAXRSServerFactoryBean();
 		jAXRSServerFactoryBean.setAddress("/service");
 		jAXRSServerFactoryBean.setServiceBean(authenticateRestService);
-//		jAXRSServerFactoryBean.setServiceBean(userResource);
-		// jAXRSServerFactoryBean.setServiceBean(organizationRestService);
-		// jAXRSServerFactoryBean.setServiceBean(permissionRestService);
-		// jAXRSServerFactoryBean.setServiceBean(roleRestService);
-		// jAXRSServerFactoryBean.setServiceBean(userRestService);
 		
 		jAXRSServerFactoryBean.setServiceBean(enumResource);
 		jAXRSServerFactoryBean.setServiceBean(banqueResource);
