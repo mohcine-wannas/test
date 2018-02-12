@@ -1,9 +1,10 @@
 package ma.salamgaz.tawassol.service;
 
+import java.util.List;
+
 import ma.salamgaz.tawassol.common.model.dto.AdherentCriteriaDto;
 import ma.salamgaz.tawassol.common.model.entity.Adherent;
-
-import java.util.List;
+import ma.salamgaz.tawassol.service.GenericService;
 
 /**
  * Created by chamakh on 06/01/2017.

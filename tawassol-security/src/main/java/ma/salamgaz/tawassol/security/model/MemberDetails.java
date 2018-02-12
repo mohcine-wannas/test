@@ -2,6 +2,7 @@ package ma.salamgaz.tawassol.security.model;
 
 import java.io.Serializable;
 
+import ma.salamgaz.tawassol.common.model.entity.School;
 import ma.salamgaz.tawassol.common.util.BeanUtils;
 
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class MemberDetails implements Serializable {
     private String phoneNumber;
     private String mobileNumber;
     private String email;
+
 
 
     public String getCompleteAddress() {

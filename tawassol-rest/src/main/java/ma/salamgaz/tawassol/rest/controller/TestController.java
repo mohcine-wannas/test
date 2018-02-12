@@ -25,8 +25,8 @@ public class TestController extends BaseController {
 
 
 
-    @RequestMapping(value = "{id:\\d+}", method = RequestMethod.GET)
-    public ResponseEntity<Adherent> getAdherentById(@PathVariable("id") Long id) throws Exception {
+    @RequestMapping(value = "{id:\\d+}", method = RequestMethod.PUT)
+    public ResponseEntity<Adherent> update(@PathVariable("id") Long id) throws Exception {
         Adherent adherent = new Adherent();
         adherent.setNom("mohcine");
         return new ResponseEntity<Adherent>(adherent, HttpStatus.OK);

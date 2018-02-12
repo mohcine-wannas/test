@@ -7,9 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -22,13 +21,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import ma.salamgaz.tawassol.common.enums.ContactChannel;
-import ma.salamgaz.tawassol.common.enums.ContactType;
-import ma.salamgaz.tawassol.common.mapper.NotNullable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Setter;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import ma.salamgaz.tawassol.common.mapper.NotNullable;
+import ma.salamgaz.tawassol.common.model.entity.Cycle;
+import ma.salamgaz.tawassol.common.model.entity.School;
 import ma.salamgaz.tawassol.common.model.entity.generic.CoordinatesEntity;
 
 @Setter
@@ -41,17 +39,17 @@ public class User extends CoordinatesEntity implements UserDetails {
 
     private String lastname;
     private String firstname;
-    private ContactType contactType;
-    private ContactChannel preferredChannel;
-    private String description;
+    private String description; //TODO to remove
 
     private String username;
     private String password;
     private boolean enabled;
+    private School school;
 
     private Set<Role> roles = new HashSet<Role>(0);
 
     private String lang;
+	private Cycle currentCycle;
 
     @Override
     @Column(name = "username", unique = true, nullable = false, length = 128)
@@ -73,11 +71,17 @@ public class User extends CoordinatesEntity implements UserDetails {
     }
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", schema = "tawassol", joinColumns = { @JoinColumn(name = "member_id", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false) })
     public Set<Role> getRoles() {
         return this.roles;
     }
+    
+	@ManyToOne
+	@JoinColumn(name = "school_id", nullable = true, foreignKey = @ForeignKey(name = "FK_USER_SCHOOL_ID"))  
+	public School getSchool() {
+		return school;
+	}
 
     @Column(name = "lastname", length = 128)
     public String getLastname() {
@@ -87,18 +91,6 @@ public class User extends CoordinatesEntity implements UserDetails {
     @Column(name = "firstname", length = 128)
     public String getFirstname() {
         return this.firstname;
-    }
-
-    @Column(name = "contact_type", length = 128)
-    @Enumerated(EnumType.STRING)
-    public ContactType getContactType() {
-        return this.contactType;
-    }
-
-    @Column(name = "preferred_channel", length = 35)
-    @Enumerated(EnumType.STRING)
-    public ContactChannel getPreferredChannel() {
-        return this.preferredChannel;
     }
 
     @Column(name = "description")
@@ -126,9 +118,9 @@ public class User extends CoordinatesEntity implements UserDetails {
     @JsonIgnore
     public Set<PermissionRight> getPermissions() {
         Set<PermissionRight> perms = new HashSet<PermissionRight>();
-        for (Role role : roles) {
-         //   perms.addAll(role.getPermissions());
-        }
+//        for (Role role : roles) {
+//         //   perms.addAll(role.getPermissions());
+//        }
         return perms;
     }
 
@@ -157,6 +149,12 @@ public class User extends CoordinatesEntity implements UserDetails {
     @JsonIgnore
     public String getLang() {
         return lang;
+    }
+    
+    @Transient
+    @JsonIgnore
+    public Cycle getCurrentCycle() {
+    	return currentCycle;
     }
 
     @Override
@@ -189,11 +187,12 @@ public class User extends CoordinatesEntity implements UserDetails {
         StringBuilder builder = new StringBuilder();
         builder.append(lastname);
         builder.append(firstname);
-        builder.append(contactType);
         builder.append(username);
         builder.append(password);
         builder.append(enabled);
         return builder.toString();
     }
+
+
 
 }

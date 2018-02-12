@@ -4,21 +4,49 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.PhaseInterceptorChain;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Service;
 import org.springframework.web.util.UrlPathHelper;
 
+import ma.salamgaz.tawassol.common.mapper.CustomModelMapper;
+import ma.salamgaz.tawassol.common.model.bean.CycleBean;
+import ma.salamgaz.tawassol.common.model.entity.Cycle;
 import ma.salamgaz.tawassol.common.util.EncodageConstants;
 import ma.salamgaz.tawassol.common.util.UnicodeStringUtils;
+import ma.salamgaz.tawassol.security.service.AffectationCycleSecurityService;
+import ma.salamgaz.tawassol.security.service.CycleSecurityService;
 
+@Service
 public class RequestUtil {
 
+    private static AffectationCycleSecurityService affectationCycleService;
+    private static CycleSecurityService cycleService;
+    private static CustomModelMapper mapper;
+    
+    @Autowired
+    private AffectationCycleSecurityService affectationCycleServiceAutowired;
+    @Autowired
+    private CycleSecurityService cycleServiceAutowired;
+    @Autowired 
+    private CustomModelMapper mapperAutowired;
+    
+    @PostConstruct
+    public void init() {
+    	mapper = mapperAutowired;
+    	cycleService = cycleServiceAutowired;
+    	affectationCycleService = affectationCycleServiceAutowired;
+    }
+    
     public static List<String> resurceEndPoints = Arrays.asList("tawassol/service", "tawassol/common", "tawassol/admin");
 
     public static List<String> loginEndPoints = Arrays.asList("/authenticate", "/authenticateForm",
@@ -34,15 +62,16 @@ public class RequestUtil {
     public static final String LINK_TOKEN = "token";
     public static final String HEADER_LANG = "X-Lang";
     public static final String LINK_LANG = "Xlang";
+	public static final String HEADER_CURRENT_CYCLE = "x-current-cycle";
 
     public static void setResponseHeader(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
         response.setHeader("Access-Control-Max-Age", "36000");
         response.setHeader("Access-Control-Allow-Headers",
-                "x-requested-with, Origin, X-Requested-With, Content-Type, Accept, X-Auth-Token, X-Lang, REMOTE_USER, username, X-filename, Data-reference");
-        response.setHeader("Access-Control-Expose-Headers",
-                "x-auth-token, X-Lang, REMOTE_USER, username, X-filename, Data-reference");
+                "x-requested-with, Origin, X-Requested-With, Content-Type, Accept, X-Auth-Token, X-Lang,x-current-cycle, REMOTE_USER, username, X-filename, Data-reference");
+        response.setHeader("Access-Control-Expose-Headers", 
+                "x-auth-token, X-Lang, x-current-cycle REMOTE_USER, username, X-filename, Data-reference");
         response.setHeader("Cache-Control", "no-cache, no-store, no-transform");
         response.setCharacterEncoding(EncodageConstants.UTF8);
     }
@@ -176,5 +205,24 @@ public class RequestUtil {
         }
         return ipAddress;
     }
+
+	public static Cycle extractCurrentCycleFromRequest(HttpServletRequest request) {
+		String currentCycleId = request.getHeader(RequestUtil.HEADER_CURRENT_CYCLE);
+		Cycle currentCycle = null; 
+		if(NumberUtils.isNumber(currentCycleId)) {
+			currentCycle = cycleService.findOne(Long.valueOf(currentCycleId));
+		}
+        if (currentCycle == null) {
+            currentCycle = extractCurrentCycle();
+        }
+        return currentCycle;
+   }
+
+	public static Cycle extractCurrentCycle() {
+		Cycle currentCycle;
+		List<CycleBean> cycles = affectationCycleService.getCurrentCycles();
+		currentCycle = mapper.map(cycles.get(cycles.size()),Cycle.class);
+		return currentCycle;
+	}
 
 }

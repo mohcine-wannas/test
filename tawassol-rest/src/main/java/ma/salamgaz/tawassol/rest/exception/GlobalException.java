@@ -63,7 +63,8 @@ public class GlobalException extends Exception implements Serializable {
 			message = messageSource.getMessage("auth.message.error", null, null);
 			status = HttpStatus.UNAUTHORIZED;
 		} else {
-			message = messageSource.getMessage("erreur.message.texte", null, null);
+			//message = messageSource.getMessage("erreur.message.texte", null, null); //TODO
+			message = "erreur.message.text";
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			e.printStackTrace();
 			ConstraintViolationException ex = null;
