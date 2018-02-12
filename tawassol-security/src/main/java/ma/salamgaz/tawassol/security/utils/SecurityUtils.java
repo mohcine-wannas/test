@@ -4,24 +4,57 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import ma.salamgaz.tawassol.admin.model.entity.Organization;
 import ma.salamgaz.tawassol.admin.model.entity.User;
+import ma.salamgaz.tawassol.common.mapper.CustomModelMapper;
+import ma.salamgaz.tawassol.common.model.bean.SchoolBean;
+import ma.salamgaz.tawassol.common.model.entity.AnneeScolaire;
 import ma.salamgaz.tawassol.security.model.MemberDetails;
 import ma.salamgaz.tawassol.security.model.PermissionModel;
+import ma.salamgaz.tawassol.security.model.SchoolDetails;
 import ma.salamgaz.tawassol.security.model.UserContext;
 import ma.salamgaz.tawassol.security.model.UserContextResponse;
+import ma.salamgaz.tawassol.security.service.AffectationCycleSecurityService;
+import ma.salamgaz.tawassol.security.service.AnneeScolaireSecurityService;
 
 /**
  * Utility class for Spring Security.
  */
+@Service
 public final class SecurityUtils {
+	
+    private static CustomModelMapper mapper;
+    private static AnneeScolaireSecurityService anneeScolaireService;
+    private static AffectationCycleSecurityService affectationCycleService;
+    
+    @Autowired
+    private CustomModelMapper mapperAutowired;
+    @Autowired
+    private AnneeScolaireSecurityService anneeScolaireServiceAutowired;
+    @Autowired
+    private AffectationCycleSecurityService affectationCycleServiceAutowired;
+
+    @PostConstruct
+    public void init() {
+    	mapper = mapperAutowired;
+    	anneeScolaireService = anneeScolaireServiceAutowired;
+    	affectationCycleService = affectationCycleServiceAutowired;
+    	
+    	System.out.println("###############################################");
+    	System.out.println("######|Tawassol is Ready !! Let's work  |######");
+    	System.out.println("###############################################");
+    }
 
     private SecurityUtils() {
     }
@@ -179,6 +212,7 @@ public final class SecurityUtils {
     public static UserContextResponse getCurrentUserContextResponse(User member) {
 
         MemberDetails details = new MemberDetails();
+        SchoolBean school = mapper.map(member.getSchool(),SchoolBean.class);
 
         // Organisation info
        // Organization organization = member.getOrganization();
@@ -196,6 +230,7 @@ public final class SecurityUtils {
         details.setPhoneNumber(member.getPhoneNumber());
         details.setMobileNumber(member.getMobileNumber());
         details.setEmail(member.getEmail());
+        
 
         PermissionModel model = new PermissionModelImpl();
         //ContactType type = getOrganizationType(member.getOrganization());
@@ -209,8 +244,15 @@ public final class SecurityUtils {
            //         member.getRoles(), type);
         //}
             //TODO test on null
+        SchoolDetails schoolDetails = new SchoolDetails();
+        schoolDetails.setAnneeScolaire(getCurrentAnneeScolaire().getLibelle());
+        schoolDetails.setSchool(school);
+        schoolDetails.setCycles(affectationCycleService.getCurrentCycles());
+        if(!schoolDetails.getCycles().isEmpty()) {
+        	schoolDetails.setCurrentCycle(schoolDetails.getCycles().get(schoolDetails.getCycles().size() - 1).getId().toString()); //TODO check null
+        }
         return new UserContextResponse(member.getId(), member.getUsername().toUpperCase(),
-                member.getFirstname().toUpperCase(), member.getLastname().toUpperCase(), details, model);
+                member.getFirstname().toUpperCase(), member.getLastname().toUpperCase(), details, schoolDetails, model);
     }
 
     public static UserContextResponse getCurrentUserContextResponse() {
@@ -219,6 +261,10 @@ public final class SecurityUtils {
 
     public static Organization getCurrentUserOrganization() {
         return null;
+    }
+    
+    public static AnneeScolaire getCurrentAnneeScolaire() {
+    	return anneeScolaireService.getCurrentAnneeScolaire();
     }
 
     public static PermissionModel getCurrentUserPermissionModel() {
@@ -230,7 +276,7 @@ public final class SecurityUtils {
                 member.getRoles(), type);
     	} else {
         */
-        return PermissionUtils.createPermissionModel(member.getId(), member.getContactType().name(), member.getRoles());
+        return PermissionUtils.createPermissionModel(member.getId(),null, member.getRoles());
     }
 
     public static boolean checkEnableAccount(UserDetails user) {

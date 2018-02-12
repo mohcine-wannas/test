@@ -1,5 +1,22 @@
 package ma.salamgaz.tawassol.resource;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ma.salamgaz.tawassol.admin.model.enums.ViewName;
 import ma.salamgaz.tawassol.common.exception.CustomWebApplicationException;
 import ma.salamgaz.tawassol.common.model.bean.BanqueBean;
@@ -7,14 +24,6 @@ import ma.salamgaz.tawassol.common.model.bean.PageDataBean;
 import ma.salamgaz.tawassol.service.BanqueService;
 import ma.salamgaz.tawassol.service.ColumnDefService;
 import ma.salamgaz.tawassol.service.ServiceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * Created by YounesM on 05/05/2017.

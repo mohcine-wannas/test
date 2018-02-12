@@ -91,6 +91,8 @@ public enum ErrorMessageType {
     AGREEMENT_NUMBER_ALREADY_EXISTS(
             HttpServletResponse.SC_CONFLICT, 101, "Agreement number", "Organisation agreement number already exists"),
 
+    WORNG_PASSWORD( HttpServletResponse.SC_UNAUTHORIZED, 101, "Mot de passe", "Le mot de passe que vous avez saisis est incorrect"),
+    
 	// Referentiel 
 	//site
 	SITE_CODE_ALREADY_EXISTS(
@@ -151,6 +153,9 @@ public enum ErrorMessageType {
     PIECE_REGLEMENT_MISSING_REQUIRED_VALUES(HttpServletResponse.SC_CONFLICT, 201, "Piece de Reglement", "Un ou plusieurs champs obligatoires sont manquants"),
     //Periode
     PERIODE_MISSING_REQUIRED_VALUES(HttpServletResponse.SC_CONFLICT, 201, "Piece de Reglement", "Periode : Un ou plusieurs champs obligatoires sont manquants"),
+    
+    
+    DELETE_ERROR(HttpServletResponse.SC_CONFLICT, 201, "Suppression", "Impossible de supprimer cet objet car il est déjà utilisé")
     
     ;
 	

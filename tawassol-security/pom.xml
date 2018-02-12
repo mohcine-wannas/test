@@ -33,14 +33,13 @@
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-spring-boot-starter-jaxrs</artifactId>
 		</dependency>
-
-
+		
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>tawassol-business</artifactId>
+			<artifactId>tawassol-repository</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
+		
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>

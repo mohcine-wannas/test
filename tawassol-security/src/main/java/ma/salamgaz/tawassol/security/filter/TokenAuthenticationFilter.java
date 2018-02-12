@@ -22,6 +22,7 @@ import org.springframework.web.util.UrlPathHelper;
 
 import ma.salamgaz.tawassol.admin.model.entity.User;
 import ma.salamgaz.tawassol.common.exception.ErrorMessageType;
+import ma.salamgaz.tawassol.common.model.entity.Cycle;
 import ma.salamgaz.tawassol.common.util.EncodageConstants;
 import ma.salamgaz.tawassol.security.exception.AuthorizationException;
 import ma.salamgaz.tawassol.security.service.AuthenticateService;
@@ -66,15 +67,17 @@ public class TokenAuthenticationFilter extends GenericFilterBean {
 
             AuthenticationChecker.checkUserIsNotNull(user);
             AuthenticationChecker.checkEnableAccount(user);
-
+            
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("RemoteAddr {" + remoteIpAddr + "} Trying to the secured resource: { "
                         + new UrlPathHelper().getPathWithinApplication(request) + " }. username: { "
                         + user.getUsername() + " }");
             }
 
-            //user.setLang(RequestUtil.extractLangFromRequest(request, properties.getDefaultLang()));
-
+            Cycle currentCycle = RequestUtil.extractCurrentCycleFromRequest(request);
+            user.setCurrentCycle(currentCycle);
+            response.setHeader(RequestUtil.HEADER_CURRENT_CYCLE, TokenUtils.createToken(remoteIpAddr, user));
+            
             setAuthenticateUser(user, request, response);
 
             chain.doFilter(request, response);
