@@ -35,6 +35,10 @@ public class SchoolServiceImpl extends GenericServiceImpl2<School, Long, SchoolB
 		school.setVille(oldSchool.getVille());
 		school.setPays(oldSchool.getPays());
 		school.setId(oldSchool.getId());
+		school.setNom(oldSchool.getNom());
+		school.setAdresse(oldSchool.getAdresse());
+		school.setCode(oldSchool.getCode());
+		school.setCodeMassar(oldSchool.getCodeMassar());
 		List<AffectationCycle> affectations = new ArrayList<>();
 		for(CycleBean cycle: schoolBean.getCycles()) {
 			AffectationCycle affectation = new AffectationCycle();

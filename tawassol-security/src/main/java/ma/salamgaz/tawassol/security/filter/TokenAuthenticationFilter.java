@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.util.UrlPathHelper;
 
@@ -95,6 +96,7 @@ public class TokenAuthenticationFilter extends GenericFilterBean {
 
     }
 
+    @Transactional
     private void setAuthenticateUser(User user, HttpServletRequest request, HttpServletResponse response)
             throws UnknownHostException {
 

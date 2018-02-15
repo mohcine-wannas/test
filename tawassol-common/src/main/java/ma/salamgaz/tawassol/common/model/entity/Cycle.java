@@ -26,7 +26,6 @@ public class Cycle extends RefEntity {
 	@Column(unique=true)
 	private String libelle;
 	private Integer nombreDesNiveaux;
-	private Integer ordre;
 	
 	public String getLibelle() {
 		return libelle;
@@ -38,10 +37,5 @@ public class Cycle extends RefEntity {
 		return nombreDesNiveaux;
 	}
 
-
-
-	public Integer getOrdre() {
-		return ordre;
-	}
  
 }

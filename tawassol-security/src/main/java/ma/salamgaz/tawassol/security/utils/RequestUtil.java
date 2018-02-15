@@ -78,12 +78,12 @@ public class RequestUtil {
 
     public static boolean isRequiresAuthentication(HttpServletRequest request) {
         String resourcePath = new UrlPathHelper().getPathWithinApplication(request);
-        if (isIndexRequest(request) || isLoginRequest(request) || isLogoutRequest(request)
+        if (isLoginRequest(request) || isLogoutRequest(request)
                 || "OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return false;
         }
 
-        return isResourcesRequest(resourcePath);
+        return true; 
     }
 
     public static boolean isResourcesRequest(String url) {

@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,22 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 			return null;
 		}
 
+	}
+	
+	@Override
+	public Authentication authenticateTest(String username, String password) {
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+				password);
+		try {
+
+			Authentication authentication = this.authManager.authenticate(authenticationToken);
+			return authentication;
+
+		} catch (DisabledException | LockedException | InternalAuthenticationServiceException
+				| BadCredentialsException ex) {
+			throw new ServiceException(ErrorMessageType.WORNG_PASSWORD.getMessage());
+
+		}
 	}
 
 	@Override

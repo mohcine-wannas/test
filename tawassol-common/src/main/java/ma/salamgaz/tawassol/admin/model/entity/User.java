@@ -71,7 +71,7 @@ public class User extends CoordinatesEntity implements UserDetails {
     }
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", schema = "tawassol", joinColumns = { @JoinColumn(name = "member_id", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "role_id", nullable = false, updatable = false) })
     public Set<Role> getRoles() {
         return this.roles;
