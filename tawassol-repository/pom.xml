@@ -1,60 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>tawassol</artifactId>
-        <groupId>com.ayouris</groupId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>tawassol-repository</artifactId>
-    <packaging>jar</packaging>
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<artifactId>tawassol</artifactId>
+		<groupId>ma.tawassol</groupId>
+		<version>0.1.1-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>tawassol-repository</artifactId>
+	<packaging>jar</packaging>
 
-    <properties>
-        <mysql.version>5.1.35</mysql.version>
-        <log4jdbc.version>1.16</log4jdbc.version>
-        <flyway.version>4.0.3</flyway.version>
-        <HikariCP.version>2.5.1</HikariCP.version>
-    </properties>
+	<name>TAWASSOL : Repository module</name>
 
-    <dependencies>
+	<properties>
+		<log4jdbc.version>1.16</log4jdbc.version>
+		<flyway.version>4.0.3</flyway.version>
+		<HikariCP.version>2.5.1</HikariCP.version>
+	</properties>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
+	<dependencies>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>tawassol-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>tawassol-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.oracle</groupId> -->
+<!-- 			<artifactId>ojdbc6</artifactId> -->
+<!-- 			<version>${oracle.version}</version> -->
+<!-- 		</dependency> -->
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>${flyway.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>${HikariCP.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>org.bgee.log4jdbc-log4j2</groupId>
-            <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
-            <version>${log4jdbc.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+			<version>${log4jdbc.version}</version>
+		</dependency>
 
-    </dependencies>
+	</dependencies>
 
 </project>

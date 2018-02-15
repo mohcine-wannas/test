@@ -1,0 +1,20 @@
+<!-- This file contains log level properties to be used within "logback.xml" -->
+<included>
+
+	<property name="hibernate.log.level" value="WARN" />
+
+	<property name="hibernate.sql.log.level" value="WARN" />
+
+	<property name="ehcache.log.level" value="ERROR" />
+
+	<property name="org.apache.cxf.log.level" value="DEBUG" />
+	
+	<property name="org.springframework.log.level" value="WARN" />
+	
+	<property name="mail.log.level" value="WARN" />
+	
+	<property name="supervision.log.level" value="WARN" />
+
+	<property name="workflow.log.level" value="DEBUG" />
+
+</included>
