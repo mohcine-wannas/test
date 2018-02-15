@@ -34,7 +34,7 @@ spring:
     hibernate:
       ddl-auto: update
       naming:
-        implicit-strategy: ma.salamgaz.tawassol.common.model.helper.cfg.CustomNamingStrategy
+        implicit-strategy: com.ayouris.tawassol.common.model.helper.cfg.CustomNamingStrategy
     properties:
       hibernate:
         dialect: org.hibernate.dialect.Oracle9iDialect
@@ -67,7 +67,7 @@ spring:
     hibernate:
       ddl-auto: validate
       naming:
-        implicit-strategy: ma.salamgaz.tawassol.common.model.helper.cfg.CustomNamingStrategy
+        implicit-strategy: com.ayouris.tawassol.common.model.helper.cfg.CustomNamingStrategy
   mail:
     default-encoding: UTF-8
     host: 127.0.0.1
