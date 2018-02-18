@@ -11,7 +11,10 @@ import com.ayouris.tawassol.common.service.BaseService;
 
 	public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
-	    @Autowired
+		protected BaseServiceImpl(JpaRepository<T, Long> jpaRepository ) {
+			this.jpaRepository = jpaRepository;
+		}
+		
 	    private JpaRepository<T, Long> jpaRepository;
 
 	    @Override

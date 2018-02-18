@@ -23,21 +23,30 @@ import com.ayouris.tawassol.security.utils.SecurityUtils;
 @Service
 public class AffectationCycleSecurityServiceImpl extends BaseServiceImpl<AffectationCycle> implements AffectationCycleSecurityService {
     
-    @Autowired
-    private AffectationCycleRepository affectationCycleRepository;
+
+	private AffectationCycleRepository affectationCycleRepository;
     @Autowired
     private CustomModelMapper mapper;
+    
+    @Autowired
+    AffectationCycleSecurityServiceImpl(AffectationCycleRepository affectationCycleRepository) {
+		super(affectationCycleRepository);
+		this.affectationCycleRepository = affectationCycleRepository;
+	}
+    
 
 	@Override
 	public List<CycleBean> getCurrentCycles() {
 		Long anneeScolaireId = SecurityUtils.getCurrentAnneeScolaire().getId();
 		Long schoolId = SecurityUtils.getCurrentUser().getSchool().getId();
-		List<AffectationCycle> affectationCycles = affectationCycleRepository.findBySchoolIdAndAnneeScolaireId(schoolId, anneeScolaireId);
+		List<AffectationCycle> affectationCycles = affectationCycleRepository.findBySchoolIdAndAnneeScolaireIdOrderByOrderAsc(schoolId, anneeScolaireId);
 		List<Cycle> cycles = new ArrayList<>();
 		for(AffectationCycle affectationCycle : affectationCycles) {
 			cycles.add(affectationCycle.getCycle());
 		}
+		cycles.sort((e,e2) -> { return e.getOrder().compareTo(e2.getOrder()); });
 		return mapper.map(cycles,CycleBean.LIST_BEAN_TYPE);
 	}
+		
 	
 }

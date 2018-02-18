@@ -10,6 +10,6 @@ import com.ayouris.tawassol.common.repository.CommonRepository;
 @Primary
 public interface AffectationCycleRepository extends  CommonRepository<AffectationCycle> {
 
-	List<AffectationCycle> findBySchoolIdAndAnneeScolaireId(Long schoolId, Long anneeScolaireId);
+	List<AffectationCycle> findBySchoolIdAndAnneeScolaireIdOrderByOrderAsc(Long schoolId, Long anneeScolaireId);
 	
 }

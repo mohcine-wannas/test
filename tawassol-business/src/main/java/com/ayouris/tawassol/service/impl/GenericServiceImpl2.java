@@ -6,8 +6,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ayouris.tawassol.common.exception.ErrorMessageType;
+import com.ayouris.tawassol.common.model.entity.QProduit;
 import com.ayouris.tawassol.common.model.entity.generic.BaseEntity;
+import com.ayouris.tawassol.common.model.entity.generic.QRefEntity;
 import com.ayouris.tawassol.service.ServiceException;
+import com.querydsl.core.types.OrderSpecifier;
 
 /**
  * 
@@ -20,6 +23,8 @@ import com.ayouris.tawassol.service.ServiceException;
 public abstract class GenericServiceImpl2<T extends BaseEntity, ID extends Serializable, B> extends GenericServiceImpl<T,ID>  {
 
    
+	private final OrderSpecifier<Integer> ORDER_SPECIFIER = QRefEntity.refEntity.order.asc();
+
    
 //    @Autowired
 //    private ExportService<B> exportService;

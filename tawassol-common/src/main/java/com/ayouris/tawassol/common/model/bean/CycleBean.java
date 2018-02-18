@@ -3,12 +3,14 @@ package com.ayouris.tawassol.common.model.bean;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.reflect.TypeToken;
 
 import lombok.Getter;
 import lombok.Setter;
 import com.ayouris.tawassol.common.model.entity.Cycle;
+import com.ayouris.tawassol.common.model.entity.Niveau;
 
 /**
  * 
@@ -33,6 +35,7 @@ public class CycleBean implements Serializable{
     private Long id;
 	private String libelle;
 	private Integer nombreDesNiveaux;
+
 
          
 }

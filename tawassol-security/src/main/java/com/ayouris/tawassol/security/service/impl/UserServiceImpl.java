@@ -21,9 +21,16 @@ import com.ayouris.tawassol.security.service.UserService;
 @Service("userService")
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	@Autowired
+    protected UserServiceImpl(UserRepository userRepository) {
+		super(userRepository);
+		this.userRepository =userRepository;
+	}
+    
 
-    @Autowired
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    
     private UserRepository userRepository;
 
     @Autowired

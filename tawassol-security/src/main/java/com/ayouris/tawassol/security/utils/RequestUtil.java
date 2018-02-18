@@ -219,9 +219,11 @@ public class RequestUtil {
    }
 
 	public static Cycle extractCurrentCycle() {
-		Cycle currentCycle;
+		Cycle currentCycle = null;
 		List<CycleBean> cycles = affectationCycleService.getCurrentCycles();
-		currentCycle = mapper.map(cycles.get(cycles.size()),Cycle.class);
+		if(!cycles.isEmpty()) {
+			currentCycle = mapper.map(cycles.get(cycles.size()-1),Cycle.class);
+		}
 		return currentCycle;
 	}
 

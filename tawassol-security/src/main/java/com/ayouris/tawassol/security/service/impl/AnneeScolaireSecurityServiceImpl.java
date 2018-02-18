@@ -20,27 +20,34 @@ import com.ayouris.tawassol.security.service.AnneeScolaireSecurityService;
  */
 
 @Service
-public class AnneeScolaireSecurityServiceImpl extends BaseServiceImpl<AnneeScolaire> implements AnneeScolaireSecurityService {
+public class AnneeScolaireSecurityServiceImpl extends BaseServiceImpl<AnneeScolaire>
+		implements AnneeScolaireSecurityService {
 
-    @Autowired
-    private AnneeScolaireRepository AnneeScolaireRepository;
+	@Autowired
+	protected AnneeScolaireSecurityServiceImpl(AnneeScolaireRepository AnneeScolaireRepository) {
+		super(AnneeScolaireRepository);
+		this.AnneeScolaireRepository = AnneeScolaireRepository;
+	}
 
-    @Autowired
-    private CustomModelMapper mapper;
+	
+	private AnneeScolaireRepository AnneeScolaireRepository;
 
-    @Override
-    public List<AnneeScolaireBean> getAll() {
-        List<AnneeScolaire> anneeScolaires = findAll();
-        return mapper.map(anneeScolaires, FabriquantBean.LIST_BEAN_TYPE);
-    }
+	@Autowired
+	private CustomModelMapper mapper;
+
+	@Override
+	public List<AnneeScolaireBean> getAll() {
+		List<AnneeScolaire> anneeScolaires = findAll();
+		return mapper.map(anneeScolaires, FabriquantBean.LIST_BEAN_TYPE);
+	}
 
 	@Override
 	public AnneeScolaire getCurrentAnneeScolaire() {
 		List<AnneeScolaire> anneeScolaires = AnneeScolaireRepository.findByCurrentTrue();
-		if(anneeScolaires != null && !anneeScolaires.isEmpty()) {
+		if (anneeScolaires != null && !anneeScolaires.isEmpty()) {
 			return anneeScolaires.get(0);
 		}
 		return null;
 	}
-	
+
 }

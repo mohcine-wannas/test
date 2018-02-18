@@ -20,6 +20,8 @@ import com.ayouris.tawassol.admin.model.entity.User;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.SchoolBean;
 import com.ayouris.tawassol.common.model.entity.AnneeScolaire;
+import com.ayouris.tawassol.common.model.entity.Cycle;
+import com.ayouris.tawassol.common.model.entity.School;
 import com.ayouris.tawassol.security.model.MemberDetails;
 import com.ayouris.tawassol.security.model.PermissionModel;
 import com.ayouris.tawassol.security.model.SchoolDetails;
@@ -208,6 +210,17 @@ public final class SecurityUtils {
         }
         return null;
     }
+    /**
+     *
+     * @return the current School
+     */
+    public static School getCurrentSchool() {
+    	User currentUser = SecurityUtils.getCurrentUser();
+    	if(currentUser != null) {
+    		return currentUser.getSchool();
+    	}
+    	return null;
+    }
 
     public static UserContextResponse getCurrentUserContextResponse(User member) {
 
@@ -287,4 +300,9 @@ public final class SecurityUtils {
     public static String getCurrentUserLang() {
         return getCurrentUser().getLang();
     }
+    public static Cycle getCurrentCycle() {
+    	return getCurrentUser().getCurrentCycle();
+    }
+
+
 }

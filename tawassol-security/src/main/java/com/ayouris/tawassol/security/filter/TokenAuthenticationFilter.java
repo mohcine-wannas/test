@@ -75,11 +75,12 @@ public class TokenAuthenticationFilter extends GenericFilterBean {
                         + user.getUsername() + " }");
             }
 
+            setAuthenticateUser(user, request, response);
+            
             Cycle currentCycle = RequestUtil.extractCurrentCycleFromRequest(request);
             user.setCurrentCycle(currentCycle);
             response.setHeader(RequestUtil.HEADER_CURRENT_CYCLE, TokenUtils.createToken(remoteIpAddr, user));
             
-            setAuthenticateUser(user, request, response);
 
             chain.doFilter(request, response);
 

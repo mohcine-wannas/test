@@ -7,23 +7,17 @@ import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ayouris.tawassol.admin.model.entity.QUser;
 import com.ayouris.tawassol.admin.model.entity.User;
 import com.ayouris.tawassol.common.exception.ErrorMessageType;
-import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.service.impl.BaseServiceImpl;
-import com.ayouris.tawassol.security.predicate.UserPredicate;
 import com.ayouris.tawassol.security.repository.UserRepository;
 import com.ayouris.tawassol.security.service.AuthenticateService;
 import com.ayouris.tawassol.security.service.PasswordService;
-import com.ayouris.tawassol.security.service.UserService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 
 
@@ -31,7 +25,16 @@ import com.ayouris.tawassol.security.utils.SecurityUtils;
 @Service("passwordService")
 public class PasswordServiceImpl extends BaseServiceImpl<User> implements PasswordService {
 
-    private static final Logger logger = LoggerFactory.getLogger(PasswordServiceImpl.class);
+	
+	
+	@Autowired
+    protected PasswordServiceImpl(UserRepository userRepository) {
+		super(userRepository);
+	}
+    
+
+
+	private static final Logger logger = LoggerFactory.getLogger(PasswordServiceImpl.class);
     
     @Autowired
 	private AuthenticateService authenticateService;

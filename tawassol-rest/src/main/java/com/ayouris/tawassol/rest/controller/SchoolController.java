@@ -22,8 +22,7 @@ public class SchoolController extends BaseController {
 	private SchoolService schoolService;
 
     @RequestMapping( method = RequestMethod.PUT)
-    public ResponseEntity<Long> getAdherentById(@RequestBody SchoolBean school) throws Exception {
-
+    public ResponseEntity<Long> updateSchool(@RequestBody SchoolBean school) throws Exception {
         return new ResponseEntity<Long>(schoolService.update(school), HttpStatus.OK);
     }
 
