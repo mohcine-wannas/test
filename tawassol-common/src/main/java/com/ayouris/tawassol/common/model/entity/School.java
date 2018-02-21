@@ -76,7 +76,7 @@ public class School extends RefEntity {
 	
     @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.LAZY, orphanRemoval=true,
     	    mappedBy = "school")
-    private List<AffectationCycle> getAffectationCycles() {
+	public List<AffectationCycle> getAffectationCycles() {
 		return affectationCycles;
     }
 	

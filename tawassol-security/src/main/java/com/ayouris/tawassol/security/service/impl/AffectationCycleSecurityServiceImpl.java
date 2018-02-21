@@ -42,6 +42,12 @@ public class AffectationCycleSecurityServiceImpl extends BaseServiceImpl<Affecta
 		List<AffectationCycle> affectationCycles = affectationCycleRepository.findBySchoolIdAndAnneeScolaireIdOrderByOrderAsc(schoolId, anneeScolaireId);
 		List<Cycle> cycles = new ArrayList<>();
 		for(AffectationCycle affectationCycle : affectationCycles) {
+			if(affectationCycle.getCycle().getActive() == null || !affectationCycle.getCycle().getActive()) {
+				continue;
+			}
+			if(affectationCycle.getEnabled() == null || !affectationCycle.getEnabled() ) {
+				continue;
+			}
 			cycles.add(affectationCycle.getCycle());
 		}
 		cycles.sort((e,e2) -> { return e.getOrder().compareTo(e2.getOrder()); });

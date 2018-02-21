@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
+import com.ayouris.tawassol.common.model.bean.AffectationCycleBean;
 import com.ayouris.tawassol.common.model.bean.AffectationNiveauBean;
 import com.ayouris.tawassol.common.model.bean.FabriquantBean;
 import com.ayouris.tawassol.common.model.entity.AffectationNiveau;
 import com.ayouris.tawassol.repository.AffectationNiveauRepository;
+import com.ayouris.tawassol.security.utils.SecurityUtils;
+import com.ayouris.tawassol.service.AffectationCycleService;
 import com.ayouris.tawassol.service.AffectationNiveauService;
 
 /**
@@ -26,11 +29,12 @@ public class AffectationNiveauServiceImpl extends GenericServiceImpl2<Affectatio
 
     @Autowired
     private CustomModelMapper mapper;
+   @Autowired
+   private AffectationCycleService affectationCycleService;
 
     @Override
     public List<AffectationNiveauBean> getAll() {
-        List<AffectationNiveau> affectationNiveaus = findAll();
-        return mapper.map(affectationNiveaus, FabriquantBean.LIST_BEAN_TYPE);
+    	return affectationCycleService.getCurrentAffectationCycleBean().getAffectationNiveaux();
     }
 
 	

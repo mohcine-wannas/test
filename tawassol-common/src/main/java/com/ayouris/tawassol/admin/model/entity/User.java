@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,28 +23,31 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.Setter;
 import com.ayouris.tawassol.common.mapper.NotNullable;
 import com.ayouris.tawassol.common.model.entity.Cycle;
 import com.ayouris.tawassol.common.model.entity.School;
 import com.ayouris.tawassol.common.model.entity.generic.CoordinatesEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Setter;
 
 @Setter
 @Entity
-@Table(name = "member", schema = "tawassol", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
+
+@Table(name = "member", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 @NotNullable
+@Inheritance(strategy=InheritanceType.JOINED)
 public class User extends CoordinatesEntity implements UserDetails {
 
     private static final long serialVersionUID = -4320600165090121185L;
 
     private String lastname;
     private String firstname;
-    private String description; //TODO to remove
 
     private String username;
     private String password;
+    private String sexe;
+    
     private boolean enabled;
     private School school;
 
@@ -92,11 +97,6 @@ public class User extends CoordinatesEntity implements UserDetails {
     public String getFirstname() {
         return this.firstname;
     }
-
-    @Column(name = "description")
-    public String getDescription() {
-		return description;
-	}
 
     @Transient
     @Override
@@ -192,6 +192,10 @@ public class User extends CoordinatesEntity implements UserDetails {
         builder.append(enabled);
         return builder.toString();
     }
+
+	public String getSexe() {
+		return sexe;
+	}
 
 
 

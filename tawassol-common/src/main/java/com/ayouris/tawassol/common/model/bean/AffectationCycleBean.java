@@ -42,7 +42,7 @@ public class AffectationCycleBean implements Serializable {
 
 	private Long id;
 	private CycleBean cycle;
-	private SchoolBean school;
+	//private SchoolBean school;
 	private AnneeScolaireBean anneeScolaire;
 	private GroupeAppellationBean groupeAppellation;
 	private ClasseNominationType classeNominationType;

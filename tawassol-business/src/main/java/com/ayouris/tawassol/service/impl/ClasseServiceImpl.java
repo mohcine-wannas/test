@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.ClasseBean;
+import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.FabriquantBean;
 import com.ayouris.tawassol.common.model.entity.Classe;
-import com.ayouris.tawassol.common.service.impl.BaseServiceImpl;
-import com.ayouris.tawassol.service.ClasseService;
+import com.ayouris.tawassol.common.model.entity.QClasse;
+import com.ayouris.tawassol.repository.ClasseRepository;
+import com.ayouris.tawassol.service.ClasseService;;
+
 
 /**
  * 
@@ -21,8 +24,8 @@ import com.ayouris.tawassol.service.ClasseService;
 @Service
 public class ClasseServiceImpl extends GenericServiceImpl2<Classe,Long,ClasseBean> implements ClasseService {
 
-//    @Autowired
-//    private ClasseRepository ClasseRepository;
+    @Autowired
+    private ClasseRepository classeRepository;
 
     @Autowired
     private CustomModelMapper mapper;
@@ -33,5 +36,11 @@ public class ClasseServiceImpl extends GenericServiceImpl2<Classe,Long,ClasseBea
         return mapper.map(classes, FabriquantBean.LIST_BEAN_TYPE);
     }
 
+	@Override
+	public List<EleveBean> getAllByNiveauId(Long id) { 
+		QClasse classe = QClasse.classe;
+		Iterable<Classe> list = classeRepository.findAll(classe.affectationNiveau.niveau.id.eq(id));
+		return mapper.map(list, ClasseBean.LIST_BEAN_TYPE);
+	}
 	
 }

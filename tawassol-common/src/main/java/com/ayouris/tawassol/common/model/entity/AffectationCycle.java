@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.ayouris.tawassol.common.model.entity.generic.RefEntity;
 import com.ayouris.tawassol.common.model.enums.ClasseNominationType;
@@ -40,6 +41,7 @@ public class AffectationCycle extends RefEntity {
 	private GroupeAppellation groupeAppellation;
 	private ClasseNominationType classeNominationType;
 	private List<AffectationNiveau> affectationNiveaux;
+	private Boolean enabled;
 
 	public AffectationCycle(School school, Cycle currentCycle, AnneeScolaire anneeScolaire, GroupeAppellation groupeAppellation) {
 		this.setActive(true);
@@ -48,6 +50,7 @@ public class AffectationCycle extends RefEntity {
 		this.setCycle(currentCycle);
 		this.setGroupeAppellation(groupeAppellation);
 		this.setClasseNominationType(ClasseNominationType.ALPHABETIQUE);
+		this.setEnabled(true);
 		List<AffectationNiveau> affectationNiveaux = new ArrayList<>();
 		if(currentCycle.getNiveaux() != null) {
 			for(Niveau niveau : currentCycle.getNiveaux()) {
@@ -95,6 +98,47 @@ public class AffectationCycle extends RefEntity {
 	    	    mappedBy = "affecctationCycle")
 	public List<AffectationNiveau> getAffectationNiveaux() {
 		return affectationNiveaux;
+	}
+
+	@Transient
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((anneeScolaire == null) ? 0 : anneeScolaire.hashCode());
+		result = prime * result + ((cycle == null) ? 0 : cycle.hashCode());
+		result = prime * result + ((school == null) ? 0 : school.hashCode());
+		return result;
+	}
+
+	@Transient
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		AffectationCycle other = (AffectationCycle) obj;
+		if (anneeScolaire == null) {
+			if (other.anneeScolaire != null)
+				return false;
+		} else if (!anneeScolaire.equals(other.anneeScolaire))
+			return false;
+		if (cycle == null) {
+			if (other.cycle != null)
+				return false;
+		} else if (!cycle.equals(other.cycle))
+			return false;
+		if (school == null) {
+			if (other.school != null)
+				return false;
+		} else if (!school.equals(other.school))
+			return false;
+		return true;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
 	}
  
 }
