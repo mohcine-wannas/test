@@ -25,7 +25,7 @@ spring:
       # Supported values include create, create-drop, update, and validate.
       ddl-auto: update
       naming:
-        implicit-strategy: ma.salamgaz.tawassol.common.model.helper.cfg.CustomNamingStrategy
+        implicit-strategy: com.ayouris.tawassol.common.model.helper.cfg.CustomNamingStrategy
 
 
   mail:

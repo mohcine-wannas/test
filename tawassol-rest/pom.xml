@@ -76,7 +76,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>ma.salamgaz.tawassol.rest.TawassolRest</mainClass>
+					<mainClass>com.ayouris.tawassol.rest.TawassolRest</mainClass>
 					<executable>true</executable>
 				</configuration>
 			</plugin>
