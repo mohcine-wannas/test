@@ -28,35 +28,14 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
 	@Autowired
 	private EleveRepository eleveRepository;
 	
-//	@Override
-//	public Long update(EleveBean eleveBean) {
-//		//TODO validators
-//		Eleve eleve = mapper.mapStrict(eleveBean, Eleve.class);
-//		Eleve oldEleve  = findOne(eleveBean.getId());
-//		eleve.setVille(oldEleve.getVille());
-//		eleve.setPays(oldEleve.getPays());
-//		eleve.setId(oldEleve.getId());
-//		eleve.setNom(oldEleve.getNom());
-//		eleve.setAdresse(oldEleve.getAdresse());
-//		eleve.setCode(oldEleve.getCode());
-//		eleve.setCodeMassar(oldEleve.getCodeMassar());
-//		List<AffectationCycle> affectations = new ArrayList<>();
-//		for(CycleBean cycleBean: eleveBean.getCycles()) {
-//			AnneeScolaire currentAnneeScolaire = SecurityUtils.getCurrentAnneeScolaire();
-//			AffectationCycle affectation = affectationCycleService.generateDefaultAffectationCycle(eleve,cycleBean,currentAnneeScolaire);
-//			affectations.add(affectation);
-//		}
-//		eleve.setAffectationCycles(affectations);
-//		save(eleve);
-//		return eleve.getId();
-//	}
-	
 	@Override
 	public List<EleveBean> getAllByClasseId(Long classeId) {
 		
 		QEleve eleve = QEleve.eleve;
 		QAffectationEleveClasse affectationEleveClasse = QAffectationEleveClasse.affectationEleveClasse;
-		Iterable<Eleve> list = eleveRepository.findAll(eleve.id.in(JPAExpressions.selectFrom(affectationEleveClasse).where(affectationEleveClasse.classe.id.eq(classeId)).select(affectationEleveClasse.eleve.id)));
+		Iterable<Eleve> list = eleveRepository.findAll(eleve.id.in(JPAExpressions.selectFrom(affectationEleveClasse)
+																					.where(affectationEleveClasse.classe.id.eq(classeId))
+																					.select(affectationEleveClasse.eleve.id)));
 		return mapper.map(list, EleveBean.LIST_BEAN_TYPE);
 	}
 

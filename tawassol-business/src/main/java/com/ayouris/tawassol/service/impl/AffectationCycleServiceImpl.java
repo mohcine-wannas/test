@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ayouris.tawassol.common.exception.ErrorMessageType;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.AffectationCycleBean;
 import com.ayouris.tawassol.common.model.bean.AffectationNiveauBean;
@@ -25,6 +26,7 @@ import com.ayouris.tawassol.security.service.CycleSecurityService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.AffectationCycleService;
 import com.ayouris.tawassol.service.GroupeAppellationService;
+import com.ayouris.tawassol.service.ServiceException;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 /**
@@ -93,11 +95,11 @@ public class AffectationCycleServiceImpl extends GenericServiceImpl2<Affectation
 
 	@Override
 	public Long save(AffectationCycleBean affectationCycle) {
-		//Validators //TODO
+		validateRequiredFields(affectationCycle);
 		Long id = affectationCycle.getId();
 		AffectationCycle oldAffectationCycle = findOne(id);
 		if(oldAffectationCycle == null) {
-			//TODO throw
+			throw new ServiceException(ErrorMessageType.ENTRY_NOT_FOUND);
 		}
 		
 		generateClasse(oldAffectationCycle,affectationCycle);
@@ -107,6 +109,20 @@ public class AffectationCycleServiceImpl extends GenericServiceImpl2<Affectation
 			renameClass(oldAffectationCycle);
 		}
 		return save(oldAffectationCycle).getId();
+	}
+
+	private void validateRequiredFields(AffectationCycleBean affectationCycle) {
+		if(affectationCycle.getId() == null || affectationCycle.getGroupeAppellation() == null ||  affectationCycle.getGroupeAppellation().getId() == null
+				|| affectationCycle.getClasseNominationType() == null 
+				|| affectationCycle.getAffectationNiveaux() == null 
+				) {
+			throw new ServiceException(ErrorMessageType.MISSING_REQUIRED_FIELDS);
+		}
+		for (AffectationNiveauBean affectationNiveau : affectationCycle.getAffectationNiveaux()) {
+			if(affectationNiveau == null || affectationNiveau.getId()==null ||affectationNiveau.getNombreDeClasse() == null ) {
+				throw new ServiceException(ErrorMessageType.MISSING_REQUIRED_FIELDS);
+			}
+		}
 	}
 
 	private void generateClasse(AffectationCycle oldAffectationCycle, AffectationCycleBean affectationCycleBean) {

@@ -154,8 +154,13 @@ public enum ErrorMessageType {
     //Periode
     PERIODE_MISSING_REQUIRED_VALUES(HttpServletResponse.SC_CONFLICT, 201, "Piece de Reglement", "Periode : Un ou plusieurs champs obligatoires sont manquants"),
     
+    //TAWASSOL 
     
-    DELETE_ERROR(HttpServletResponse.SC_CONFLICT, 201, "Suppression", "Impossible de supprimer cet objet car il est déjà utilisé")
+    DELETE_ERROR(HttpServletResponse.SC_CONFLICT, 201, "Suppression", "Impossible de supprimer cet objet car il est déjà utilisé"), 
+    ENTRY_NOT_FOUND(HttpServletResponse.SC_CONFLICT, 202, "Erreur", "Aucune enregistrement n'est trouvée avec l'identifiant mentioné"),
+    MISSING_REQUIRED_FIELDS(HttpServletResponse.SC_CONFLICT, 203, "Erreur", "Un ou plusieurs champs obligatoires sont manquants"),
+    //ECOLE
+    SCHOOL_NO_CYCLE(HttpServletResponse.SC_CONFLICT, 210, "Ecole", "Vous devez au moins activer un cycle"),
     
     ;
 	

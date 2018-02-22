@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ayouris.tawassol.common.exception.ErrorMessageType;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.CycleBean;
 import com.ayouris.tawassol.common.model.bean.SchoolBean;
@@ -17,6 +18,7 @@ import com.ayouris.tawassol.security.service.CycleSecurityService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.AffectationCycleService;
 import com.ayouris.tawassol.service.SchoolService;
+import com.ayouris.tawassol.service.ServiceException;
 
 /**
  * 
@@ -36,9 +38,12 @@ public class SchoolServiceImpl extends GenericServiceImpl2<School, Long, SchoolB
 
 	@Override
 	public Long update(SchoolBean schoolBean) {
-		// TODO validators
+		validateRequiredFields(schoolBean);
 		School school = mapper.mapStrict(schoolBean, School.class);
 		School oldSchool = findOne(schoolBean.getId());
+		if(oldSchool == null) {
+			throw new ServiceException(ErrorMessageType.ENTRY_NOT_FOUND);
+		}
 		school.setVille(oldSchool.getVille());
 		school.setPays(oldSchool.getPays());
 		school.setId(oldSchool.getId());
@@ -89,6 +94,17 @@ public class SchoolServiceImpl extends GenericServiceImpl2<School, Long, SchoolB
 		school.setAffectationCycles(oldSchool.getAffectationCycles());
 		save(school);
 		return school.getId();
+	}
+
+	private void validateRequiredFields(SchoolBean schoolBean) {
+		if(schoolBean.getId() == null) {
+			throw new ServiceException(ErrorMessageType.MISSING_REQUIRED_FIELDS);
+
+		}
+		if(schoolBean.getCycles() == null || schoolBean.getCycles().isEmpty() ) {
+			throw new ServiceException(ErrorMessageType.SCHOOL_NO_CYCLE);
+		}
+
 	}
 
 }

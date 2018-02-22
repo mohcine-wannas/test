@@ -62,7 +62,6 @@ public class AffectationCycle extends RefEntity {
 	}
 
 	public AffectationCycle() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@ManyToOne
