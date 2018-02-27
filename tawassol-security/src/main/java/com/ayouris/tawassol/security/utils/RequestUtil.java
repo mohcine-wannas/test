@@ -16,7 +16,6 @@ import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UrlPathHelper;
 
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.CycleBean;
@@ -55,6 +54,8 @@ public class RequestUtil {
     public static final String INDEX_LINK = "/index.html";
     public static final String RESOURCES_LINK = "/resources/*";
     public static final String LOGOUT_LINK = "/logout";
+    public static final String[] FREE_LINK = {"/_set-parent"};
+    
     public static final String HEADER_TOKEN = "x-auth-token";
     public static final String REMOTE_USER = "REMOTE_USER";
     public static final String USERNAME = "username";
@@ -77,8 +78,8 @@ public class RequestUtil {
     }
 
     public static boolean isRequiresAuthentication(HttpServletRequest request) {
-        String resourcePath = new UrlPathHelper().getPathWithinApplication(request);
-        if (isLoginRequest(request) || isLogoutRequest(request)
+//        String resourcePath = new UrlPathHelper().getPathWithinApplication(request);
+        if (isLoginRequest(request) || isLogoutRequest(request) || isFreeRequest(request)
                 || "OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return false;
         }
@@ -110,6 +111,14 @@ public class RequestUtil {
             return true;
         }
         return false;
+    }
+    public static boolean isFreeRequest(HttpServletRequest httpRequest) {
+    	for (String link : FREE_LINK) {
+    		if (currentLink(httpRequest).contains(link)) {
+        		return true;
+        	}
+		}
+    	return false;
     }
 
     public static boolean isLoginRequest(HttpServletRequest httpRequest) {

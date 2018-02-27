@@ -52,13 +52,15 @@ public class PasswordServiceImpl extends BaseServiceImpl<User> implements Passwo
     	return currentUser.getId();
     }
 
+    
     private void validate(Map<String, String> bean) {
     	if(bean == null || StringUtils.isBlank(bean.get("oldPassword")) || StringUtils.isBlank(bean.get("newPassword"))) {
     		throw new ServiceException(ErrorMessageType.TMP_EXCEPTION.getMessage());
     	}
     }
 
-    private String encodePassword(String pwd) {
+    @Override
+    public String encodePassword(String pwd) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(pwd);
     }

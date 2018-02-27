@@ -1,6 +1,5 @@
 package com.ayouris.tawassol.common.model.entity;
 
-import java.beans.Transient;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,8 +11,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Setter;
 import com.ayouris.tawassol.common.model.entity.generic.RefEntity;
+
+import lombok.Setter;
 
 /**
  * 

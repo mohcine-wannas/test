@@ -5,13 +5,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ayouris.tawassol.common.model.entity.School;
 import com.google.common.reflect.TypeToken;
 
 import lombok.Getter;
 import lombok.Setter;
-import com.ayouris.tawassol.common.model.entity.Cycle;
-import com.ayouris.tawassol.common.model.entity.School;
 
 /**
  * 

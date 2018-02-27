@@ -1,8 +1,10 @@
 package com.ayouris.tawassol.common.model.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -41,6 +43,13 @@ public class Eleve  extends User{
 	public String getObservation() {
 		return observation;
 	}
+	
+	private List<AffectationParentEleve> affectationParents;
+	
+    @OneToMany(orphanRemoval=true, mappedBy = "eleve")
+	public List<AffectationParentEleve> getAffectationParents() {
+		return affectationParents;
+    }
 
 //	public Long getUser_id() {
 //		return user_id;

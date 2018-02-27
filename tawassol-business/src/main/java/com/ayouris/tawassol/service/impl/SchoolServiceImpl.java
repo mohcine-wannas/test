@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ayouris.tawassol.common.exception.ErrorMessageType;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
@@ -37,8 +38,8 @@ public class SchoolServiceImpl extends GenericServiceImpl2<School, Long, SchoolB
 	private CycleSecurityService cycleService;
 
 	@Override
+	@Transactional
 	public Long update(SchoolBean schoolBean) {
-		validateRequiredFields(schoolBean);
 		School school = mapper.mapStrict(schoolBean, School.class);
 		School oldSchool = findOne(schoolBean.getId());
 		if(oldSchool == null) {
@@ -94,17 +95,6 @@ public class SchoolServiceImpl extends GenericServiceImpl2<School, Long, SchoolB
 		school.setAffectationCycles(oldSchool.getAffectationCycles());
 		save(school);
 		return school.getId();
-	}
-
-	private void validateRequiredFields(SchoolBean schoolBean) {
-		if(schoolBean.getId() == null) {
-			throw new ServiceException(ErrorMessageType.MISSING_REQUIRED_FIELDS);
-
-		}
-		if(schoolBean.getCycles() == null || schoolBean.getCycles().isEmpty() ) {
-			throw new ServiceException(ErrorMessageType.SCHOOL_NO_CYCLE);
-		}
-
 	}
 
 }

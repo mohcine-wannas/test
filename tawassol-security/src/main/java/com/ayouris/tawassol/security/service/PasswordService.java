@@ -11,4 +11,6 @@ public interface PasswordService extends BaseService<User> {
 
 	Long passwordChange(Map<String, String> bean);
 
+	String encodePassword(String pwd);
+
 }

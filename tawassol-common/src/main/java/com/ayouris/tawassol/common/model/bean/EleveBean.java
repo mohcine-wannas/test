@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.ayouris.tawassol.common.model.entity.Eleve;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.reflect.TypeToken;
 
 import lombok.Getter;
@@ -40,4 +42,37 @@ public class EleveBean implements Serializable{
 	private LocalDate dateNaissance;
 	private String codeMassar;
 	private String observation;
+	private Boolean hasAffectations;
+	private Boolean hasToBeEnabled;
+	private Boolean enabledAffectations;
+
+	@JsonIgnore
+	private List<AffectationParentEleveBean> affectationParents;
+	
+	
+	public Boolean getHasToBeEnabled() {
+		for (AffectationParentEleveBean affectationParentEleveBean : affectationParents) {
+			if(affectationParentEleveBean.getEnabled() == null) {
+				hasToBeEnabled = true;
+				return hasToBeEnabled;
+			}
+		}
+		hasToBeEnabled = false;
+		return hasToBeEnabled;	}
+	
+	public Boolean getHasAffectations() {
+		hasAffectations =  !affectationParents.isEmpty();
+		return hasAffectations;
+	}
+	
+	public Boolean getEnabledAffectations() {
+		enabledAffectations = true;
+		for (AffectationParentEleveBean affectationParentEleveBean : affectationParents) {
+			if(affectationParentEleveBean.getEnabled() == null || !affectationParentEleveBean.getEnabled()) {
+				enabledAffectations = false;
+				break;
+			}
+		}
+		return enabledAffectations;
+	}
 }

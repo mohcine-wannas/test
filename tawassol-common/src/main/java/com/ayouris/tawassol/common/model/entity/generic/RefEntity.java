@@ -11,7 +11,7 @@ public abstract class RefEntity extends AuditEntity {
 
 
 	private Boolean active;
-	private Integer Order;
+	private Integer order;
 
 	public Boolean getActive() {
 		return active;
@@ -19,7 +19,7 @@ public abstract class RefEntity extends AuditEntity {
 
 	@Column(name="ordre")
 	public Integer getOrder() {
-		return Order;
+		return order;
 	}
 
 }

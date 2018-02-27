@@ -50,6 +50,7 @@ public class User extends CoordinatesEntity implements UserDetails {
     
     private boolean enabled;
     private School school;
+    
 
     private Set<Role> roles = new HashSet<Role>(0);
 
