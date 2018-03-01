@@ -86,4 +86,14 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
 		}
 		
 	}
+
+	@Override
+	public Boolean verifierCodeMassar(String codeMassar) {
+		Eleve eleve = getEleveByCodeMassar(codeMassar);
+		if(eleve == null) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 }

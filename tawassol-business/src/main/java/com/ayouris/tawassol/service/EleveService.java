@@ -25,4 +25,6 @@ public interface EleveService extends GenericService<Eleve, Long> {
 
 	void enableParent(Long id, Boolean enable);
 
+	Boolean verifierCodeMassar(String codeMassar);
+
 }

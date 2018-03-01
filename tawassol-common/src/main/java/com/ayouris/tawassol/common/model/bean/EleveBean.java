@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ayouris.tawassol.common.model.entity.Eleve;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.reflect.TypeToken;
 
 import lombok.Getter;
@@ -46,7 +45,6 @@ public class EleveBean implements Serializable{
 	private Boolean hasToBeEnabled;
 	private Boolean enabledAffectations;
 
-	@JsonIgnore
 	private List<AffectationParentEleveBean> affectationParents;
 	
 	

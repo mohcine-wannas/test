@@ -54,7 +54,7 @@ public class RequestUtil {
     public static final String INDEX_LINK = "/index.html";
     public static final String RESOURCES_LINK = "/resources/*";
     public static final String LOGOUT_LINK = "/logout";
-    public static final String[] FREE_LINK = {"/_set-parent"};
+    public static final String FREE_LINK = "/__";
     
     public static final String HEADER_TOKEN = "x-auth-token";
     public static final String REMOTE_USER = "REMOTE_USER";
@@ -113,11 +113,9 @@ public class RequestUtil {
         return false;
     }
     public static boolean isFreeRequest(HttpServletRequest httpRequest) {
-    	for (String link : FREE_LINK) {
-    		if (currentLink(httpRequest).contains(link)) {
+    		if (currentLink(httpRequest).contains(FREE_LINK)) {
         		return true;
         	}
-		}
     	return false;
     }
 

@@ -23,7 +23,7 @@ public class EleveController extends BaseController {
 	@Autowired
 	private EleveService eleveService;
 
-    @RequestMapping(value = "{codeMassar}/_set-parent", method = RequestMethod.PUT)
+    @RequestMapping(value = "{codeMassar}/__set-parent", method = RequestMethod.PUT)
     public ResponseEntity<Long> setParent(@PathVariable("codeMassar") String codeMassar,@RequestBody ParentBean parent) throws Exception {
       return new ResponseEntity<Long>(eleveService.setParent(codeMassar,parent), HttpStatus.OK);
     }
@@ -32,6 +32,12 @@ public class EleveController extends BaseController {
     public ResponseEntity<Long> enableParent(@PathVariable("id") Long id,@RequestBody Boolean enabled) throws Exception {
     	eleveService.enableParent(id,enabled);
     	return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "{codeMassar}/__exists", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> verifierCodeMassar(@PathVariable("codeMassar") String codeMassar) throws Exception {
+    	
+    	return new ResponseEntity<>(eleveService.verifierCodeMassar(codeMassar),HttpStatus.OK);
     }
 
 }
