@@ -12,7 +12,6 @@ import com.ayouris.tawassol.admin.model.entity.QUser;
 import com.ayouris.tawassol.admin.model.entity.User;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.service.impl.BaseServiceImpl;
-import com.ayouris.tawassol.security.predicate.UserPredicate;
 import com.ayouris.tawassol.security.repository.UserRepository;
 import com.ayouris.tawassol.security.service.UserService;
 
@@ -28,15 +27,15 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	}
     
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     
     private UserRepository userRepository;
 
-    @Autowired
-    private UserPredicate userPredicate;
     
-    @Autowired
+    @SuppressWarnings("unused")
+	@Autowired
     private CustomModelMapper mapper;
     
 	@Override

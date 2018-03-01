@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@SuppressWarnings("unused")
 public class ErrorMessage implements Serializable {
 
 	private static final long serialVersionUID = 134029623684047335L;

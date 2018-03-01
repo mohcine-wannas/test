@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ayouris.tawassol.common.model.bean.EleveBean;
-import com.ayouris.tawassol.common.model.entity.Eleve;
 import com.ayouris.tawassol.service.EleveService;
 
 import io.swagger.annotations.Api;

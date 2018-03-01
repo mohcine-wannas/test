@@ -1,5 +1,8 @@
 package com.ayouris.tawassol.rest.exception;
 
+import java.io.Serializable;
+import java.sql.SQLException;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,10 +14,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.io.Serializable;
-import java.sql.SQLException;
-
 public class GlobalException extends Exception implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8697525975452434452L;
 	/**
 	 * 
 	 */
@@ -39,10 +43,10 @@ public class GlobalException extends Exception implements Serializable {
 			EntityNotFoundException entityNotFoundException = (EntityNotFoundException) e;
 			status = HttpStatus.NOT_FOUND;
 			message = messageSource.getMessage(entityNotFoundException.getMessage(), entityNotFoundException.getParams(), null);
-		} else if (e instanceof EntityAlreadyExistsException) {
-			EntityAlreadyExistsException entityAlreadyExistsException = (EntityAlreadyExistsException) e;
-			status = HttpStatus.CONFLICT;
-			message = messageSource.getMessage(entityAlreadyExistsException.getMessage(), entityAlreadyExistsException.getParams(), null);
+//		} else if (e instanceof EntityAlreadyExistsException) {
+//			EntityAlreadyExistsException entityAlreadyExistsException = (EntityAlreadyExistsException) e;
+//			status = HttpStatus.CONFLICT;
+//			message = messageSource.getMessage(entityAlreadyExistsException.getMessage(), entityAlreadyExistsException.getParams(), null);
 		} else if (e instanceof BadCredentialsException) {
 			status = HttpStatus.UNAUTHORIZED;
 			message = messageSource.getMessage("auth.message.error", null, null);

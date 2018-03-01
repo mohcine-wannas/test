@@ -3,6 +3,11 @@ package com.ayouris.tawassol.rest.exception;
 
 public class BusinessRuleException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5633454096491224421L;
+	
 	private String[] params;
 
 	public BusinessRuleException(String message) {

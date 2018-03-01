@@ -1,11 +1,16 @@
 package com.ayouris.tawassol.common.model.helper.bean;
 
-import com.ayouris.tawassol.common.model.enumeration.ENUM_TYPE_ACTION;
-
 import java.io.Serializable;
 import java.util.Date;
 
+import com.ayouris.tawassol.common.model.enumeration.ENUM_TYPE_ACTION;
+
 public class AuditEntity implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 127548420436711534L;
 
 	/** Colonne */
 	private String colonne;

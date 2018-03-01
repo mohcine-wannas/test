@@ -24,31 +24,6 @@ public interface CommonRepository<T extends BaseEntity> extends JpaRepository<T,
      */
     Long getSequenceNextVal(String sequenceName);
     
-    /**
-     * Find referential data by text
-     * 
-     * @param entityRef
-     *            referential entity (ex: country_ref)
-     * @param entityLang
-     *            lang referential entity (ex: country__lang)
-     * @param predicate
-     *            predicate (where condition)
-     * @param userLang
-     *            user language
-     * @param pageNumber
-     *            page number
-     * @param pageSize
-     *            page size
-     * @param orderByColumn
-     *            column to be ordered with
-     * @return List of referential data corresponding to search text
-     */
-    <O extends Comparable<O>, P extends BaseEntity> Iterable<T> findRefData(Class<T> entityRef, Class<P> entityLang,
-            Predicate predicate, Integer pageNumber, Integer pageSize, String orderByColumn);
-
-    <O extends Comparable<O>, P extends BaseEntity> Iterable<T> findRefDataWithCountry(Class<T> entityRef,
-            Class<P> entityLang, Predicate predicate, Integer pageNumber, Integer pageSize, String orderByColumn,
-            String userLang);
     
     <O extends Comparable<O>> Iterable<T> searchOrderedByEntityGraph(Predicate predicate, EntityPathBase<T> qObject,
             List<String> properties, Integer pageNumber, Integer pageSize, OrderSpecifier<O> order);
@@ -56,5 +31,7 @@ public interface CommonRepository<T extends BaseEntity> extends JpaRepository<T,
     Iterable<T> searchByEntityGraph(Predicate predicate, EntityPathBase<T> qObject, String... properties);
     
     T searchOneByEntityGraph(Predicate predicate, EntityPathBase<T> qObject, String... properties);
+
+
 
 }

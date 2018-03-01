@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ayouris.tawassol.common.model.entity.AffectationNiveau;
-import com.ayouris.tawassol.common.model.entity.Classe;
 import com.google.common.reflect.TypeToken;
 
 import lombok.Getter;

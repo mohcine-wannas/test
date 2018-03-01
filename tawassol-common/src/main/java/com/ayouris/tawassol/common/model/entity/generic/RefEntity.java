@@ -10,6 +10,10 @@ import lombok.Setter;
 public abstract class RefEntity extends AuditEntity {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 476329361189681706L;
 	private Boolean active;
 	private Integer order;
 

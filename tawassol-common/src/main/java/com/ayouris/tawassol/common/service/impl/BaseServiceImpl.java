@@ -2,7 +2,6 @@ package com.ayouris.tawassol.common.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ayouris.tawassol.common.model.entity.generic.BaseEntity;

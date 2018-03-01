@@ -2,7 +2,6 @@ package com.ayouris.tawassol.security.model;
 
 import java.io.Serializable;
 
-import com.ayouris.tawassol.common.model.entity.School;
 import com.ayouris.tawassol.common.util.BeanUtils;
 
 import lombok.Getter;

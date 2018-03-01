@@ -14,7 +14,8 @@ public abstract class QueryUtils {
      * @param pageSize
      *            page size
      */
-    public static void applyPagination(JPAQuery query, Integer pageNumber, Integer pageSize) {
+    @SuppressWarnings("rawtypes")
+	public static void applyPagination(JPAQuery query, Integer pageNumber, Integer pageSize) {
         if (pageSize != null) {
             if (isValidPageParam(pageSize)) {
                 query = (JPAQuery) query.limit(pageSize.longValue()); 

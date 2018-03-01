@@ -2,6 +2,10 @@ package com.ayouris.tawassol.rest.exception;
 
 public class EntityNotFoundException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6226729777440224408L;
 	private String[] params;
 
 	public EntityNotFoundException(String message) {

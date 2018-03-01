@@ -3,18 +3,13 @@ package com.ayouris.tawassol.common.util;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import com.ayouris.tawassol.common.enums.ContactType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.reflect.TypeToken;
 
-import com.ayouris.tawassol.common.enums.ContactType;
-
 import lombok.Getter;
-import lombok.Setter;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Getter
-@Setter
-@SuppressWarnings("unused")
 public class RoleInfo {
 
     @SuppressWarnings("serial")

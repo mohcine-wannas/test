@@ -8,6 +8,10 @@ import java.sql.Timestamp;
 
 public class ErrorResponse implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3715863360595585984L;
 	private Timestamp timestamp;
 	private int status;
 	private String error;

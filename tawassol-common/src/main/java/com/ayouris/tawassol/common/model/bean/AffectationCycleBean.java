@@ -5,17 +5,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ayouris.tawassol.common.model.entity.AffectationCycle;
+import com.ayouris.tawassol.common.model.enums.ClasseNominationType;
 import com.google.common.reflect.TypeToken;
 
 import lombok.Getter;
 import lombok.Setter;
-import com.ayouris.tawassol.common.model.entity.AffectationCycle;
-import com.ayouris.tawassol.common.model.entity.AffectationNiveau;
-import com.ayouris.tawassol.common.model.entity.AnneeScolaire;
-import com.ayouris.tawassol.common.model.entity.Cycle;
-import com.ayouris.tawassol.common.model.entity.GroupeAppellation;
-import com.ayouris.tawassol.common.model.entity.School;
-import com.ayouris.tawassol.common.model.enums.ClasseNominationType;
 
 /**
  * 

@@ -34,6 +34,7 @@ public class PasswordServiceImpl extends BaseServiceImpl<User> implements Passwo
     
 
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(PasswordServiceImpl.class);
     
     @Autowired

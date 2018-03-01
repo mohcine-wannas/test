@@ -1,17 +1,5 @@
 package com.ayouris.tawassol.reporting.helper;
 
-import lombok.Getter;
-import lombok.Setter;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,6 +9,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import org.springframework.stereotype.Component;
+
+import lombok.Getter;
+import lombok.Setter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
 
 @Component
 @Getter
@@ -108,25 +113,15 @@ public class BuildReport implements Serializable {
     }
 
     private JasperPrint buidAsJasperPrint()  throws Exception {
-        String reportPath = null;
         JasperPrint jasperPrint = null;
 
         ClassLoader classLoader = getClass().getClassLoader();
         URL url = classLoader.getResource("reports/" + nomReport + ".jasper");
 
-//        StringBuffer javascript = new StringBuffer();
-//        javascript.append("var params= his.getPrintParams();");
-//        javascript.append("params.interactive=params.constants.interactionLevel.silent;");
-//        javascript.append("params.pageHandling =params.constants.handling.shrink;");
-//        javascript.append("this.print(params);");
-//        parameters.put(PdfExporterConfiguration.PROPERTY_PDF_JAVASCRIPT, javascript.toString());
 
 
         if (null != url) {
-
-            File reportFile = new File(url.getFile());
             jasperPrint = JasperFillManager.fillReport(url.getFile(), parameters, new JRBeanCollectionDataSource(listeBean));
-
         } else {
             url = classLoader.getResource("reports/" + nomReport + ".jrxml");
             if (null == url) {
@@ -142,7 +137,8 @@ public class BuildReport implements Serializable {
         return  jasperPrint;
     }
 
-    private String exportPdfReport(JasperPrint jasperPrint) throws Exception {
+    @SuppressWarnings("unused")
+	private String exportPdfReport(JasperPrint jasperPrint) throws Exception {
 
         byte[] binaryData = JasperExportManager.exportReportToPdf(jasperPrint);
 
@@ -154,7 +150,8 @@ public class BuildReport implements Serializable {
         return filePath;
     }
 
-    private void exportXlsReport(JasperPrint jasperPrint) throws Exception {
+    @SuppressWarnings("unused")
+	private void exportXlsReport(JasperPrint jasperPrint) throws Exception {
 
         jasperPrint.setProperty("net.sf.jasperreports.export.xls.exclude.origin.band.1", "pageHeader");
         jasperPrint.setProperty("net.sf.jasperreports.export.xls.exclude.origin.band.2", "pageFooter");

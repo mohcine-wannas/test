@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@SuppressWarnings("unused")
 public class BackendException extends RuntimeException {
 
 	private static final long serialVersionUID = 6204548847348758051L;

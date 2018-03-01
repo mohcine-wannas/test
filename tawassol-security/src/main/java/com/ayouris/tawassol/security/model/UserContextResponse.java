@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.Setter;
-import com.ayouris.tawassol.common.model.bean.SchoolBean;
 
 @Getter
 @Setter

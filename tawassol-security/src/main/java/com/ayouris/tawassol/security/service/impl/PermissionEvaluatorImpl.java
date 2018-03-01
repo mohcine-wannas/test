@@ -1,6 +1,5 @@
 package com.ayouris.tawassol.security.service.impl;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ayouris.tawassol.common.enums.ContactType;

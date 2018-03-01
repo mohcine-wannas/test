@@ -6,30 +6,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.ayouris.tawassol.common.mapper.NotNullable;
-import com.ayouris.tawassol.common.util.BeanUtils;
+import com.ayouris.tawassol.common.model.entity.generic.CoordinatesEntity;
 
 import lombok.Setter;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import com.ayouris.tawassol.common.model.entity.generic.CoordinatesEntity;
-import com.ayouris.tawassol.common.model.entity.ref.CountryRef;
 
 @Setter
 @Entity
@@ -51,7 +40,6 @@ public class Organization extends CoordinatesEntity {
     private String additionalAddress = "";
     private String zipCode = "";
     private String city = "";
-    private CountryRef countryRef;
 
     private String managerLastname = "";
     private String managerFirstname = "";
@@ -143,11 +131,6 @@ public class Organization extends CoordinatesEntity {
     }
 
    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "country_id")
-    public CountryRef getCountryRef() {
-        return countryRef;
-    }
 
    
     @Column(name = "manager_lastname")
@@ -186,10 +169,5 @@ public class Organization extends CoordinatesEntity {
         // nothing to do. used only to avoid mapping issue.
     }
 
-    @Transient
-    public String getCompleteAddress() {
-        return BeanUtils.getCompleteAddress(address, additionalAddress, zipCode, city, countryRef.getLabel(),
-                countryRef.getCode());
-    }
 
 }

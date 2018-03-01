@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.ayouris.tawassol.common.model.bean.AffectationNiveauBean;
 import com.ayouris.tawassol.common.model.entity.AffectationNiveau;
-import com.ayouris.tawassol.common.model.entity.Appellation;
-import com.ayouris.tawassol.common.service.BaseService;
 
 /**
  * 

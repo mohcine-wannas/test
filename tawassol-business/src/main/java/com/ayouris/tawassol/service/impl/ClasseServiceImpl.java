@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.ClasseBean;
 import com.ayouris.tawassol.common.model.bean.EleveBean;
-import com.ayouris.tawassol.common.model.bean.FabriquantBean;
 import com.ayouris.tawassol.common.model.entity.Classe;
 import com.ayouris.tawassol.common.model.entity.QClasse;
 import com.ayouris.tawassol.repository.ClasseRepository;
@@ -33,7 +32,7 @@ public class ClasseServiceImpl extends GenericServiceImpl2<Classe,Long,ClasseBea
     @Override
     public List<ClasseBean> getAll() {
         List<Classe> classes = findAll();
-        return mapper.map(classes, FabriquantBean.LIST_BEAN_TYPE);
+        return mapper.map(classes, ClasseBean.LIST_BEAN_TYPE);
     }
 
 	@Override

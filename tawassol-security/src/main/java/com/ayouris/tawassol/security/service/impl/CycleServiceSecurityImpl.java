@@ -3,14 +3,12 @@ package com.ayouris.tawassol.security.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.CycleBean;
 import com.ayouris.tawassol.common.model.entity.Cycle;
 import com.ayouris.tawassol.common.model.entity.QCycle;
-import com.ayouris.tawassol.common.model.entity.generic.QRefEntity;
 import com.ayouris.tawassol.common.service.impl.BaseServiceImpl;
 import com.ayouris.tawassol.repository.CycleRepository;
 import com.ayouris.tawassol.security.service.CycleSecurityService;
