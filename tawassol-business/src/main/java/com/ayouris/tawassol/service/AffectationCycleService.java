@@ -17,6 +17,10 @@ public interface AffectationCycleService extends GenericService<AffectationCycle
 
 	AffectationCycleBean getCurrentAffectationCycleBean();
 
+	AffectationCycle getAffectationCycleBySchoolAndCycleAndAnneeScolaire(School school, Cycle cycle, AnneeScolaire anneeScolaire);
+
+	AffectationCycle getAffectationCycleByCycleIdAndSchoolIdAndAnneeScolaireId(Long cycleId, Long schoolId, Long anneeScolaireId);
+
 	Long save(AffectationCycleBean affectationCycle);
 
 	AffectationCycle generateDefaultAffectationCycle(School school, Cycle cycle, AnneeScolaire currentAnneeScolaire);

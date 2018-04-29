@@ -50,6 +50,9 @@ public class User extends CoordinatesEntity implements UserDetails {
     
     private boolean enabled;
     private School school;
+
+    private String fcmWebToken;
+    private String fcmMobileToken;
     
 
     private Set<Role> roles = new HashSet<Role>(0);
@@ -198,6 +201,11 @@ public class User extends CoordinatesEntity implements UserDetails {
 		return sexe;
 	}
 
+    public String getFcmWebToken() {
+        return fcmWebToken;
+    }
 
-
+    public String getFcmMobileToken() {
+        return fcmMobileToken;
+    }
 }

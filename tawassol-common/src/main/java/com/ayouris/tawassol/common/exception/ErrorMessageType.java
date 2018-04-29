@@ -67,14 +67,14 @@ public enum ErrorMessageType {
             HttpServletResponse.SC_UNAUTHORIZED, 25, "not available", "available only for partners"),
     SC_INTERNAL_SERVER_ERROR(
             HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 26, "INTERNAL_SERVER_ERROR", "INTERNAL_SERVER_ERROR"),
-    
+
     TMP_EXCEPTION(
             HttpServletResponse.SC_BAD_REQUEST, 27, "n/a", "tmp exception"),
     USER_ACCOUNT_DISABLED(
             HttpServletResponse.SC_UNAUTHORIZED, 2, "USEr_DISABLED", "User account is disabled"),
     BAD_STATUS(
             HttpServletResponse.SC_BAD_REQUEST, 52, "status", "Unrecognized status value"),
-   
+
     // Roles
     ROLE_RANK_NOT_VALID(
             HttpServletResponse.SC_BAD_REQUEST, 69, "role rank", "Role rank must be greater or equal than user rank"),
@@ -92,8 +92,8 @@ public enum ErrorMessageType {
             HttpServletResponse.SC_CONFLICT, 101, "Agreement number", "Organisation agreement number already exists"),
 
     WORNG_PASSWORD( HttpServletResponse.SC_UNAUTHORIZED, 101, "Mot de passe", "Le mot de passe que vous avez saisis est incorrect"),
-    
-	// Referentiel 
+
+	// Referentiel
 	//site
 	SITE_CODE_ALREADY_EXISTS(
 	            HttpServletResponse.SC_CONFLICT, 110, "Code", "Site code existe dejà"),
@@ -153,17 +153,21 @@ public enum ErrorMessageType {
     PIECE_REGLEMENT_MISSING_REQUIRED_VALUES(HttpServletResponse.SC_CONFLICT, 201, "Piece de Reglement", "Un ou plusieurs champs obligatoires sont manquants"),
     //Periode
     PERIODE_MISSING_REQUIRED_VALUES(HttpServletResponse.SC_CONFLICT, 201, "Piece de Reglement", "Periode : Un ou plusieurs champs obligatoires sont manquants"),
-    
+
     //TAWASSOL 
-    
-    DELETE_ERROR(HttpServletResponse.SC_CONFLICT, 201, "Suppression", "Impossible de supprimer cet objet car il est déjà utilisé"), 
+
+    DELETE_ERROR(HttpServletResponse.SC_CONFLICT, 201, "Suppression", "Impossible de supprimer cet objet car il est déjà utilisé"),
     ENTRY_NOT_FOUND(HttpServletResponse.SC_CONFLICT, 202, "Erreur", "Aucune enregistrement n'est trouvée avec l'identifiant mentioné"),
     MISSING_REQUIRED_FIELDS(HttpServletResponse.SC_CONFLICT, 203, "Erreur", "Un ou plusieurs champs obligatoires sont manquants"),
     //ECOLE
     SCHOOL_NO_CYCLE(HttpServletResponse.SC_CONFLICT, 210, "Ecole", "Vous devez au moins activer un cycle"),
-    
+
+    //AFFECTATION CYCLE
+    AFFECTATION_CYCLE_NOT_FOUND(HttpServletResponse.SC_CONFLICT, 211, "Affectation cycle", "Aucune affectation cycle, ecole et année scolaire n'est trouvée"),
+    AFFECTATION_UNITE_SAVE_ERROR(HttpServletResponse.SC_CONFLICT, 211, "Affectation cycle", "Une erreur est servenue lors de l'enregistrement des affectations"),
+
     ;
-	
+
     private final int httpResponseStatus;
     private final int code;
     private final String fieldName;

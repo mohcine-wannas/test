@@ -41,4 +41,6 @@ public class UserRepositoryImpl implements CustomUserRepository {
 		return query.fetchOne();
 	}
 
+
+
 }
