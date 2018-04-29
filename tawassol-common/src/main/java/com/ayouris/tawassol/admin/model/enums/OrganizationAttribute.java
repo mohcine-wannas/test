@@ -3,7 +3,7 @@ package com.ayouris.tawassol.admin.model.enums;
 
 import lombok.Getter;
 import com.ayouris.tawassol.common.exception.ErrorMessageType;
-
+//TODO clean
 @Getter
 public enum OrganizationAttribute {
 

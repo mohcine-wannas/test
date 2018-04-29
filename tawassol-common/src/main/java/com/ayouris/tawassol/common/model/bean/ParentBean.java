@@ -41,4 +41,5 @@ public class ParentBean implements Serializable{
 	private String codeMassar;
 	private String observation;
 	private String password;
+	private SchoolBean school;
 }

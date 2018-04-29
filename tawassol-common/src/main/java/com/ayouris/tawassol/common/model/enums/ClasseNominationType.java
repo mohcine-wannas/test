@@ -7,7 +7,7 @@ public enum ClasseNominationType {
 	
     private String key;
 
-    private ClasseNominationType(String value) {
+    ClasseNominationType(String value) {
     	
         key = value;
     }

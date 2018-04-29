@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import com.ayouris.tawassol.common.model.entity.AffectationParentEleve;
+import com.ayouris.tawassol.common.model.enums.ParentingRelationship;
 import com.google.common.reflect.TypeToken;
 
 import lombok.Getter;
@@ -36,5 +37,6 @@ public class AffectationParentEleveBean implements Serializable {
 	private Long id;
 	private ParentBean parent;
 	private Boolean enabled;
+	private ParentingRelationship parentingRelationship;
 
 }

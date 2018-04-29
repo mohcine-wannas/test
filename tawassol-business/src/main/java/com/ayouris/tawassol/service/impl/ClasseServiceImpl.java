@@ -36,7 +36,7 @@ public class ClasseServiceImpl extends GenericServiceImpl2<Classe,Long,ClasseBea
     }
 
 	@Override
-	public List<EleveBean> getAllByNiveauId(Long id) { 
+	public List<ClasseBean> getAllByNiveauId(Long id) {
 		QClasse classe = QClasse.classe;
 		Iterable<Classe> list = classeRepository.findAll(classe.affectationNiveau.niveau.id.eq(id));
 		return mapper.map(list, ClasseBean.LIST_BEAN_TYPE);
