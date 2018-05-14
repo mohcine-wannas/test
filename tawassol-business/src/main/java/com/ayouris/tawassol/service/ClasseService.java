@@ -19,4 +19,5 @@ public interface ClasseService extends GenericService<Classe,Long> {
 
 	List<ClasseBean> getAllByNiveauId(Long id);
 
+	List<Classe> getClassesByNiveauId(Long id);
 }

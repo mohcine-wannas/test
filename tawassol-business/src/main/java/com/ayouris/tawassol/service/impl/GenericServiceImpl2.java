@@ -1,7 +1,9 @@
 package com.ayouris.tawassol.service.impl;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.ayouris.tawassol.common.model.entity.Eleve;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,5 +66,5 @@ public abstract class GenericServiceImpl2<T extends BaseEntity, ID extends Seria
 		}
 	}
 
-	
+
 }

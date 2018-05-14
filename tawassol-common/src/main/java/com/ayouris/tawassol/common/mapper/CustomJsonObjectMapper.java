@@ -1,5 +1,6 @@
 package com.ayouris.tawassol.common.mapper;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -20,6 +21,7 @@ public class CustomJsonObjectMapper extends ObjectMapper {
         Hibernate4Module hm = new Hibernate4Module();
         hm.disable(Feature.USE_TRANSIENT_ANNOTATION);
         registerModule(hm);
+        registerModule(new JavaTimeModule());
         this.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);
     }
 

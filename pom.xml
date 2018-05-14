@@ -142,6 +142,7 @@
 			<version>${commons-configuration.version}</version>
 		</dependency>
 
+
 	</dependencies>
 
 	<modules>

@@ -20,6 +20,8 @@ public interface EleveService extends GenericService<Eleve, Long> {
 
 	List<EleveBean> getAllByClasseId(Long classeId);
 
+	 List<Eleve> getElevesByClasseId(Long classeId);
+
 	List<EleveBean> getAllByParentId(Long parentId);
 
 	Long setParent(String codeMassar, ParentBean parent, ParentingRelationship parentingRelationship);

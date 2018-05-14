@@ -1,36 +1,45 @@
 package com.ayouris.tawassol.common.model.bean;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
-
+import com.ayouris.tawassol.common.model.entity.Eleve;
+import com.ayouris.tawassol.common.model.entity.Message;
+import com.ayouris.tawassol.common.model.entity.Niveau;
 import com.google.common.reflect.TypeToken;
-import com.ayouris.tawassol.common.enums.MessageSubject;
-import com.ayouris.tawassol.common.enums.MessageType;
-
 import lombok.Getter;
 import lombok.Setter;
 
+import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Class contain message information displayed.
- * 
+ * author: m.wannas
  */
 @Setter
 @Getter
 public final class MessageBean {
 
+
     @SuppressWarnings("serial")
-	public static final Type LIST_TYPE = new TypeToken<ArrayList<MessageBean>>() {
-    }.getType();
+    public static final Type LIST_BEAN_TYPE = new TypeToken<ArrayList<MessageBean>>() {
+    }
+            .getType();
 
-    private MessageType messageType;
+    @SuppressWarnings("serial")
+    public static final Type LIST_ENTITY_TYPE = new TypeToken<ArrayList<Message>>() {
+    }
+            .getType();
 
-    private String comment;
 
-    private String author;
+    private UserBean sender;
+    private List<AffectationMessageUserBean> recipients;
+    private List<AffectationMessageNiveauBean> niveaux;
+    private List<AffectationMessageClasseBean> classes;
 
-    private Date date;
-    
-    private MessageSubject messageSubject;
+    private List<UniteBean> unites;
+    private LocalDate forDate;
+    private String message;
+    private String attachment;
+
 
 }

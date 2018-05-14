@@ -51,13 +51,19 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
     @Override
     public List<EleveBean> getAllByClasseId(Long classeId) {
 
+        Iterable<Eleve> list = getElevesByClasseId(classeId);
+        return mapper.map(list, EleveBean.LIST_BEAN_TYPE);
+    }
+
+    @Override
+    public List<Eleve> getElevesByClasseId(Long classeId) {
         QEleve eleve = QEleve.eleve;
         QAffectationEleveClasse affectationEleveClasse = QAffectationEleveClasse.affectationEleveClasse;
-        Iterable<Eleve> list = eleveRepository.findAll(eleve.enabled.isTrue().and(eleve.id.in(JPAExpressions.selectFrom(affectationEleveClasse)
+        return (List<Eleve>) eleveRepository.findAll(eleve.enabled.isTrue().and(eleve.id.in(JPAExpressions.selectFrom(affectationEleveClasse)
                 .where(affectationEleveClasse.classe.id.eq(classeId)
                         .and(affectationEleveClasse.classe.active.isTrue()))
                 .select(affectationEleveClasse.eleve.id))));
-        return mapper.map(list, EleveBean.LIST_BEAN_TYPE);
+
     }
 
     @Override
