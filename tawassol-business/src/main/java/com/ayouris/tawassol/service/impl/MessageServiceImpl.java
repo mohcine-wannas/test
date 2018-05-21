@@ -7,12 +7,10 @@ import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.MessageBean;
 import com.ayouris.tawassol.common.model.bean.UserBean;
 import com.ayouris.tawassol.common.model.entity.*;
+import com.ayouris.tawassol.repository.AffectationMessageUserRepository;
 import com.ayouris.tawassol.repository.MessageRepository;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
-import com.ayouris.tawassol.service.AffectationParentEleveService;
-import com.ayouris.tawassol.service.ClasseService;
-import com.ayouris.tawassol.service.EleveService;
-import com.ayouris.tawassol.service.MessageService;
+import com.ayouris.tawassol.service.*;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.JPAExpressions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,9 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private AffectationMessageUserRepository affectationMessageUserRepository;
 
     @Autowired
     private CustomModelMapper mapper;
@@ -189,5 +190,57 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
                 .select(affectationMessageUser.message.id)),sortOrder);
     }
 
+    private List<AffectationMessageUser> getAllAffectationMessageByUser(User user) {
+
+        QAffectationMessageUser affectationMessageUser = QAffectationMessageUser.affectationMessageUser;
+        OrderSpecifier<Date> sortOrder = QAffectationMessageUser.affectationMessageUser.createdOn.desc();
+        return (List<AffectationMessageUser>) affectationMessageUserRepository.findAll(affectationMessageUser.user.id.eq(user.getId()),sortOrder);
+
+    }
+
+    @Override
+    public List<MessageBean> getAllMessageForParent2() {
+        //  validateIsparent
+        List<Message> messages = new ArrayList<>();
+
+        List<MessageBean> messageBeans = new ArrayList();
+
+        User currentUser = SecurityUtils.getCurrentUser();
+        Parent parent = (Parent) currentUser;
+        List<AffectationParentEleve> affectations = affectationParentEleveService.findByParent(parent);
+        for(AffectationParentEleve affectation : affectations) {
+            if(affectation.getEnabled() != null && affectation.getEnabled()) {
+                Eleve eleve = affectation.getEleve();
+                if(eleve.isEnabled()) {
+                    List<AffectationMessageUser> affectationsMessage = getAllAffectationMessageByUser(eleve);
+                    for(AffectationMessageUser affectationMessage : affectationsMessage) {
+                        MessageBean message = mapper.map(affectationMessage.getMessage(), MessageBean.class);
+                        message.setClasses(null);
+                        message.setRecipients(null);
+                        message.setNiveaux(null);
+                        UserBean recipient = new UserBean();
+                        recipient.setFirstname(eleve.getFirstname());
+                        recipient.setLastname(eleve.getLastname());
+                        message.setRecipient(recipient);
+                        message.setSeen(affectationMessage.getSeen());
+                        message.setRecipientMessageId(affectationMessage.getId());
+                        messageBeans.add(message);
+                    }
+                }
+            }
+        }
+
+
+        return messageBeans;
+    }
+
+    @Override
+    public void setSeen(Long idAffectation) {
+        AffectationMessageUser affectation =affectationMessageUserRepository.findOne(idAffectation);
+        if(affectation != null) {
+            affectation.setSeen(true);
+            affectationMessageUserRepository.save(affectation);
+        }
+    }
 
 }

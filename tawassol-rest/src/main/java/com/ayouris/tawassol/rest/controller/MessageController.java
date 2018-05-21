@@ -36,9 +36,15 @@ public class MessageController extends BaseController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/parent/getAll")
+    @GetMapping("/parent/get-all")
     public ResponseEntity getAllMessageForParent() throws Exception {
-        return new ResponseEntity<>(messageService.getAllMessageForParent(), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getAllMessageForParent2(), HttpStatus.OK);
+    }
+
+    @PutMapping("{id:\\d+}/seen")
+    public ResponseEntity setSeen(@PathVariable("id") Long idAffectation) throws Exception {
+        messageService.setSeen(idAffectation);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

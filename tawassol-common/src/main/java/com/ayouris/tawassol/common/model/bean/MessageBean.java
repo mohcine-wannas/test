@@ -42,7 +42,10 @@ public final class MessageBean {
     private LocalDate forDate;
     private String message;
     private String attachment;
+
     private MessageType messageType;
     private UserBean recipient;
+    private Boolean seen;
+
 
 }

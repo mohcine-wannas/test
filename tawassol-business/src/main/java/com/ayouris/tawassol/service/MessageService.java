@@ -25,4 +25,8 @@ public interface MessageService extends GenericService<Message,Long> {
 	void validateMessage(Long messageId) throws Exception;
 
     List<MessageBean> getAllMessageForParent();
+
+	List<MessageBean> getAllMessageForParent2();
+
+	void setSeen(Long idAffectation);
 }
