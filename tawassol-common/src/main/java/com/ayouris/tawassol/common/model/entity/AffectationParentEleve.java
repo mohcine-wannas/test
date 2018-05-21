@@ -1,13 +1,10 @@
 package com.ayouris.tawassol.common.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.ayouris.tawassol.common.model.entity.generic.RefEntity;
 
+import com.ayouris.tawassol.common.model.enums.ParentingRelationship;
 import lombok.Setter;
 
 /**
@@ -28,16 +25,18 @@ public class AffectationParentEleve extends RefEntity {
 	private Parent parent;
 	private Eleve eleve;
 	private Boolean enabled;
+	private ParentingRelationship parentingRelationship;
 	
 
 	public AffectationParentEleve() {}
 
 	
-	public AffectationParentEleve(Eleve eleve, Parent parent) {
+	public AffectationParentEleve(Eleve eleve, Parent parent, ParentingRelationship parentingRelationship) {
 		this.setParent(parent);
 		this.setEleve(eleve);
 		this.setActive(true);
 		this.setEnabled(null);
+		this.setParentingRelationship(parentingRelationship);
 	}
 
 
@@ -55,6 +54,11 @@ public class AffectationParentEleve extends RefEntity {
 
 	public Boolean getEnabled() {
 		return enabled;
+	}
+
+	@Enumerated(EnumType.STRING)
+	public ParentingRelationship getParentingRelationship() {
+		return parentingRelationship;
 	}
  
 }

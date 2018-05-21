@@ -1,7 +1,7 @@
 package com.ayouris.tawassol.admin.model.enums;
 
 import lombok.Getter;
-
+//TODO clean
 @Getter
 public enum OrganizationType {
 

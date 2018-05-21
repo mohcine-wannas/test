@@ -1,5 +1,6 @@
 package com.ayouris.tawassol.rest.controller;
 
+import com.ayouris.tawassol.common.model.enums.ParentingRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,10 @@ public class EleveController extends BaseController {
 	@Autowired
 	private EleveService eleveService;
 
-    @RequestMapping(value = "{codeMassar}/__set-parent", method = RequestMethod.PUT)
-    public ResponseEntity<Long> setParent(@PathVariable("codeMassar") String codeMassar,@RequestBody ParentBean parent) throws Exception {
-      return new ResponseEntity<Long>(eleveService.setParent(codeMassar,parent), HttpStatus.OK);
+    @RequestMapping(value = "{codeMassar}/{parentingRelationship}/__set-parent", method = RequestMethod.PUT)
+    public ResponseEntity<Long> setParent(@PathVariable("codeMassar") String codeMassar, @PathVariable("parentingRelationship") ParentingRelationship parentingRelationship,
+                                          @RequestBody ParentBean parent) throws Exception {
+        return new ResponseEntity<Long>(eleveService.setParent(codeMassar, parent, parentingRelationship), HttpStatus.OK);
     }
     
     @RequestMapping(value = "{id:\\d+}/enable", method = RequestMethod.PUT)
@@ -36,7 +38,6 @@ public class EleveController extends BaseController {
     
     @RequestMapping(value = "{codeMassar}/__exists", method = RequestMethod.GET)
     public ResponseEntity<Boolean> verifierCodeMassar(@PathVariable("codeMassar") String codeMassar) throws Exception {
-    	
     	return new ResponseEntity<>(eleveService.verifierCodeMassar(codeMassar),HttpStatus.OK);
     }
 

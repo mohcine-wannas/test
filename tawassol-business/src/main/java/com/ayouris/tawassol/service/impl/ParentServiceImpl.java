@@ -1,19 +1,21 @@
 package com.ayouris.tawassol.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.ParentBean;
+import com.ayouris.tawassol.common.model.entity.AffectationParentEleve;
 import com.ayouris.tawassol.common.model.entity.Parent;
 import com.ayouris.tawassol.common.model.entity.QAffectationParentEleve;
 import com.ayouris.tawassol.common.model.entity.QParent;
 import com.ayouris.tawassol.repository.ParentRepository;
 import com.ayouris.tawassol.security.service.PasswordService;
+import com.ayouris.tawassol.service.AffectationParentEleveService;
 import com.ayouris.tawassol.service.ParentService;
+import com.ayouris.tawassol.service.SchoolService;
 import com.querydsl.jpa.JPAExpressions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 
@@ -30,7 +32,11 @@ public class ParentServiceImpl extends GenericServiceImpl2<Parent, Long, ParentB
 	private ParentRepository parentRepository;
 	@Autowired
 	private PasswordService passwordService;
-	
+	@Autowired
+	private SchoolService schoolService;
+	@Autowired
+	private AffectationParentEleveService affectationParentEleveService;
+
 	@Override
 	public List<ParentBean> getAllByEleveId(Long eleveId) {
 		
@@ -51,9 +57,20 @@ public class ParentServiceImpl extends GenericServiceImpl2<Parent, Long, ParentB
 		return save(parent);
 	}
 
+	@Override
+	public boolean isValidated(Long parentId) {
+		Parent parent = findOne(parentId);
+		if(parent == null) {
+			//TODO throw error;
+		}
+		List<AffectationParentEleve> affectations = affectationParentEleveService.findByParent(parent);
+		for(AffectationParentEleve affectation : affectations) {
+			if(affectation.getEnabled() != null && affectation.getEnabled()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 
-
-
-	
 }

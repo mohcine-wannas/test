@@ -1,14 +1,15 @@
 package com.ayouris.tawassol.common.model.enums;
 
-public enum ClasseNominationType {
+public enum ParentingRelationship {
 
-	ALPHABETIQUE("Alphabethique"),
-	NUMERIQUE( "Numerique");
-	
+	FATHER("Père"),
+	MOTHER("Père"),
+	BROTHER("Frère"),
+	SISTER("Soeur");
+
     private String key;
 
-    ClasseNominationType(String value) {
-    	
+    ParentingRelationship(String value) {
         key = value;
     }
 

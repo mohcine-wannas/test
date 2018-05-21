@@ -17,4 +17,6 @@ public interface ParentService extends GenericService<Parent, Long> {
 
 	Parent createOrUpdate(ParentBean parent);
 
+	boolean isValidated(Long parenId);
+
 }
