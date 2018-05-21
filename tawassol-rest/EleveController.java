@@ -31,6 +31,6 @@ public class EleveController extends BaseController {
     @RequestMapping(value = "{id:\\d+}/parents" method = RequestMethod.PUT)
     public ResponseEntity<Long> updateSchool(@PathVariable("id") Long codeMassar,@RequestBody EleveBean eleve) throws Exception {
       return new ResponseEntity<Long>(eleveService.update(eleve), HttpStatus.OK);
-  }
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.ayouris.tawassol.common.model.bean;
 
+import com.ayouris.tawassol.common.enums.MessageType;
 import com.ayouris.tawassol.common.model.entity.Eleve;
 import com.ayouris.tawassol.common.model.entity.Message;
 import com.ayouris.tawassol.common.model.entity.Niveau;
@@ -30,7 +31,8 @@ public final class MessageBean {
     }
             .getType();
 
-
+    private Long id;
+    private Long recipientMessageId;
     private UserBean sender;
     private List<AffectationMessageUserBean> recipients;
     private List<AffectationMessageNiveauBean> niveaux;
@@ -40,6 +42,7 @@ public final class MessageBean {
     private LocalDate forDate;
     private String message;
     private String attachment;
-
+    private MessageType messageType;
+    private UserBean recipient;
 
 }

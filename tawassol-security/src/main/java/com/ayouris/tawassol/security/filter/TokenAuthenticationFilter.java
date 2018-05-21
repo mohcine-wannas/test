@@ -79,7 +79,7 @@ public class TokenAuthenticationFilter extends GenericFilterBean {
             
             Cycle currentCycle = RequestUtil.extractCurrentCycleFromRequest(request);
             user.setCurrentCycle(currentCycle);
-            response.setHeader(RequestUtil.HEADER_CURRENT_CYCLE, TokenUtils.createToken(remoteIpAddr, user));
+            response.setHeader(RequestUtil.HEADER_CURRENT_CYCLE, ""+currentCycle.getId());
             
 
             chain.doFilter(request, response);

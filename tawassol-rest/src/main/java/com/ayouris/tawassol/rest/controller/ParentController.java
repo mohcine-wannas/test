@@ -17,7 +17,7 @@ public class ParentController extends BaseController {
 	@Autowired
 	private ParentService parentService;
 
-    @GetMapping("/{id:\\d+}/is-enabled")
+    @GetMapping("/{id:\\d+}/__is-enabled")
     public ResponseEntity<Boolean> isEnabled(@PathVariable Long id) throws Exception {
         return new ResponseEntity<Boolean>(parentService.isValidated(id), HttpStatus.OK);
     }

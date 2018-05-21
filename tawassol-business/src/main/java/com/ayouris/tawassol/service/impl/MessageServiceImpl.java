@@ -1,8 +1,11 @@
 package com.ayouris.tawassol.service.impl;
 
 import com.ayouris.tawassol.admin.model.entity.User;
+import com.ayouris.tawassol.common.enums.MessageType;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
+import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.MessageBean;
+import com.ayouris.tawassol.common.model.bean.UserBean;
 import com.ayouris.tawassol.common.model.entity.*;
 import com.ayouris.tawassol.repository.MessageRepository;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
@@ -10,11 +13,13 @@ import com.ayouris.tawassol.service.AffectationParentEleveService;
 import com.ayouris.tawassol.service.ClasseService;
 import com.ayouris.tawassol.service.EleveService;
 import com.ayouris.tawassol.service.MessageService;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.JPAExpressions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -126,7 +131,10 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
             affecations.add(affectation);
         }
         if(!affecations.isEmpty()) {
-            message.setRecipients(affecations);
+            if(message.getRecipients() == null) {
+                message.setRecipients(new ArrayList<>());
+            }
+            message.getRecipients().addAll(affecations);
         }
     }
 
@@ -144,32 +152,41 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
     public List<MessageBean> getAllMessageForParent() {
         //  validateIsparent
         List<Message> messages = new ArrayList<>();
+        List<MessageBean> messageBeans = new ArrayList();
         User currentUser = SecurityUtils.getCurrentUser();
         Parent parent = (Parent) currentUser;
         List<AffectationParentEleve> affectations = affectationParentEleveService.findByParent(parent);
         for(AffectationParentEleve affectation : affectations) {
-            if(affectation.getEnabled() != nulll && affectation.getEnabled()) {
+            if(affectation.getEnabled() != null && affectation.getEnabled()) {
                 Eleve eleve = affectation.getEleve();
                 if(eleve.isEnabled()) {
-                    messages.addAll(getAllMessageByUser(eleve));
+                    List<MessageBean> eleveMessages = mapper.map(getAllMessageByUser(eleve), MessageBean.LIST_BEAN_TYPE);
+                    for(MessageBean message : eleveMessages) {
+                        message.setClasses(null);
+                        message.setRecipients(null);
+                        message.setNiveaux(null);
+                        UserBean recipient = new UserBean();
+                        recipient.setFirstname(eleve.getFirstname());
+                        recipient.setLastname(eleve.getLastname());
+                        message.setRecipient(recipient);
+                    }
+                    messageBeans.addAll(eleveMessages);
                 }
             }
         }
 
-        List<MessageBean> messageBeans =  mapper.map(messages, MessageBean.LIST_BEAN_TYPE);
-        for(MessageBean message : messageBeans) {
-            message.setClasses(null);
-            message.setRecipients(null);
-            message.setNiveaux(null);
-        }
+
+        return messageBeans;
     }
 
     private List<Message> getAllMessageByUser(User user) {
         QMessage message = QMessage.message1;
+
         QAffectationMessageUser affectationMessageUser = QAffectationMessageUser.affectationMessageUser;
+        OrderSpecifier<Date> sortOrder = QMessage.message1.createdOn.desc();
         return (List<Message>) messageRepository.findAll(message.id.in(JPAExpressions.selectFrom(affectationMessageUser)
                 .where(affectationMessageUser.user.id.eq(user.getId()))
-                .select(affectationMessageUser.message.id)));
+                .select(affectationMessageUser.message.id)),sortOrder);
     }
 
 

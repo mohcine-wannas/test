@@ -92,7 +92,8 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
         Parent parent = parentService.createOrUpdate(parentBean);
         AffectationParentEleve affectation = new AffectationParentEleve(eleve, parent, parentingRelationship);
 
-        return affectationParentEleveService.save(affectation).getId();
+        affectationParentEleveService.save(affectation);
+        return parent.getId();
     }
 
     @Override
@@ -101,6 +102,9 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
         AffectationParentEleve affectation = affectationParentEleveService.findOne(id);
         affectation.setEnabled(enable);
         affectationParentEleveService.save(affectation);
+        Parent parent = affectation.getParent();
+        parent.setEnabled(true);
+        parentService.save(parent);
     }
 
     @Override

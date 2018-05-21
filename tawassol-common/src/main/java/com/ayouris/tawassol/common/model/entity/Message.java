@@ -2,6 +2,7 @@ package com.ayouris.tawassol.common.model.entity;
 
 import com.ayouris.tawassol.admin.model.entity.User;
 import com.ayouris.tawassol.common.model.entity.generic.BaseEntity;
+import com.ayouris.tawassol.common.model.entity.generic.RefEntity;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "messages", schema = "tawassol")
-public class Message extends BaseEntity {
+public class Message extends RefEntity {
 
     private static final long serialVersionUID = 6589657722921185470L;
 
