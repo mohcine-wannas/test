@@ -10,6 +10,7 @@ import com.ayouris.tawassol.service.AffectationCycleService;
 import com.ayouris.tawassol.service.AffectationUniteService;
 import com.ayouris.tawassol.service.ServiceException;
 import com.ayouris.tawassol.service.UniteService;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,7 @@ public class AffectationUniteServiceImpl extends GenericServiceImpl2<Affectation
         AnneeScolaire currentAnneeScolaire = SecurityUtils.getCurrentAnneeScolaire();
         School currentSchool = SecurityUtils.getCurrentSchool();
 
-        AffectationCycle affectationCycle = affectationCycleService.getAffectationCycleByCycleIdAndSchoolIdAndAnneeScolaireId(cycleId, currentAnneeScolaire.getId(), currentSchool.getId());
+        AffectationCycle affectationCycle = affectationCycleService.getAffectationCycleByCycleIdAndSchoolIdAndAnneeScolaireId(cycleId, currentSchool.getId(), currentAnneeScolaire.getId());
         List<AffectationUnite> affectations = new ArrayList<>();
         if (affectationCycle != null) {
             generateDefaultAffectationsUnite(cycleId, affectationCycle);
@@ -87,5 +88,16 @@ public class AffectationUniteServiceImpl extends GenericServiceImpl2<Affectation
         affectationUnite.setAffectationCycle(affectationCycle);
         affectationUnite.setEnabled(false);
         save(affectationUnite);
+    }
+
+    @Override
+    public List<AffectationUniteBean> getAffectationsUniteBySchoolCodeAndByCycleId(String schoolCode, Long cycleId) {
+        QAffectationUnite affectationUnite = QAffectationUnite.affectationUnite;
+        BooleanExpression expression = affectationUnite.affectationCycle.school.code.eq(schoolCode).and(affectationUnite.affectationCycle.cycle.id.eq(cycleId))
+                .and(affectationUnite.enabled.isTrue());
+
+        List<AffectationUnite> affectations = (List<AffectationUnite>) affectationUniteRepository.findAll(expression);
+
+        return mapper.map(affectations, AffectationUniteBean.LIST_BEAN_TYPE);
     }
 }

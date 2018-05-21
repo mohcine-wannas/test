@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -83,6 +84,41 @@ public class AffectationCycleServiceImpl extends GenericServiceImpl2<Affectation
         }
 
         return null;
+    }
+
+
+    @Override
+    public List<AffectationCycle> getAffectationsCycleBySchool(School school) {
+        QAffectationCycle affectationcycle = QAffectationCycle.affectationCycle;
+        BooleanExpression expression = affectationcycle.school.eq(school)
+                .and(affectationcycle.active.isTrue());
+
+        List<AffectationCycle> affectationCycles = (List<AffectationCycle>) affectationCycleRepository.findAll(expression);
+
+        return affectationCycles;
+    }
+
+
+    @Override
+    public AffectationCycleBean getAffectationCycleBySchoolCodeAndByCycleId(String schoolCode, Long cycleId) {
+        QAffectationCycle affectationcycle = QAffectationCycle.affectationCycle;
+        BooleanExpression expression = affectationcycle.school.code.eq(schoolCode).and(affectationcycle.cycle.id.eq(cycleId))
+                .and(affectationcycle.active.isTrue());
+
+        AffectationCycle affectationCycle = affectationCycleRepository.findOne(expression);
+
+        return mapper.map(affectationCycle, AffectationCycleBean.class);
+    }
+
+
+    @Override
+    public AffectationCycle getAffectationCycleBySchoolIdAndByCycleId(Long schoolId, Long cycleId) {
+        QAffectationCycle affectationcycle = QAffectationCycle.affectationCycle;
+        BooleanExpression expression = affectationcycle.school.id.eq(schoolId).and(affectationcycle.cycle.id.eq(cycleId))
+                .and(affectationcycle.active.isTrue());
+
+        return affectationCycleRepository.findOne(expression);
+
     }
 
     @Override

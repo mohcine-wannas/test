@@ -1,17 +1,18 @@
 package com.ayouris.tawassol.rest.controller;
 
+import com.ayouris.tawassol.common.model.bean.CycleBean;
+import com.ayouris.tawassol.common.model.entity.AffectationCycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ayouris.tawassol.common.model.bean.AffectationCycleBean;
 import com.ayouris.tawassol.service.AffectationCycleService;
 
 import io.swagger.annotations.Api;
+
+import java.util.List;
 
 
 @RestController
@@ -30,5 +31,12 @@ public class AffectationCycleController extends BaseController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<AffectationCycleBean> getAffectationCycle() throws Exception {
         return new ResponseEntity<AffectationCycleBean>(affectationCycleService.getCurrentAffectationCycleBean(), HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "{codeSchool}/school/{cycleId}/cycle", method = RequestMethod.GET)
+    public ResponseEntity<AffectationCycleBean> getAffectationCycleBySchoolCodeAndByCycleId(@PathVariable("codeSchool") String codeSchool, @PathVariable("cycleId") Long cycleId) throws Exception {
+
+        return new ResponseEntity<>(affectationCycleService.getAffectationCycleBySchoolCodeAndByCycleId(codeSchool, cycleId), HttpStatus.OK);
     }
 }
