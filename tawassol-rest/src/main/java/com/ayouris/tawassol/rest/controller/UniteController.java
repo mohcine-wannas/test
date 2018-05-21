@@ -1,5 +1,6 @@
 package com.ayouris.tawassol.rest.controller;
 
+import com.ayouris.tawassol.common.model.bean.AffectationUniteBean;
 import com.ayouris.tawassol.common.model.bean.UniteBean;
 import com.ayouris.tawassol.service.UniteService;
 import io.swagger.annotations.Api;
@@ -26,11 +27,4 @@ public class UniteController extends BaseController {
     public ResponseEntity<List<UniteBean>> getUnitesByCycleId(@PathVariable("cycleId") Long cycleId) throws Exception {
         return new ResponseEntity<List<UniteBean>>(uniteService.findByCycleId(cycleId), HttpStatus.OK);
     }
-
-    /*@RequestMapping(value = "/", method = RequestMethod.GET)
-    public ResponseEntity<List<UniteBean>> getAll() throws Exception {
-        return new ResponseEntity<List<UniteBean>>(uniteService.getAll(), HttpStatus.OK);
-    }
-    */
-
 }

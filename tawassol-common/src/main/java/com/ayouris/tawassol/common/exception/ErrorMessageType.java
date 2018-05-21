@@ -164,7 +164,14 @@ public enum ErrorMessageType {
 
     //AFFECTATION CYCLE
     AFFECTATION_CYCLE_NOT_FOUND(HttpServletResponse.SC_CONFLICT, 211, "Affectation cycle", "Aucune affectation cycle, ecole et année scolaire n'est trouvée"),
-    AFFECTATION_UNITE_SAVE_ERROR(HttpServletResponse.SC_CONFLICT, 211, "Affectation cycle", "Une erreur est servenue lors de l'enregistrement des affectations"),
+    AFFECTATION_UNITE_SAVE_ERROR(HttpServletResponse.SC_CONFLICT, 212, "Affectation cycle", "Une erreur est servenue lors de l'enregistrement des affectations"),
+
+    // Professeur
+    AFFECTATION_PROF_NIVEAU_EMPTY(HttpServletResponse.SC_CONFLICT, 213, "Professeur", "Merci de choisir au minimum un niveau et une classe"),
+    AFFECTATION_PROF_NIVEAU_DUPLICATE(HttpServletResponse.SC_CONFLICT, 213, "Professeur", "Un où plusieurs affactations sont dupliquée"),
+    AFFECTATION_PROF_UNITE_EMPTY(HttpServletResponse.SC_CONFLICT, 214, "Professeur", "Merci de sélectionner au minimum une unité"),
+    PROF_ALREADY_EXISTE(HttpServletResponse.SC_CONFLICT, 214, "Professeur", "Un professeur avec ce numéro de téléphone est déjà enregistré"),
+    OBJECT_NOT_EXSIST(HttpServletResponse.SC_CONFLICT, 214, "Object", "Aucun enregistrement n'est trouvé avec cet identifiant"),
 
     ;
 
