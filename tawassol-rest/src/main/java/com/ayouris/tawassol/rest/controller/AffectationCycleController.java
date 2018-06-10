@@ -33,6 +33,11 @@ public class AffectationCycleController extends BaseController {
         return new ResponseEntity<AffectationCycleBean>(affectationCycleService.getCurrentAffectationCycleBean(), HttpStatus.OK);
     }
 
+    @GetMapping("prof")
+    public ResponseEntity<AffectationCycleBean> getAffectationCycleForProf() throws Exception {
+        return new ResponseEntity<AffectationCycleBean>(affectationCycleService.getCurrentAffectationCycleForProfBean(), HttpStatus.OK);
+    }
+
 
     @RequestMapping(value = "{codeSchool}/school/{cycleId}/cycle", method = RequestMethod.GET)
     public ResponseEntity<AffectationCycleBean> getAffectationCycleBySchoolCodeAndByCycleId(@PathVariable("codeSchool") String codeSchool, @PathVariable("cycleId") Long cycleId) throws Exception {

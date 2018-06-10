@@ -3,7 +3,6 @@ package com.ayouris.tawassol.service.impl;
 import com.ayouris.tawassol.admin.model.entity.User;
 import com.ayouris.tawassol.common.enums.MessageType;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
-import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.MessageBean;
 import com.ayouris.tawassol.common.model.bean.UserBean;
 import com.ayouris.tawassol.common.model.entity.*;
@@ -16,9 +15,7 @@ import com.querydsl.jpa.JPAExpressions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -54,7 +51,59 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
         return mapper.map(messages, MessageBean.LIST_BEAN_TYPE);
     }
 
-	@Override
+    @Override
+    public List<MessageBean> getAllForValidation() {
+        QMessage message = QMessage.message1;
+        List<Message> list = (List<Message>)  messageRepository.findAll(message.validated.isFalse().or(message.validated.isNull()));
+        list.forEach(item -> {
+
+            item.getRecipients().removeIf((affectationUser) -> {
+                User user =  affectationUser.getUser();
+                if(user instanceof Eleve) {
+                    Eleve recipient = (Eleve) user;
+                    for(AffectationMessageNiveau affectationNiveau : item.getNiveaux()) {
+                        List<Classe> classes = classeService.getClassesByNiveauId(affectationNiveau.getNiveau().getId());
+                        if(isEleveExistsInClasses(classes, recipient)) return  true;
+                    }
+                    return isEleveExistsInAffectationClasses(item.getClasses(), recipient);
+
+                }
+                return false;
+            });
+
+        });
+        List<MessageBean> messageBeans =  mapper.map(list, MessageBean.LIST_BEAN_TYPE);
+        Collections.sort(messageBeans);
+        return messageBeans;
+
+    }
+
+    private boolean isEleveExistsInAffectationClasses(List<AffectationMessageClasse> affectationMessageClasses, Eleve recipient) {
+        for(AffectationMessageClasse affectationClasse : affectationMessageClasses) {
+            if (isEleveExistsInClasse(recipient, affectationClasse.getClasse())) return true;
+        }
+        return false;
+    }
+
+    private boolean isEleveExistsInClasses(List<Classe> classes, Eleve recipient) {
+        for(Classe classe : classes) {
+            if (isEleveExistsInClasse(recipient, classe)) return true;
+        }
+        return false;
+    }
+
+    private boolean isEleveExistsInClasse(Eleve recipient, Classe classe) {
+        List<Eleve> eleves = eleveService.getElevesByClasseId(classe.getId());
+        for (Eleve eleve : eleves) {
+            if (eleve.getId() == recipient.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Override
 	public List<MessageBean> getAllBySenderId(Long id) {
 		QMessage message = QMessage.message1;
 		Iterable<Message> list = messageRepository.findAll(message.sender.id.eq(id));
@@ -69,15 +118,23 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
 
     @Override
     public void sendAdminMessage(MessageBean messageBean) {
+        //validation
         Message message =mapper.map(messageBean, Message.class);
-        User currentUser = SecurityUtils.getCurrentUser();
-        message.setSender(currentUser);
+        sendMessage(message);
+    }
+
+
+    @Override
+    public void sendProfMessage(MessageBean messageBean) {
+        //validation
+        Message message =mapper.map(messageBean, Message.class);
         sendMessage(message);
     }
 
     private void sendMessage(Message message) {
 
-
+        User currentUser = SecurityUtils.getCurrentUser();
+        message.setSender(currentUser);
 
         List<AffectationMessageUser> users = message.getRecipients();
         message.setRecipients(null);
@@ -94,11 +151,11 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
             }
             message.setRecipients(users);
         }
+
         if(message.getClasses() != null) {
             for (AffectationMessageClasse classe : message.getClasses()) {
                 classe.setMessage(message);
                 setElevesToMessageFromClasse(message, classe.getClasse());
-
             }
         }
         if(message.getNiveaux() != null) {
@@ -111,11 +168,6 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
             }
         }
 
-        if(message.getUnites() != null) {
-            for (AffectationMessageUnite unite : message.getUnites()) {
-                unite.setMessage(message);
-            }
-        }
         save(message);
     }
 
@@ -150,35 +202,58 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
     }
 
     @Override
-    public List<MessageBean> getAllMessageForParent() {
-        //  validateIsparent
-        List<Message> messages = new ArrayList<>();
-        List<MessageBean> messageBeans = new ArrayList();
+    public void deleteMessage(Long messageId) throws Exception {
         User currentUser = SecurityUtils.getCurrentUser();
-        Parent parent = (Parent) currentUser;
-        List<AffectationParentEleve> affectations = affectationParentEleveService.findByParent(parent);
-        for(AffectationParentEleve affectation : affectations) {
-            if(affectation.getEnabled() != null && affectation.getEnabled()) {
-                Eleve eleve = affectation.getEleve();
-                if(eleve.isEnabled()) {
-                    List<MessageBean> eleveMessages = mapper.map(getAllMessageByUser(eleve), MessageBean.LIST_BEAN_TYPE);
-                    for(MessageBean message : eleveMessages) {
-                        message.setClasses(null);
-                        message.setRecipients(null);
-                        message.setNiveaux(null);
-                        UserBean recipient = new UserBean();
-                        recipient.setFirstname(eleve.getFirstname());
-                        recipient.setLastname(eleve.getLastname());
-                        message.setRecipient(recipient);
-                    }
-                    messageBeans.addAll(eleveMessages);
-                }
+        if(currentUser instanceof Professeur || currentUser instanceof Eleve || currentUser instanceof Parent) {
+            Message message = findOne(messageId);
+
+            if (message == null) {
+                throw new Exception("Message not found");
+            }
+
+            if (message.getSender() != null && message.getSender().getId() == currentUser.getId()) {
+                delete(message);
+            }else {
+                throw new Exception("Forbidden");
+            }
+        }else { //if administrateur
+            Message message = findOne(messageId);
+
+            if (message == null) {
+                throw new Exception("Message not found");
+            }
+
+            //Verification de l'ecole
+            if (message.getSender() != null && message.getSender().getSchool() != null
+                    && message.getSender().getSchool().getId().equals(currentUser.getSchool().getId())) {
+                delete(message);
             }
         }
-
-
-        return messageBeans;
     }
+
+    @Override
+    public void enableMessage(Long messageId) throws Exception {
+        User currentUser = SecurityUtils.getCurrentUser();
+        if(currentUser instanceof Professeur || currentUser instanceof Eleve || currentUser instanceof Parent) {
+                throw new Exception("Forbidden");
+        }else { //if administrateur
+            Message message = findOne(messageId);
+            if (message == null) {
+                throw new Exception("Message not found");
+            }
+
+            //Verification de l'ecole
+            if (message.getSender() != null && message.getSender().getSchool() != null
+                    && message.getSender().getSchool().getId().equals(currentUser.getSchool().getId())) {
+                message.setValidated(true);
+                save(message);
+            }else  {
+                throw new Exception("Forbidden");
+            }
+
+        }
+    }
+
 
     private List<Message> getAllMessageByUser(User user) {
         QMessage message = QMessage.message1;
@@ -199,7 +274,12 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
     }
 
     @Override
-    public List<MessageBean> getAllMessageForParent2() {
+    public List<MessageBean> getAllMessageForParent() {
+        return getAllMessageForParentByMessageType(null);
+    }
+
+    @Override
+    public List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType) {
         //  validateIsparent
         List<Message> messages = new ArrayList<>();
 
@@ -214,7 +294,12 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
                 if(eleve.isEnabled()) {
                     List<AffectationMessageUser> affectationsMessage = getAllAffectationMessageByUser(eleve);
                     for(AffectationMessageUser affectationMessage : affectationsMessage) {
+                        MessageType thisMessageType = affectationMessage.getMessage().getSender() instanceof Professeur ? MessageType.PROFESSEUR : MessageType.ADMINISTRATION;
+                        if(messageType != null && !thisMessageType.equals(messageType)) {
+                            continue;
+                        }
                         MessageBean message = mapper.map(affectationMessage.getMessage(), MessageBean.class);
+                        message.setMessageType(thisMessageType);
                         message.setClasses(null);
                         message.setRecipients(null);
                         message.setNiveaux(null);
@@ -229,11 +314,9 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
                 }
             }
         }
-
-
+        Collections.sort(messageBeans);
         return messageBeans;
     }
-
     @Override
     public void setSeen(Long idAffectation) {
         AffectationMessageUser affectation =affectationMessageUserRepository.findOne(idAffectation);

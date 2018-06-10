@@ -5,6 +5,7 @@ import java.util.List;
 import com.ayouris.tawassol.common.model.bean.ClasseBean;
 import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.entity.Classe;
+import com.ayouris.tawassol.common.model.entity.Eleve;
 
 /**
  * 
@@ -20,4 +21,7 @@ public interface ClasseService extends GenericService<Classe,Long> {
 	List<ClasseBean> getAllByNiveauId(Long id);
 
 	List<Classe> getClassesByNiveauId(Long id);
+
+
+	Classe getClasseByEleve(Eleve eleve);
 }

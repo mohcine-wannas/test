@@ -50,6 +50,22 @@ public class AffectationUniteServiceImpl extends GenericServiceImpl2<Affectation
         return mapper.map(affectations, AffectationUniteBean.LIST_BEAN_TYPE);
     }
 
+    @Transactional
+    @Override
+    public List<AffectationUniteBean> getAffectationsUnite() {
+
+        AffectationCycle affectationCycle = affectationCycleService.getCurrentAffectationCycle();
+        List<AffectationUnite> affectations;
+        if (affectationCycle != null) {
+            generateDefaultAffectationsUnite(affectationCycle.getCycle().getId(), affectationCycle);
+            affectations = affectationUniteRepository.findByAffectationCycleId(affectationCycle.getId());
+        } else {
+            throw new ServiceException(ErrorMessageType.AFFECTATION_CYCLE_NOT_FOUND);
+        }
+
+        return mapper.map(affectations, AffectationUniteBean.LIST_BEAN_TYPE);
+    }
+
     @Override
     @Transactional
     public void updateAffectationsUnite(List<AffectationUniteBean> affectations) {

@@ -2,6 +2,9 @@ package com.ayouris.tawassol.service.impl;
 
 import java.util.List;
 
+import com.ayouris.tawassol.common.model.entity.AffectationEleveClasse;
+import com.ayouris.tawassol.common.model.entity.Eleve;
+import com.ayouris.tawassol.service.AffectationEleveClasseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,9 @@ public class ClasseServiceImpl extends GenericServiceImpl2<Classe,Long,ClasseBea
     private ClasseRepository classeRepository;
 
     @Autowired
+    private AffectationEleveClasseService affectationEleveClasseService;
+
+    @Autowired
     private CustomModelMapper mapper;
 
     @Override
@@ -45,6 +51,16 @@ public class ClasseServiceImpl extends GenericServiceImpl2<Classe,Long,ClasseBea
     public List<Classe> getClassesByNiveauId(Long id) {
         QClasse classe = QClasse.classe;
         return (List<Classe>)classeRepository.findAll(classe.affectationNiveau.niveau.id.eq(id));
+    }
+
+    @Override
+    public Classe getClasseByEleve(Eleve eleve) {
+        AffectationEleveClasse affectation = affectationEleveClasseService.getClasseByEleve(eleve);
+        if(affectation != null) {
+            return affectation.getClasse();
+        }
+        return null;
+
     }
 
 }

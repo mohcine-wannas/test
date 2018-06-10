@@ -25,6 +25,12 @@ public class AffectationUniteController extends BaseController {
                 .getAffectationsUniteByCycleId(cycleId), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/")
+    public ResponseEntity<List<AffectationUniteBean>> getAffectationsUnite() throws Exception {
+        return new ResponseEntity<>(affectationUniteService
+                .getAffectationsUnite(), HttpStatus.OK);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateAffectationsUnite(@RequestBody List<AffectationUniteBean> affectation) throws Exception {

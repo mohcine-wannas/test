@@ -20,7 +20,7 @@ public class Message extends RefEntity {
     private List<AffectationMessageUser> recipients;
     private List<AffectationMessageClasse> classes;
     private List<AffectationMessageNiveau> niveaux;
-    private List<AffectationMessageUnite> unites;
+    private Unite unite;
 
     private String message;
     private String attachment;
@@ -38,7 +38,6 @@ public class Message extends RefEntity {
             mappedBy = "message")
     public List<AffectationMessageUser> getRecipients() {
         return recipients;
-
     }
 
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true,
@@ -53,10 +52,10 @@ public class Message extends RefEntity {
         return niveaux;
     }
 
-    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true,
-            mappedBy = "message")
-    public List<AffectationMessageUnite> getUnites() {
-        return unites;
+    @ManyToOne
+    @JoinColumn(name = "unite_id", foreignKey = @ForeignKey(name = "FK_MESS_UNITE_ID"))
+    public Unite getUnite() {
+        return unite;
     }
 
     public LocalDate getForDate() {

@@ -12,10 +12,14 @@ import com.ayouris.tawassol.security.service.CycleSecurityService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.AffectationCycleService;
 import com.ayouris.tawassol.service.GroupeAppellationService;
+import com.ayouris.tawassol.service.ProfesseurService;
 import com.ayouris.tawassol.service.ServiceException;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +40,10 @@ public class AffectationCycleServiceImpl extends GenericServiceImpl2<Affectation
     private GroupeAppellationService groupeAppellationService;
     @Autowired
     private CycleSecurityService cycleService;
+    @Autowired
+    private ProfesseurService professeurService;
 
+    @Override
     public AffectationCycle getCurrentAffectationCycle() {
         Cycle currentCycle = SecurityUtils.getCurrentCycle();
         AnneeScolaire anneeScolaire = SecurityUtils.getCurrentAnneeScolaire();
@@ -46,6 +53,34 @@ public class AffectationCycleServiceImpl extends GenericServiceImpl2<Affectation
             affectationCycle = generateDefaultAffectationCycle(school, currentCycle, anneeScolaire);
         }
         return affectationCycle;
+    }
+
+    @Transactional(propagation=Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
+    @Override
+    public AffectationCycleBean getCurrentAffectationCycleForProfBean() {
+        AffectationCycle affectationCycle = getCurrentAffectationCycle();
+        if(!(SecurityUtils.getCurrentUser() instanceof Professeur)) {
+            return null;
+        }
+        Professeur prof = professeurService.findOne(SecurityUtils.getCurrentUser().getId());
+
+
+        List<AffectationNiveauClasseProf> list= prof.getAffectationsNiveauClasseProf();
+        for(AffectationNiveau niveau : affectationCycle.getAffectationNiveaux()) {
+            niveau.getClasses().removeIf((classe -> {
+                boolean found = false;
+                for (AffectationNiveauClasseProf affectation : list) {
+                    if (affectation.getClasse().getId().equals(classe.getId()) && affectation.getNiveau().getId().equals(niveau.getId())) {
+                        found = true;
+                        break;
+                    }
+                }
+                return !found;
+            }));
+        }
+        affectationCycle.getAffectationNiveaux().removeIf(niveau -> niveau.getClasses().isEmpty());
+
+        return mapper.map(affectationCycle, AffectationCycleBean.class);
     }
 
     @Override

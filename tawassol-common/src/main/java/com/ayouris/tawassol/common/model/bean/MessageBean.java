@@ -1,9 +1,8 @@
 package com.ayouris.tawassol.common.model.bean;
 
 import com.ayouris.tawassol.common.enums.MessageType;
-import com.ayouris.tawassol.common.model.entity.Eleve;
 import com.ayouris.tawassol.common.model.entity.Message;
-import com.ayouris.tawassol.common.model.entity.Niveau;
+import com.ayouris.tawassol.common.model.entity.Unite;
 import com.google.common.reflect.TypeToken;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +10,8 @@ import lombok.Setter;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
  */
 @Setter
 @Getter
-public final class MessageBean {
+public final class MessageBean implements Comparable<MessageBean> {
 
 
     @SuppressWarnings("serial")
@@ -38,7 +39,7 @@ public final class MessageBean {
     private List<AffectationMessageNiveauBean> niveaux;
     private List<AffectationMessageClasseBean> classes;
 
-    private List<UniteBean> unites;
+    private Unite unite;
     private LocalDate forDate;
     private String message;
     private String attachment;
@@ -47,5 +48,12 @@ public final class MessageBean {
     private UserBean recipient;
     private Boolean seen;
 
+    private Date createdOn;
 
+
+    @Override
+    public int compareTo(MessageBean o) {
+        return o == null ? -1 : o.getCreatedOn() == null ? -1 : this.getCreatedOn() == null ? 1 :
+                o.getCreatedOn().compareTo(this.createdOn);
+    }
 }

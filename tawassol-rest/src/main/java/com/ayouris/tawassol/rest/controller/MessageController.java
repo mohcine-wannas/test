@@ -1,5 +1,6 @@
 package com.ayouris.tawassol.rest.controller;
 
+import com.ayouris.tawassol.common.enums.MessageType;
 import com.ayouris.tawassol.common.model.bean.MessageBean;
 import com.ayouris.tawassol.service.MessageService;
 import io.swagger.annotations.Api;
@@ -21,9 +22,16 @@ public class MessageController extends BaseController {
 
     @RequestMapping(value = "{id:\\d+}/eleves",method = RequestMethod.GET)
     public ResponseEntity<List<MessageBean>> getAllMessageBySender(@PathVariable("id") Long id) throws Exception {
-        return new ResponseEntity<List<MessageBean>>(messageService.getAllBySenderId(id), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getAllBySenderId(id), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "admin/not-validated/",method = RequestMethod.GET)
+    public ResponseEntity<List<MessageBean>> getAllMessageForValidation() throws Exception {
+        //TODO if current user is administrateur
+        return new ResponseEntity<>(messageService.getAllForValidation(), HttpStatus.OK);
+    }
+
+    //TODO Remove
     @PostMapping("/send")
     public ResponseEntity sendMessage(@RequestBody MessageBean messageBean) throws Exception {
         messageService.sendMessage(messageBean);
@@ -36,9 +44,20 @@ public class MessageController extends BaseController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @PostMapping("/prof/send")
+    public ResponseEntity sendProfMessage(@RequestBody MessageBean messageBean) throws Exception {
+        messageService.sendProfMessage(messageBean);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @GetMapping("/parent/get-all")
     public ResponseEntity getAllMessageForParent() throws Exception {
-        return new ResponseEntity<>(messageService.getAllMessageForParent2(), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getAllMessageForParent(), HttpStatus.OK);
+    }
+
+    @GetMapping("/parent/get-all/{messageType}")
+    public ResponseEntity getAllMessageForParentByMessageType(@PathVariable("messageType") MessageType messageType) throws Exception {
+        return new ResponseEntity<>(messageService.getAllMessageForParentByMessageType(messageType), HttpStatus.OK);
     }
 
     @PutMapping("{id:\\d+}/seen")
@@ -46,5 +65,19 @@ public class MessageController extends BaseController {
         messageService.setSeen(idAffectation);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("admin/{id:\\d+}/enable")
+    public ResponseEntity setValidated(@PathVariable("id") Long id) throws Exception {
+        messageService.enableMessage(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+
+    @DeleteMapping("admin/{id:\\d+}")
+    public ResponseEntity<List<MessageBean>> deleteMessage(@PathVariable("id") Long id) throws Exception {
+        messageService.deleteMessage(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 
 }

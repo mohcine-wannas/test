@@ -15,7 +15,11 @@ import java.util.List;
 
 public interface AffectationCycleService extends GenericService<AffectationCycle, Long> {
 
+    AffectationCycleBean getCurrentAffectationCycleForProfBean();
+
     AffectationCycleBean getCurrentAffectationCycleBean();
+
+    AffectationCycle getCurrentAffectationCycle();
 
     AffectationCycle getAffectationCycleBySchoolAndCycleAndAnneeScolaire(School school, Cycle cycle, AnneeScolaire anneeScolaire);
 
