@@ -31,6 +31,16 @@ public class MessageController extends BaseController {
         return new ResponseEntity<>(messageService.getAllForValidation(), HttpStatus.OK);
     }
 
+    @GetMapping("prof/not-validated/")
+    public ResponseEntity<List<MessageBean>> getAllProfNotYetValidatedMessages() throws Exception {
+        return new ResponseEntity<>(messageService.getAllProfMessages(false), HttpStatus.OK);
+    }
+
+    @GetMapping("prof/validated/")
+    public ResponseEntity<List<MessageBean>> getAllProfValidatedMessages() throws Exception {
+        return new ResponseEntity<>(messageService.getAllProfMessages(true), HttpStatus.OK);
+    }
+
     //TODO Remove
     @PostMapping("/send")
     public ResponseEntity sendMessage(@RequestBody MessageBean messageBean) throws Exception {
@@ -41,6 +51,12 @@ public class MessageController extends BaseController {
     @PostMapping("/admin/send")
     public ResponseEntity sendAdminMessage(@RequestBody MessageBean messageBean) throws Exception {
         messageService.sendAdminMessage(messageBean);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/admin/sendToProf")
+    public ResponseEntity sendAdminMessageToProf(@RequestBody MessageBean messageBean) throws Exception {
+        messageService.sendAdminMessageToProf(messageBean);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -55,6 +71,11 @@ public class MessageController extends BaseController {
         return new ResponseEntity<>(messageService.getAllMessageForParent(), HttpStatus.OK);
     }
 
+    @GetMapping("/prof/get-all")
+    public ResponseEntity getAllMessageForProf() throws Exception {
+        return new ResponseEntity<>(messageService.getAllMessageForProf(), HttpStatus.OK);
+    }
+
     @GetMapping("/parent/get-all/{messageType}")
     public ResponseEntity getAllMessageForParentByMessageType(@PathVariable("messageType") MessageType messageType) throws Exception {
         return new ResponseEntity<>(messageService.getAllMessageForParentByMessageType(messageType), HttpStatus.OK);
@@ -62,6 +83,12 @@ public class MessageController extends BaseController {
 
     @PutMapping("{id:\\d+}/seen")
     public ResponseEntity setSeen(@PathVariable("id") Long idAffectation) throws Exception {
+        messageService.setSeen(idAffectation);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/prof/{id:\\d+}/seen")
+    public ResponseEntity setSeenProf(@PathVariable("id") Long idAffectation) throws Exception {
         messageService.setSeen(idAffectation);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -75,6 +102,12 @@ public class MessageController extends BaseController {
 
     @DeleteMapping("admin/{id:\\d+}")
     public ResponseEntity<List<MessageBean>> deleteMessage(@PathVariable("id") Long id) throws Exception {
+        messageService.deleteMessage(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("prof/{id:\\d+}")
+    public ResponseEntity<List<MessageBean>> deleteProfMessage(@PathVariable("id") Long id) throws Exception {
         messageService.deleteMessage(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

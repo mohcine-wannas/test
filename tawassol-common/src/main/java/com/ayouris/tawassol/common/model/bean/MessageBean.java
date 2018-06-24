@@ -38,6 +38,7 @@ public final class MessageBean implements Comparable<MessageBean> {
     private List<AffectationMessageUserBean> recipients;
     private List<AffectationMessageNiveauBean> niveaux;
     private List<AffectationMessageClasseBean> classes;
+    private List<AffectationMessageUniteBean> unites;
 
     private Unite unite;
     private LocalDate forDate;

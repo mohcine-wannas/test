@@ -20,6 +20,7 @@ public class Message extends RefEntity {
     private List<AffectationMessageUser> recipients;
     private List<AffectationMessageClasse> classes;
     private List<AffectationMessageNiveau> niveaux;
+    private List<AffectationMessageUnite> unites;
     private Unite unite;
 
     private String message;
@@ -50,6 +51,12 @@ public class Message extends RefEntity {
             mappedBy = "message")
     public List<AffectationMessageNiveau> getNiveaux() {
         return niveaux;
+    }
+
+    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true,
+            mappedBy = "message")
+    public List<AffectationMessageUnite> getUnites() {
+        return unites;
     }
 
     @ManyToOne

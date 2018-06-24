@@ -11,6 +11,7 @@ import com.ayouris.tawassol.repository.MessageRepository;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.*;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,9 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
     private EleveService eleveService;
 
     @Autowired
+    private ProfesseurService professeurService;
+
+    @Autowired
     private AffectationParentEleveService affectationParentEleveService;
 
     @Override
@@ -55,8 +59,29 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
     public List<MessageBean> getAllForValidation() {
         QMessage message = QMessage.message1;
         List<Message> list = (List<Message>)  messageRepository.findAll(message.validated.isFalse().or(message.validated.isNull()));
-        list.forEach(item -> {
+        traiterLesMessages(list);
+        List<MessageBean> messageBeans =  mapper.map(list, MessageBean.LIST_BEAN_TYPE);
+        Collections.sort(messageBeans);
+        return messageBeans;
 
+    }
+
+    @Override
+    public List<MessageBean> getAllProfMessages(Boolean valid) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        List<Message> list = getAllMessageByUser(currentUser,valid);
+
+        traiterLesMessages(list);
+
+        List<MessageBean> messageBeans =  mapper.map(list, MessageBean.LIST_BEAN_TYPE);
+        Collections.sort(messageBeans);
+        return messageBeans;
+
+    }
+
+
+    private void traiterLesMessages(List<Message> list) {
+        list.forEach(item -> {
             item.getRecipients().removeIf((affectationUser) -> {
                 User user =  affectationUser.getUser();
                 if(user instanceof Eleve) {
@@ -66,16 +91,10 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
                         if(isEleveExistsInClasses(classes, recipient)) return  true;
                     }
                     return isEleveExistsInAffectationClasses(item.getClasses(), recipient);
-
                 }
                 return false;
             });
-
         });
-        List<MessageBean> messageBeans =  mapper.map(list, MessageBean.LIST_BEAN_TYPE);
-        Collections.sort(messageBeans);
-        return messageBeans;
-
     }
 
     private boolean isEleveExistsInAffectationClasses(List<AffectationMessageClasse> affectationMessageClasses, Eleve recipient) {
@@ -131,7 +150,73 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
         sendMessage(message);
     }
 
+    @Override
+    public void sendAdminMessageToProf(MessageBean messageBean) {
+        //validation
+        Message message =mapper.map(messageBean, Message.class);
+        sendMessage(message,Professeur.class);
+    }
+
+    private void sendMessage(Message message, Class recipientClass) {
+
+        User currentUser = SecurityUtils.getCurrentUser();
+        message.setSender(currentUser);
+
+        List<AffectationMessageUser> users = message.getRecipients();
+        message.setRecipients(null);
+        save(message);
+        flush();
+
+        if(message.getSender().getAutoSendMessage() != null && message.getSender().getAutoSendMessage()) {
+            message.setValidated(true);
+        }
+
+        if(users != null) {
+            for(AffectationMessageUser user : users) {
+                user.setMessage(message);
+            }
+            message.setRecipients(users);
+        }
+
+        if(message.getUnites() != null && recipientClass.equals(Professeur.class)) {
+            for (AffectationMessageUnite unite : message.getUnites()) {
+                unite.setMessage(message);
+                setProfsToMessageFromUnite(message, unite.getUnite());
+            }
+        }
+
+        if(message.getClasses() != null) {
+            for (AffectationMessageClasse classe : message.getClasses()) {
+                classe.setMessage(message);
+                if(recipientClass.equals(Professeur.class)) {
+                    setProfsToMessageFromClasse(message, classe.getClasse());
+                }else {
+                    setElevesToMessageFromClasse(message, classe.getClasse());
+                }
+            }
+        }
+        if(message.getNiveaux() != null) {
+            for (AffectationMessageNiveau niveau : message.getNiveaux()) {
+                niveau.setMessage(message);
+                List<Classe> classes = classeService.getClassesByNiveauId(niveau.getNiveau().getId());
+                for(Classe classe : classes) {
+                    if(recipientClass.equals(Professeur.class)) {
+                        setProfsToMessageFromClasse(message, classe);
+                    }else {
+                        setElevesToMessageFromClasse(message, classe);
+                    }
+                }
+            }
+        }
+
+        save(message);
+    }
+
     private void sendMessage(Message message) {
+         sendMessage(message,Eleve.class);
+    }
+
+    private void sendMessage2(Message message) {
 
         User currentUser = SecurityUtils.getCurrentUser();
         message.setSender(currentUser);
@@ -173,6 +258,11 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
 
 
 
+    private void setProfsToMessageFromClasse(Message message, Classe classe) {
+        List<Professeur> professeurs = professeurService.getProfsByClasseId(classe.getId());
+        setAffectationUserToMessage(message, professeurs);
+    }
+
     private void setElevesToMessageFromClasse(Message message, Classe classe) {
         List<Eleve> eleves = eleveService.getElevesByClasseId(classe.getId());
 
@@ -181,6 +271,35 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
             AffectationMessageUser affectation = new AffectationMessageUser();
             affectation.setMessage(message);
             affectation.setUser(eleve);
+            affecations.add(affectation);
+        }
+        if(!affecations.isEmpty()) {
+            if(message.getRecipients() == null) {
+                message.setRecipients(new ArrayList<>());
+            }
+            message.getRecipients().addAll(affecations);
+        }
+    }
+
+    private void setProfsToMessageFromUnite(Message message, Unite unite) {
+        List<Professeur> professeurs = professeurService.getProfsByUniteId(unite.getId());
+        setAffectationUserToMessage(message, professeurs);
+    }
+
+    private void setAffectationUserToMessage(Message message, List<Professeur> professeurs) {
+        List<AffectationMessageUser> affecations = new ArrayList<>();
+
+        PROF_FOR : for(Professeur professeur :professeurs) {
+            if(message.getRecipients() != null) {
+                for(AffectationMessageUser affectation : message.getRecipients()) {
+                    if(affectation.getUser().getId().equals(professeur.getId())) {
+                        continue PROF_FOR;
+                    }
+                }
+            }
+            AffectationMessageUser affectation = new AffectationMessageUser();
+            affectation.setMessage(message);
+            affectation.setUser(professeur);
             affecations.add(affectation);
         }
         if(!affecations.isEmpty()) {
@@ -259,10 +378,26 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
         QMessage message = QMessage.message1;
 
         QAffectationMessageUser affectationMessageUser = QAffectationMessageUser.affectationMessageUser;
+
         OrderSpecifier<Date> sortOrder = QMessage.message1.createdOn.desc();
-        return (List<Message>) messageRepository.findAll(message.id.in(JPAExpressions.selectFrom(affectationMessageUser)
+        BooleanExpression predicat = message.id.in(JPAExpressions.selectFrom(affectationMessageUser)
                 .where(affectationMessageUser.user.id.eq(user.getId()))
-                .select(affectationMessageUser.message.id)),sortOrder);
+                .select(affectationMessageUser.message.id));
+
+        return (List<Message>) messageRepository.findAll(predicat,sortOrder);
+    }
+
+    private List<Message> getAllMessageByUser(User user,Boolean validated) {
+        QMessage message = QMessage.message1;
+
+        BooleanExpression predicat = message.sender.id.eq(user.getId());
+        OrderSpecifier<Date> sortOrder = QMessage.message1.createdOn.desc();
+
+        if(validated != null) {
+                predicat = predicat.and( validated ? message.validated.isTrue() : message.validated.isFalse().or(message.validated.isNull()));
+        }
+
+        return (List<Message>) messageRepository.findAll(predicat,sortOrder);
     }
 
     private List<AffectationMessageUser> getAllAffectationMessageByUser(User user) {
@@ -277,6 +412,7 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
     public List<MessageBean> getAllMessageForParent() {
         return getAllMessageForParentByMessageType(null);
     }
+
 
     @Override
     public List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType) {
@@ -314,6 +450,38 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
                 }
             }
         }
+        Collections.sort(messageBeans);
+        return messageBeans;
+    }
+
+    @Override
+    public List<MessageBean> getAllMessageForProf() {
+        //  validateIsProf
+
+        List<MessageBean> messageBeans = new ArrayList();
+
+        User currentUser = SecurityUtils.getCurrentUser();
+        Professeur prof = (Professeur) currentUser;
+
+        if(prof.isEnabled()) {
+            List<AffectationMessageUser> affectationsMessage = getAllAffectationMessageByUser(prof);
+            for(AffectationMessageUser affectationMessage : affectationsMessage) {
+
+                MessageBean message = mapper.map(affectationMessage.getMessage(), MessageBean.class);
+                message.setMessageType(MessageType.ADMINISTRATION);
+                message.setClasses(null);
+                message.setRecipients(null);
+                message.setNiveaux(null);
+                UserBean recipient = new UserBean();
+                recipient.setFirstname(prof.getFirstname());
+                recipient.setLastname(prof.getLastname());
+                message.setRecipient(recipient);
+                message.setSeen(affectationMessage.getSeen());
+                message.setRecipientMessageId(affectationMessage.getId());
+                messageBeans.add(message);
+            }
+        }
+
         Collections.sort(messageBeans);
         return messageBeans;
     }

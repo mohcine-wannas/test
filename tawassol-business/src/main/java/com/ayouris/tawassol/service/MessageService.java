@@ -19,11 +19,15 @@ public interface MessageService extends GenericService<Message,Long> {
 
 	List<MessageBean> getAllForValidation();
 
+	List<MessageBean> getAllProfMessages(Boolean valid);
+
 	List<MessageBean> getAllBySenderId(Long id);
 
 	void sendMessage(MessageBean messageBean); //TODO DELETE
 
 	void sendAdminMessage(MessageBean messageBean);
+
+	void sendAdminMessageToProf(MessageBean messageBean);
 
 	void sendProfMessage(MessageBean messageBean);
 
@@ -33,9 +37,12 @@ public interface MessageService extends GenericService<Message,Long> {
 
 	List<MessageBean> getAllMessageForParent();
 
+	List<MessageBean> getAllMessageForProf();
+
 	void setSeen(Long idAffectation);
 
 	List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType);
 
 	void deleteMessage(Long id) throws Exception;
+
 }

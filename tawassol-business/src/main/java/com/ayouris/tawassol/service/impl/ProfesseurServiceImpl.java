@@ -15,6 +15,7 @@ import com.ayouris.tawassol.service.SchoolService;
 import com.ayouris.tawassol.service.ServiceException;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.JPAExpressions;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -254,6 +255,33 @@ public class ProfesseurServiceImpl extends GenericServiceImpl2<Professeur, Long,
             }
         }
 
+    }
+
+    @Override
+    public List<ProfesseurBean> getAllByUniteId(Long uniteId) {
+        List<Professeur> professeurs =  getProfsByUniteId(uniteId);
+        return mapper.map(professeurs, ProfesseurEditBean.LIST_BEAN_TYPE);
+    }
+
+    @Override
+    public List<Professeur> getProfsByUniteId(Long uniteId) {
+        QProfesseur Professeur = QProfesseur.professeur;
+        QAffectationUniteProf affectationUniteProf = QAffectationUniteProf.affectationUniteProf;
+        return (List<Professeur>) professeurRepository.findAll(Professeur.enabled.isTrue().and(Professeur.id.in(JPAExpressions.selectFrom(affectationUniteProf)
+                .where(affectationUniteProf.unite.id.eq(uniteId)
+                        .and(affectationUniteProf.unite.active.isTrue()).and(affectationUniteProf.enabled.isTrue()))
+                .select(affectationUniteProf.professeur.id))));
+
+    }
+
+    @Override
+    public 	 List<Professeur> getProfsByClasseId(Long classeId) {
+        QProfesseur professeur = QProfesseur.professeur;
+        QAffectationNiveauClasseProf affectationNiveauClasseProf = QAffectationNiveauClasseProf.affectationNiveauClasseProf;
+        return (List<Professeur>) professeurRepository.findAll(professeur.enabled.isTrue().and(professeur.id.in(JPAExpressions.selectFrom(affectationNiveauClasseProf)
+                .where(affectationNiveauClasseProf.classe.id.eq(classeId)
+                        .and(affectationNiveauClasseProf.classe.active.isTrue()))
+                .select(affectationNiveauClasseProf.professeur.id))));
     }
 
 }

@@ -66,6 +66,7 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
 
     }
 
+
     @Override
     public List<EleveBean> getAllByParentId(Long parentId) {
 
