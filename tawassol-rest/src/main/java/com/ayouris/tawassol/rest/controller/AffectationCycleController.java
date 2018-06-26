@@ -1,7 +1,5 @@
 package com.ayouris.tawassol.rest.controller;
 
-import com.ayouris.tawassol.common.model.bean.CycleBean;
-import com.ayouris.tawassol.common.model.entity.AffectationCycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +9,6 @@ import com.ayouris.tawassol.common.model.bean.AffectationCycleBean;
 import com.ayouris.tawassol.service.AffectationCycleService;
 
 import io.swagger.annotations.Api;
-
-import java.util.List;
 
 
 @RestController
@@ -37,6 +33,6 @@ public class AffectationCycleController extends BaseController {
     @RequestMapping(value = "{codeSchool}/school/{cycleId}/cycle", method = RequestMethod.GET)
     public ResponseEntity<AffectationCycleBean> getAffectationCycleBySchoolCodeAndByCycleId(@PathVariable("codeSchool") String codeSchool, @PathVariable("cycleId") Long cycleId) throws Exception {
 
-        return new ResponseEntity<>(affectationCycleService.getAffectationCycleBySchoolCodeAndByCycleId(codeSchool, cycleId), HttpStatus.OK);
+        return new ResponseEntity<>(affectationCycleService.getAffectationCycleBySchoolCodeAndByCycleIdAndCurrentAnneeScolaire(codeSchool, cycleId), HttpStatus.OK);
     }
 }

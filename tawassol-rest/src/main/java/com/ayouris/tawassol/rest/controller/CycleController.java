@@ -41,10 +41,4 @@ public class CycleController extends BaseController {
 
         return new ResponseEntity<List<GroupeAppellationBean>>(groupeAppellationService.getAll(), HttpStatus.OK);
     }
-
-    @RequestMapping(value = "{codeSchool}/school", method = RequestMethod.GET)
-    public ResponseEntity<List<CycleBean>> getAllBySchoolCode(@PathVariable("codeSchool") String codeSchool) throws Exception {
-
-        return new ResponseEntity<>(cycleService.getAllBySchoolCode(codeSchool), HttpStatus.OK);
-    }
 }

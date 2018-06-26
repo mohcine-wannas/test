@@ -1,14 +1,12 @@
 package com.ayouris.tawassol.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.util.List;
-
 import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.ParentBean;
 import com.ayouris.tawassol.common.model.entity.Eleve;
 import com.ayouris.tawassol.common.model.enums.ParentingRelationship;
+
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * 
@@ -28,5 +26,17 @@ public interface EleveService extends GenericService<Eleve, Long> {
 
 	Boolean verifierCodeMassar(String codeMassar);
 
-    int importFromMassarFileUpload(Long idClasse, InputStream in) throws Exception;
+    Long create(EleveBean eleveBean);
+
+	Long update(Long id, EleveBean eleveBean);
+
+	EleveBean getEleve(Long id);
+
+	void delete(Long id);
+
+	void enableEleve(Long id, Boolean enable);
+
+	void enableAllEleve(Boolean enable);
+
+	int importFromMassarFileUpload(Long idClasse, InputStream in) throws Exception;
 }

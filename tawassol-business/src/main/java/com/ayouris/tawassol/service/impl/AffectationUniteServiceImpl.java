@@ -5,6 +5,7 @@ import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.AffectationUniteBean;
 import com.ayouris.tawassol.common.model.entity.*;
 import com.ayouris.tawassol.repository.AffectationUniteRepository;
+import com.ayouris.tawassol.security.service.AnneeScolaireSecurityService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.AffectationCycleService;
 import com.ayouris.tawassol.service.AffectationUniteService;
@@ -29,6 +30,8 @@ public class AffectationUniteServiceImpl extends GenericServiceImpl2<Affectation
     private AffectationCycleService affectationCycleService;
     @Autowired
     private UniteService uniteService;
+    @Autowired
+    private AnneeScolaireSecurityService anneeScolaireService;
 
     @Transactional
     @Override
@@ -91,13 +94,17 @@ public class AffectationUniteServiceImpl extends GenericServiceImpl2<Affectation
     }
 
     @Override
-    public List<AffectationUniteBean> getAffectationsUniteBySchoolCodeAndByCycleId(String schoolCode, Long cycleId) {
+    public List<AffectationUniteBean> getAffectationsUniteBySchoolCodeAndByCycleIdAndCurrentAnneeScolaire(String schoolCode, Long cycleId) {
         QAffectationUnite affectationUnite = QAffectationUnite.affectationUnite;
-        BooleanExpression expression = affectationUnite.affectationCycle.school.code.eq(schoolCode).and(affectationUnite.affectationCycle.cycle.id.eq(cycleId))
-                .and(affectationUnite.enabled.isTrue());
+        AnneeScolaire currentYear = anneeScolaireService.getCurrentAnneeScolaire();
+        List<AffectationUnite> affectations = new ArrayList<>();
+        if (currentYear != null) {
+            BooleanExpression expression = affectationUnite.affectationCycle.school.code.eq(schoolCode).and(affectationUnite.affectationCycle.cycle.id.eq(cycleId))
+                    .and(affectationUnite.affectationCycle.anneeScolaire.id.eq(currentYear.getId()))
+                    .and(affectationUnite.enabled.isTrue());
 
-        List<AffectationUnite> affectations = (List<AffectationUnite>) affectationUniteRepository.findAll(expression);
-
+            affectations = (List<AffectationUnite>) affectationUniteRepository.findAll(expression);
+        }
         return mapper.map(affectations, AffectationUniteBean.LIST_BEAN_TYPE);
     }
 }

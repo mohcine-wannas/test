@@ -8,6 +8,7 @@ import com.ayouris.tawassol.common.model.bean.CycleBean;
 import com.ayouris.tawassol.common.model.entity.*;
 import com.ayouris.tawassol.common.model.enums.ClasseNominationType;
 import com.ayouris.tawassol.repository.AffectationCycleRepository;
+import com.ayouris.tawassol.security.service.AnneeScolaireSecurityService;
 import com.ayouris.tawassol.security.service.CycleSecurityService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.AffectationCycleService;
@@ -36,6 +37,8 @@ public class AffectationCycleServiceImpl extends GenericServiceImpl2<Affectation
     private GroupeAppellationService groupeAppellationService;
     @Autowired
     private CycleSecurityService cycleService;
+    @Autowired
+    private AnneeScolaireSecurityService anneeScolaireService;
 
     public AffectationCycle getCurrentAffectationCycle() {
         Cycle currentCycle = SecurityUtils.getCurrentCycle();
@@ -88,9 +91,9 @@ public class AffectationCycleServiceImpl extends GenericServiceImpl2<Affectation
 
 
     @Override
-    public List<AffectationCycle> getAffectationsCycleBySchool(School school) {
+    public List<AffectationCycle> getAffectationsCycleBySchoolAndAnneeScolaire(School school, AnneeScolaire anneeScolaire) {
         QAffectationCycle affectationcycle = QAffectationCycle.affectationCycle;
-        BooleanExpression expression = affectationcycle.school.eq(school)
+        BooleanExpression expression = affectationcycle.school.id.eq(school.getId()).and(affectationcycle.anneeScolaire.id.eq(anneeScolaire.getId()))
                 .and(affectationcycle.active.isTrue());
 
         List<AffectationCycle> affectationCycles = (List<AffectationCycle>) affectationCycleRepository.findAll(expression);
@@ -100,14 +103,19 @@ public class AffectationCycleServiceImpl extends GenericServiceImpl2<Affectation
 
 
     @Override
-    public AffectationCycleBean getAffectationCycleBySchoolCodeAndByCycleId(String schoolCode, Long cycleId) {
-        QAffectationCycle affectationcycle = QAffectationCycle.affectationCycle;
-        BooleanExpression expression = affectationcycle.school.code.eq(schoolCode).and(affectationcycle.cycle.id.eq(cycleId))
-                .and(affectationcycle.active.isTrue());
+    public AffectationCycleBean getAffectationCycleBySchoolCodeAndByCycleIdAndCurrentAnneeScolaire(String schoolCode, Long cycleId) {
 
-        AffectationCycle affectationCycle = affectationCycleRepository.findOne(expression);
+        AnneeScolaire currentYear = anneeScolaireService.getCurrentAnneeScolaire();
+        if (currentYear != null) {
 
-        return mapper.map(affectationCycle, AffectationCycleBean.class);
+            QAffectationCycle affectationcycle = QAffectationCycle.affectationCycle;
+            BooleanExpression expression = affectationcycle.school.code.eq(schoolCode).and(affectationcycle.cycle.id.eq(cycleId))
+                    .and(affectationcycle.active.isTrue());
+            return mapper.map(affectationCycleRepository.findOne(expression), AffectationCycleBean.class);
+
+        }
+        return null;
+
     }
 
 

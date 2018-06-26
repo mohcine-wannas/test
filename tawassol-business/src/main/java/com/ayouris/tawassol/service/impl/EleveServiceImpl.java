@@ -1,5 +1,6 @@
 package com.ayouris.tawassol.service.impl;
 
+import com.ayouris.tawassol.common.exception.ErrorMessageType;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.ParentBean;
@@ -7,22 +8,20 @@ import com.ayouris.tawassol.common.model.bean.SchoolBean;
 import com.ayouris.tawassol.common.model.entity.*;
 import com.ayouris.tawassol.common.model.enums.ParentingRelationship;
 import com.ayouris.tawassol.repository.EleveRepository;
+import com.ayouris.tawassol.security.service.PasswordService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.*;
 import com.github.fluent.hibernate.internal.util.InternalUtils;
 import com.querydsl.jpa.JPAExpressions;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -47,6 +46,8 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
     private ClasseService classeService;
     @Autowired
     private AffectationEleveClasseService affectationEleveClasseService;
+    @Autowired
+    private PasswordService passwordService;
 
     @Override
     public List<EleveBean> getAllByClasseId(Long classeId) {
@@ -99,12 +100,94 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
 
     @Override
     public Boolean verifierCodeMassar(String codeMassar) {
-        Eleve eleve = getEleveByCodeMassar(codeMassar);
+        return getEleveByCodeMassar(codeMassar) != null;
+    }
+
+
+    @Override
+    public EleveBean getEleve(Long id) {
+
+        Eleve eleve = findOne(id);
         if (eleve == null) {
-            return false;
-        } else {
-            return true;
+            throw new ServiceException(ErrorMessageType.OBJECT_NOT_EXSIST);
         }
+        // QAffectationEleveClasse qAffectationEleveClasse = QAffectationEleveClasse.affectationEleveClasse;
+
+        //AffectationEleveClasse affectation = findOne(qAffectationEleveClasse.eleve.id.eq(eleve.getId()));
+
+        EleveBean elevebean = mapper.mapStrict(eleve, EleveBean.class);
+
+        return elevebean;
+    }
+
+    @Override
+    public Long create(EleveBean eleveBean) {
+
+        validationRequiredValue(eleveBean);
+        if (verifierCodeMassar(eleveBean.getCodeMassar())) {
+            throw new ServiceException(ErrorMessageType.CODE_MASSAR_EXIST);
+        }
+
+        Eleve eleve = mapper.mapStrict(eleveBean, Eleve.class);
+        Classe classe = mapper.mapStrict(eleveBean.getClasse(), Classe.class);
+
+        eleve.setSchool(SecurityUtils.getCurrentSchool());
+        eleve.setCurrentCycle(SecurityUtils.getCurrentCycle());
+        eleve.setEnabled(false);
+        eleve.setPassword(passwordService.encodePassword(eleve.getCodeMassar()));
+        eleve.setUsername(eleve.getCodeMassar());
+        save(eleve);
+
+        AffectationEleveClasse affectation = new AffectationEleveClasse();
+        affectation.setClasse(classe);
+        affectation.setEleve(eleve);
+        affectationEleveClasseService.save(affectation);
+
+        return eleve.getId();
+    }
+
+    @Override
+    public Long update(Long id, EleveBean eleveBean) {
+
+        Eleve oldEntity = findOne(id);
+
+        if (oldEntity == null) {
+            throw new ServiceException(ErrorMessageType.OBJECT_NOT_EXSIST);
+        }
+        validationRequiredValue(eleveBean);
+
+        Eleve eleveCheck = getEleveByCodeMassar(eleveBean.getCodeMassar());
+        if (eleveCheck.getId() != id) {
+            throw new ServiceException(ErrorMessageType.CODE_MASSAR_EXIST);
+        }
+
+        Eleve eleve = mapper.mapStrict(eleveBean, Eleve.class);
+        Classe classe = mapper.mapStrict(eleveBean.getClasse(), Classe.class);
+
+        oldEntity.setCodeMassar(eleve.getCodeMassar());
+        oldEntity.setFirstname(eleve.getFirstname());
+        oldEntity.setLastname(eleve.getLastname());
+        oldEntity.setEtatSante(eleve.getEtatSante());
+        oldEntity.setRemarque(eleve.getRemarque());
+        save(eleve);
+
+        AffectationEleveClasse affectation = affectationEleveClasseService.findByEleveIdAndClasseId(eleve.getId(), classe.getId());
+        if (affectation != null) {
+            affectation.setClasse(classe);
+            affectationEleveClasseService.save(affectation);
+        }
+        return eleve.getId();
+    }
+
+    @Override
+    public void delete(Long id) {
+        Eleve oldEntity = findOne(id);
+
+        if (oldEntity == null) {
+            throw new ServiceException(ErrorMessageType.OBJECT_NOT_EXSIST);
+        }
+
+        delete(oldEntity);
     }
 
     @Override
@@ -184,6 +267,40 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
             return "Garçon";
         } else {
             return value;
+        }
+    }
+
+    void validationRequiredValue(EleveBean eleveBean) {
+        if (StringUtils.isEmpty(eleveBean.getFirstname())
+                || StringUtils.isEmpty(eleveBean.getLastname())
+                || StringUtils.isEmpty(eleveBean.getCodeMassar())
+                || eleveBean.getClasse() == null
+                || eleveBean.getNiveau() == null) {
+            throw new ServiceException(ErrorMessageType.MISSING_REQUIRED_FIELDS);
+        }
+    }
+
+    @Override
+    public void enableEleve(Long id, Boolean enable) {
+        Eleve eleve = findOne(id);
+        if (eleve == null) {
+            throw new ServiceException(ErrorMessageType.OBJECT_NOT_EXSIST);
+        }
+
+        eleve.setEnabled(enable);
+        save(eleve);
+
+    }
+
+
+    @Override
+    public void enableAllEleve(Boolean enable) {
+
+        QEleve qEleve = QEleve.eleve;
+        List<Eleve> eleves = (List<Eleve>) eleveRepository.findAll(qEleve.school.id.eq(SecurityUtils.getCurrentSchool().getId()));
+        for (Eleve eleve : eleves) {
+            eleve.setEnabled(enable);
+            save(eleve);
         }
     }
 }

@@ -32,10 +32,4 @@ public class AffectationUniteController extends BaseController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "{codeSchool}/school/{cycleId}/cycle", method = RequestMethod.GET)
-    public ResponseEntity< List<AffectationUniteBean>> getAffectationUniteBySchoolCodeAndByCycleId(@PathVariable("codeSchool") String codeSchool, @PathVariable("cycleId") Long cycleId) throws Exception {
-
-        return new ResponseEntity<>(affectationUniteService.getAffectationsUniteBySchoolCodeAndByCycleId(codeSchool, cycleId), HttpStatus.OK);
-    }
-
 }

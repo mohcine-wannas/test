@@ -173,6 +173,8 @@ public enum ErrorMessageType {
     PROF_ALREADY_EXISTE(HttpServletResponse.SC_CONFLICT, 214, "Professeur", "Un professeur avec ce numéro de téléphone est déjà enregistré"),
     OBJECT_NOT_EXSIST(HttpServletResponse.SC_CONFLICT, 214, "Object", "Aucun enregistrement n'est trouvé avec cet identifiant"),
 
+    //Eeve
+    CODE_MASSAR_EXIST(HttpServletResponse.SC_CONFLICT, 214, "Eleve", "Un élève avec ce code massar est déjà enregistré"),
     ;
 
     private final int httpResponseStatus;

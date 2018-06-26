@@ -21,12 +21,6 @@ public class ProfesseurController extends BaseController {
     @Autowired
     private ProfesseurService professeurService;
 
-    @RequestMapping(value = "{codeSchool}/register-validate", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> validateCodeSchool(@PathVariable("codeSchool") String codeSchool) throws Exception {
-
-        return new ResponseEntity<>(professeurService.validateCodeSchool(codeSchool), HttpStatus.OK);
-    }
-
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Long> create(@RequestBody ProfesseurBean professeur) throws Exception {
         return new ResponseEntity<Long>(professeurService.create(professeur), HttpStatus.OK);

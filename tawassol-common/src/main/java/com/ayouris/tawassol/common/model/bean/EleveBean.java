@@ -44,10 +44,15 @@ public class EleveBean implements Serializable{
 	private Boolean hasAffectations;
 	private Boolean hasToBeEnabled;
 	private Boolean enabledAffectations;
+	private Boolean enabled;
 
 	private List<AffectationParentEleveBean> affectationParents;
 	
-	
+	private NiveauBean niveau;
+	private ClasseBean classe;
+	private String etatSante;
+	private String remarque;
+
 	public Boolean getHasToBeEnabled() {
 		for (AffectationParentEleveBean affectationParentEleveBean : affectationParents) {
 			if(affectationParentEleveBean.getEnabled() == null) {

@@ -190,6 +190,7 @@ public class ProfesseurServiceImpl extends GenericServiceImpl2<Professeur, Long,
     @Override
     public Long create(ProfesseurBean professeur) {
         validateRequiredFields(professeur);
+        validateAffectationsRequiredValue(professeur);
         validateAffectationNiveauClasse(professeur);
 
         QProfesseur qProfesseur = QProfesseur.professeur;
