@@ -60,6 +60,8 @@ public class User extends CoordinatesEntity implements UserDetails {
     private String lang;
 	private Cycle currentCycle;
 
+    private Boolean autoSendMessage = false;
+
     @Override
     @Column(name = "username", unique = true, nullable = false, length = 128)
     public String getUsername() {
@@ -207,5 +209,9 @@ public class User extends CoordinatesEntity implements UserDetails {
 
     public String getFcmMobileToken() {
         return fcmMobileToken;
+    }
+
+    public Boolean getAutoSendMessage() {
+        return autoSendMessage;
     }
 }

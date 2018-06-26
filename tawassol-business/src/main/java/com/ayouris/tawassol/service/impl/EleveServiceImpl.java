@@ -52,14 +52,21 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
     @Override
     public List<EleveBean> getAllByClasseId(Long classeId) {
 
+        Iterable<Eleve> list = getElevesByClasseId(classeId);
+        return mapper.map(list, EleveBean.LIST_BEAN_TYPE);
+    }
+
+    @Override
+    public List<Eleve> getElevesByClasseId(Long classeId) {
         QEleve eleve = QEleve.eleve;
         QAffectationEleveClasse affectationEleveClasse = QAffectationEleveClasse.affectationEleveClasse;
-        Iterable<Eleve> list = eleveRepository.findAll(eleve.enabled.isTrue().and(eleve.id.in(JPAExpressions.selectFrom(affectationEleveClasse)
+        return (List<Eleve>) eleveRepository.findAll(eleve.enabled.isTrue().and(eleve.id.in(JPAExpressions.selectFrom(affectationEleveClasse)
                 .where(affectationEleveClasse.classe.id.eq(classeId)
                         .and(affectationEleveClasse.classe.active.isTrue()))
                 .select(affectationEleveClasse.eleve.id))));
-        return mapper.map(list, EleveBean.LIST_BEAN_TYPE);
+
     }
+
 
     @Override
     public List<EleveBean> getAllByParentId(Long parentId) {
@@ -87,7 +94,8 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
         Parent parent = parentService.createOrUpdate(parentBean);
         AffectationParentEleve affectation = new AffectationParentEleve(eleve, parent, parentingRelationship);
 
-        return affectationParentEleveService.save(affectation).getId();
+        affectationParentEleveService.save(affectation);
+        return parent.getId();
     }
 
     @Override
@@ -96,6 +104,9 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
         AffectationParentEleve affectation = affectationParentEleveService.findOne(id);
         affectation.setEnabled(enable);
         affectationParentEleveService.save(affectation);
+        Parent parent = affectation.getParent();
+        parent.setEnabled(true);
+        parentService.save(parent);
     }
 
     @Override

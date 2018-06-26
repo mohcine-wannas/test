@@ -58,10 +58,11 @@ public class ParentServiceImpl extends GenericServiceImpl2<Parent, Long, ParentB
 	}
 
 	@Override
-	public boolean isValidated(Long parentId) {
+	public boolean isValidated(Long parentId) throws Exception {
 		Parent parent = findOne(parentId);
 		if(parent == null) {
 			//TODO throw error;
+			throw new Exception("not found parent with id : " + parentId);
 		}
 		List<AffectationParentEleve> affectations = affectationParentEleveService.findByParent(parent);
 		for(AffectationParentEleve affectation : affectations) {

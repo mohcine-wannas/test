@@ -1,6 +1,7 @@
 package com.ayouris.tawassol.service;
 
 import com.ayouris.tawassol.common.model.entity.AffectationEleveClasse;
+import com.ayouris.tawassol.common.model.entity.Eleve;
 
 import java.util.Optional;
 
@@ -14,4 +15,5 @@ public interface AffectationEleveClasseService extends  GenericService<Affectati
 
 
     AffectationEleveClasse findByEleveIdAndClasseId(Long eleveId, Long classeId);
+    AffectationEleveClasse getClasseByEleve(Eleve eleve);
 }

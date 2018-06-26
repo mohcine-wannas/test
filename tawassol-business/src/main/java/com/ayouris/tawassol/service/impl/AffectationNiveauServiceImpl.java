@@ -36,5 +36,6 @@ public class AffectationNiveauServiceImpl extends GenericServiceImpl2<Affectatio
     	return affectationCycleService.getCurrentAffectationCycleBean().getAffectationNiveaux();
     }
 
+
 	
 }

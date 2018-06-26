@@ -30,4 +30,11 @@ public interface ProfesseurService extends GenericService<Professeur, Long> {
     void delete(Long id);
 
     Long passwordChange(Long id, Map<String, String> bean);
+
+    List<ProfesseurBean> getAllByUniteId(Long id);
+
+    List<Professeur> getProfsByUniteId(Long id);
+
+
+    List<Professeur> getProfsByClasseId(Long classeId);
 }
