@@ -61,6 +61,13 @@ public class ProfesseurController extends BaseController {
     }
 
 
+    @RequestMapping(value = "{id}/auto-send", method = RequestMethod.PUT)
+    public ResponseEntity<Long> autoEnvoiProf(@PathVariable("id") Long id, @RequestBody Boolean autoSend) throws Exception {
+        professeurService.autoSendProf(id, autoSend);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
     @RequestMapping(value = "{id}/unites", method = RequestMethod.PUT)
     public ResponseEntity<Long> updateProfUnites(@PathVariable("id") Long id, @RequestBody ProfesseurBean professeur) throws Exception {
         return new ResponseEntity<>(professeurService.updateProfUnites(id, professeur), HttpStatus.OK);

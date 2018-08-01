@@ -95,8 +95,8 @@ public class ProfesseurServiceImpl extends GenericServiceImpl2<Professeur, Long,
             throw new ServiceException(ErrorMessageType.OBJECT_NOT_EXSIST);
         }
 
-//        prof.set(autoSend);
-//        save(prof);
+        prof.setAutoSendMessage(autoSend);
+        save(prof);
     }
 
     @Override

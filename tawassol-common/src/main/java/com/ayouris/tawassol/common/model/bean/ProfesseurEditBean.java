@@ -32,6 +32,7 @@ public class ProfesseurEditBean implements Serializable {
     private String fullname;
     private String phoneNumber;
     private Boolean enabled;
+    private Boolean autoSendMessage;
 
     private List<AffectationUniteProfBean> affectationsUniteProf;
 

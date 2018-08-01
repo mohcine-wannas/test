@@ -12,6 +12,8 @@ import com.ayouris.tawassol.security.service.PasswordService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.*;
 import com.github.fluent.hibernate.internal.util.InternalUtils;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.JPAExpressions;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -60,10 +62,12 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
     public List<Eleve> getElevesByClasseId(Long classeId) {
         QEleve eleve = QEleve.eleve;
         QAffectationEleveClasse affectationEleveClasse = QAffectationEleveClasse.affectationEleveClasse;
-        return (List<Eleve>) eleveRepository.findAll(eleve.enabled.isTrue().and(eleve.id.in(JPAExpressions.selectFrom(affectationEleveClasse)
+        return (List<Eleve>) eleveRepository.findAll(eleve.id.in(JPAExpressions.selectFrom(affectationEleveClasse)
                 .where(affectationEleveClasse.classe.id.eq(classeId)
                         .and(affectationEleveClasse.classe.active.isTrue()))
-                .select(affectationEleveClasse.eleve.id))));
+                .select(affectationEleveClasse.eleve.id)),
+                new OrderSpecifier<>(Order.ASC, eleve.enabled),
+                new OrderSpecifier<>(Order.DESC, eleve.createdOn));
 
     }
 

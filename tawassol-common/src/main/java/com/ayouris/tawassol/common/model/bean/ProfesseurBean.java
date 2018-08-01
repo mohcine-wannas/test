@@ -34,6 +34,7 @@ public class ProfesseurBean implements Serializable {
     private String password;
     private String passwordConfirm;
     private Boolean enabled;
+    private Boolean autoSendMessage;
 
     private CycleBean cycle;
 
