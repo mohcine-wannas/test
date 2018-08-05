@@ -1,8 +1,10 @@
 package com.ayouris.tawassol.common.model.bean;
 
-import com.ayouris.tawassol.common.enums.MessageType;
+import com.ayouris.tawassol.common.enums.MessageDestinationType;
 import com.ayouris.tawassol.common.model.entity.Message;
 import com.ayouris.tawassol.common.model.entity.Unite;
+import com.ayouris.tawassol.common.model.enums.MessageStatus;
+import com.ayouris.tawassol.common.model.enums.MessageType;
 import com.google.common.reflect.TypeToken;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +12,6 @@ import lombok.Setter;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -50,6 +51,12 @@ public final class MessageBean implements Comparable<MessageBean> {
     private Boolean seen;
 
     private Date createdOn;
+
+    private MessageDestinationType messageDestinationType;
+    private MessageStatus messageStatus;
+
+    private Integer totalRecipients;
+    private Integer totalOfViews;
 
 
     @Override

@@ -1,14 +1,12 @@
 package com.ayouris.tawassol.service;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.List;
 
+import com.ayouris.tawassol.common.model.bean.AffectationParentEleveBean;
 import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.ParentBean;
 import com.ayouris.tawassol.common.model.entity.Eleve;
-import com.ayouris.tawassol.common.model.entity.Professeur;
 import com.ayouris.tawassol.common.model.enums.ParentingRelationship;
 
 /**
@@ -25,11 +23,17 @@ public interface EleveService extends GenericService<Eleve, Long> {
 
 	List<EleveBean> getAllByParentId(Long parentId);
 
+	List<AffectationParentEleveBean> getAllByCurrentParent() throws Exception;
+
 	Long setParent(String codeMassar, ParentBean parent, ParentingRelationship parentingRelationship);
+
+	boolean addStudent(String codeMassar, ParentingRelationship parentingRelationship) throws Exception;
 
 	void enableParent(Long id, Boolean enable);
 
 	Boolean verifierCodeMassar(String codeMassar);
+
+	Boolean deleteAffectation(Long idAffectation) throws Exception;
 
     int importFromMassarFileUpload(Long idClasse, InputStream in) throws Exception;
 }

@@ -1,15 +1,14 @@
 package com.ayouris.tawassol.common.model.enums;
 
-public enum ParentingRelationship {
-
-	FATHER("Père"),
-	MOTHER("Mère"),
-	BROTHER("Frère"),
-	SISTER("Soeur");
+public enum MessageStatus {
+    EN_INSTANCE("En Instance"),
+    VALIDE("Validée"),
+    REJETE("Rejetée");
 
     private String key;
 
-    ParentingRelationship(String value) {
+    MessageStatus(String value) {
+
         key = value;
     }
 

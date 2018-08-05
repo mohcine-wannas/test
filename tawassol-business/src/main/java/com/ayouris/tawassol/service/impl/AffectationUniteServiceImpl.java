@@ -1,9 +1,11 @@
 package com.ayouris.tawassol.service.impl;
 
+import com.ayouris.tawassol.admin.model.entity.User;
 import com.ayouris.tawassol.common.exception.ErrorMessageType;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.AffectationUniteBean;
 import com.ayouris.tawassol.common.model.entity.*;
+import com.ayouris.tawassol.repository.AffectationUniteProfRepository;
 import com.ayouris.tawassol.repository.AffectationUniteRepository;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
 import com.ayouris.tawassol.service.AffectationCycleService;
@@ -23,6 +25,8 @@ public class AffectationUniteServiceImpl extends GenericServiceImpl2<Affectation
 
     @Autowired
     private AffectationUniteRepository affectationUniteRepository;
+    @Autowired
+    private AffectationUniteProfRepository affectationUniteProfRepository;
     @Autowired
     private CustomModelMapper mapper;
     @Autowired
@@ -64,6 +68,24 @@ public class AffectationUniteServiceImpl extends GenericServiceImpl2<Affectation
         }
 
         return mapper.map(affectations, AffectationUniteBean.LIST_BEAN_TYPE);
+    }
+
+    @Transactional
+    @Override
+    public List<AffectationUniteBean> getAffectationsUniteByCurrentProf() {
+
+        User currentUser = SecurityUtils.getCurrentUser();
+        List<AffectationUniteProf> affectations = getAffectationUniteByUserId(currentUser.getId());;
+
+        return mapper.map(affectations, AffectationUniteBean.LIST_BEAN_TYPE);
+    }
+
+    private List<AffectationUniteProf> getAffectationUniteByUserId(Long id) {
+        QAffectationUniteProf affectationUniteProf = QAffectationUniteProf.affectationUniteProf;
+        BooleanExpression predicat = affectationUniteProf.professeur.id.eq(id).and(affectationUniteProf.enabled.isTrue().and(
+                affectationUniteProf.unite.isNotNull().and(affectationUniteProf.unite.active.isTrue())));
+
+        return (List<AffectationUniteProf>) affectationUniteProfRepository.findAll(predicat);
     }
 
     @Override
