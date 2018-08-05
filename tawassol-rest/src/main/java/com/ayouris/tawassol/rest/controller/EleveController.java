@@ -2,6 +2,8 @@ package com.ayouris.tawassol.rest.controller;
 
 import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.ParentBean;
+import com.ayouris.tawassol.common.model.bean.AffectationParentEleveBean;
+import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.enums.ParentingRelationship;
 import com.ayouris.tawassol.service.EleveService;
 import io.swagger.annotations.Api;
@@ -9,6 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.ayouris.tawassol.common.model.bean.ParentBean;
+import com.ayouris.tawassol.service.EleveService;
+
+import io.swagger.annotations.Api;
+
+import java.util.List;
 
 
 @RestController
@@ -34,6 +43,19 @@ public class EleveController extends BaseController {
     @RequestMapping(value = "{codeMassar}/__exists", method = RequestMethod.GET)
     public ResponseEntity<Boolean> verifierCodeMassar(@PathVariable("codeMassar") String codeMassar) throws Exception {
         return new ResponseEntity<>(eleveService.verifierCodeMassar(codeMassar), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "{codeMassar}/{parentingRelationship}/set-parent")
+    public ResponseEntity<Boolean> addStudent(@PathVariable("codeMassar") String codeMassar,@PathVariable("parentingRelationship") ParentingRelationship parentingRelationship) throws Exception {
+        return new ResponseEntity<>(eleveService.addStudent(codeMassar,parentingRelationship),HttpStatus.OK);
+    }
+    @GetMapping(value = "/by-parent")
+    public ResponseEntity<List<AffectationParentEleveBean>> getAllByCurrentParent() throws Exception {
+        return new ResponseEntity<>(eleveService.getAllByCurrentParent(),HttpStatus.OK);
+    }
+    @DeleteMapping(value = "/delete-affectation/{id}")
+    public ResponseEntity<Boolean> getAllByCurrentParent(@PathVariable("id") Long idAffectation) throws Exception {
+        return new ResponseEntity<>(eleveService.deleteAffectation(idAffectation) ,HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)

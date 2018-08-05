@@ -1,7 +1,10 @@
 package com.ayouris.tawassol.rest.controller;
 
-import com.ayouris.tawassol.common.enums.MessageType;
+import com.ayouris.tawassol.common.enums.MessageDestinationType;
 import com.ayouris.tawassol.common.model.bean.MessageBean;
+import com.ayouris.tawassol.common.model.bean.ViewBean;
+import com.ayouris.tawassol.common.model.enums.MessageStatus;
+import com.ayouris.tawassol.common.model.enums.MessageType;
 import com.ayouris.tawassol.service.MessageService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +36,17 @@ public class MessageController extends BaseController {
 
     @GetMapping("prof/not-validated/")
     public ResponseEntity<List<MessageBean>> getAllProfNotYetValidatedMessages() throws Exception {
-        return new ResponseEntity<>(messageService.getAllProfMessages(false), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getAllProfMessages(MessageStatus.EN_INSTANCE), HttpStatus.OK);
     }
 
     @GetMapping("prof/validated/")
     public ResponseEntity<List<MessageBean>> getAllProfValidatedMessages() throws Exception {
-        return new ResponseEntity<>(messageService.getAllProfMessages(true), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getAllProfMessages(MessageStatus.VALIDE), HttpStatus.OK);
+    }
+
+    @GetMapping("prof/rejected/")
+    public ResponseEntity<List<MessageBean>> getAllProfRejectedMessages() throws Exception {
+        return new ResponseEntity<>(messageService.getAllProfMessages(MessageStatus.REJETE), HttpStatus.OK);
     }
 
     //TODO Remove
@@ -81,6 +89,11 @@ public class MessageController extends BaseController {
         return new ResponseEntity<>(messageService.getAllMessageForParentByMessageType(messageType), HttpStatus.OK);
     }
 
+    @GetMapping("/admin/get-all/{messageDestinationType}")
+    public ResponseEntity getAllMessageByMessageDestinationType(@PathVariable("messageDestinationType") MessageDestinationType messageDestinationType) throws Exception {
+        return new ResponseEntity<>(messageService.getAllMessageByMessageDestinationType(messageDestinationType), HttpStatus.OK);
+    }
+
     @PutMapping("{id:\\d+}/seen")
     public ResponseEntity setSeen(@PathVariable("id") Long idAffectation) throws Exception {
         messageService.setSeen(idAffectation);
@@ -99,6 +112,11 @@ public class MessageController extends BaseController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("admin/{id:\\d+}/reject")
+    public ResponseEntity<List<MessageBean>> rejectMessage(@PathVariable("id") Long id) throws Exception {
+        messageService.rejectMessage(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
     @DeleteMapping("admin/{id:\\d+}")
     public ResponseEntity<List<MessageBean>> deleteMessage(@PathVariable("id") Long id) throws Exception {
@@ -112,5 +130,9 @@ public class MessageController extends BaseController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("admin/{id:\\d+}/views")
+    public ResponseEntity<List<ViewBean>> getViews(@PathVariable("id") Long id)  {
+        return new ResponseEntity<>(messageService.getViewsDetails(id), HttpStatus.OK);
+    }
 
 }

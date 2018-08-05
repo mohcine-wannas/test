@@ -36,6 +36,7 @@ public class AffectationParentEleveBean implements Serializable {
 
 	private Long id;
 	private ParentBean parent;
+	private UserBean eleve;
 	private Boolean enabled;
 	private ParentingRelationship parentingRelationship;
 

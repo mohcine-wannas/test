@@ -1,12 +1,15 @@
 package com.ayouris.tawassol.service.impl;
 
+import com.ayouris.tawassol.admin.model.entity.User;
 import com.ayouris.tawassol.common.exception.ErrorMessageType;
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
+import com.ayouris.tawassol.common.model.bean.AffectationParentEleveBean;
 import com.ayouris.tawassol.common.model.bean.EleveBean;
 import com.ayouris.tawassol.common.model.bean.ParentBean;
 import com.ayouris.tawassol.common.model.bean.SchoolBean;
 import com.ayouris.tawassol.common.model.entity.*;
 import com.ayouris.tawassol.common.model.enums.ParentingRelationship;
+import com.ayouris.tawassol.repository.AffectationParentEleveRepository;
 import com.ayouris.tawassol.repository.EleveRepository;
 import com.ayouris.tawassol.security.service.PasswordService;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
@@ -40,6 +43,8 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
     private CustomModelMapper mapper;
     @Autowired
     private EleveRepository eleveRepository;
+    @Autowired
+    private AffectationParentEleveRepository affectationParentEleveRepository;
     @Autowired
     private ParentService parentService;
     @Autowired
@@ -84,6 +89,18 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
         return mapper.map(list, EleveBean.LIST_BEAN_TYPE);
     }
 
+    @Override
+    public List<AffectationParentEleveBean> getAllByCurrentParent() throws Exception {
+        User currentUser = SecurityUtils.getCurrentUser();
+        if(!(currentUser instanceof Parent)) {
+            throw new Exception("Forbidden");
+        }
+        QAffectationParentEleve affectationParentEleve = QAffectationParentEleve.affectationParentEleve;
+        Iterable<AffectationParentEleve> list = affectationParentEleveRepository.findAll(affectationParentEleve.parent.id.eq(currentUser.getId())
+                        .and(affectationParentEleve.eleve.enabled.isTrue()));
+        return mapper.map(list, AffectationParentEleveBean.LIST_BEAN_TYPE);
+    }
+
     private Eleve getEleveByCodeMassar(String codeMassar) {
         List<Eleve> list = eleveRepository.findByCodeMassarAndEnabledTrue(codeMassar);
         return list.isEmpty() ? null : list.get(0);
@@ -100,6 +117,27 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
 
         affectationParentEleveService.save(affectation);
         return parent.getId();
+    }
+
+    @Override
+    public boolean addStudent(String codeMassar, ParentingRelationship parentingRelationship) throws Exception {
+        Boolean exist = verifierCodeMassar(codeMassar);
+
+        if(!exist) {
+            return false;
+        }
+        Eleve eleve = getEleveByCodeMassar(codeMassar);
+        School school = eleve.getSchool();
+
+        User currentUser = SecurityUtils.getCurrentUser();
+        if(!(currentUser instanceof Parent)) {
+            throw new Exception("Forbidden");
+        }
+        Parent parent = (Parent) currentUser;
+        AffectationParentEleve affectation = new AffectationParentEleve(eleve, parent, parentingRelationship);
+
+        affectationParentEleveService.save(affectation);
+        return true;
     }
 
     @Override
@@ -203,6 +241,20 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
         }
 
         delete(oldEntity);
+    }
+
+    @Override
+    public 	Boolean deleteAffectation(Long idAffectation) throws Exception {
+        AffectationParentEleve affectation = affectationParentEleveService.findOne(idAffectation);
+        if (affectation == null) {
+            throw new Exception("not found");
+        }
+        Parent parent = affectation.getParent();
+        if (parent == null || parent.getId() != SecurityUtils.getCurrentUser().getId()) {
+            throw new Exception("forbidden");
+        }
+        affectationParentEleveService.delete(idAffectation);
+        return true;
     }
 
     @Override
