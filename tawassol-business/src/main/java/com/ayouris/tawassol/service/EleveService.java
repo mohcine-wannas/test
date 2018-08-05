@@ -48,5 +48,5 @@ public interface EleveService extends GenericService<Eleve, Long> {
 
 	void enableAllEleve(Boolean enable);
 
-	int importFromMassarFileUpload(Long idClasse, InputStream in) throws Exception;
+    int importFromMassarFileUpload(Long idClasse, InputStream in) throws Exception;
 }

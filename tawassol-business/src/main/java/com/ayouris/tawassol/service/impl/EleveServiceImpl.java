@@ -258,6 +258,20 @@ public class EleveServiceImpl extends GenericServiceImpl2<Eleve, Long, EleveBean
     }
 
     @Override
+    public 	Boolean deleteAffectation(Long idAffectation) throws Exception {
+        AffectationParentEleve affectation = affectationParentEleveService.findOne(idAffectation);
+        if (affectation == null) {
+            throw new Exception("not found");
+        }
+        Parent parent = affectation.getParent();
+        if (parent == null || parent.getId() != SecurityUtils.getCurrentUser().getId()) {
+            throw new Exception("forbidden");
+        }
+        affectationParentEleveService.delete(idAffectation);
+        return true;
+    }
+
+    @Override
     public int importFromMassarFileUpload(Long idClasse, InputStream is) throws Exception {
 
 
