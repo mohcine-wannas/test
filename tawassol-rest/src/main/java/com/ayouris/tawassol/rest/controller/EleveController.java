@@ -56,20 +56,7 @@ public class EleveController extends BaseController {
         return new ResponseEntity<>(eleveService.getAllByCurrentParent(),HttpStatus.OK);
     }
     @DeleteMapping(value = "/delete-affectation/{id}")
-    public ResponseEntity<Boolean> getAllByCurrentParent(@PathVariable("id") Long idAffectation) throws Exception {
-        return new ResponseEntity<>(eleveService.deleteAffectation(idAffectation) ,HttpStatus.OK);
-    }
-
-    @PutMapping(value = "{codeMassar}/{parentingRelationship}/set-parent")
-    public ResponseEntity<Boolean> addStudent(@PathVariable("codeMassar") String codeMassar,@PathVariable("parentingRelationship") ParentingRelationship parentingRelationship) throws Exception {
-        return new ResponseEntity<>(eleveService.addStudent(codeMassar,parentingRelationship),HttpStatus.OK);
-    }
-    @GetMapping(value = "/by-parent")
-    public ResponseEntity<List<AffectationParentEleveBean>> getAllByCurrentParent() throws Exception {
-        return new ResponseEntity<>(eleveService.getAllByCurrentParent(),HttpStatus.OK);
-    }
-    @DeleteMapping(value = "/delete-affectation/{id}")
-    public ResponseEntity<Boolean> getAllByCurrentParent(@PathVariable("id") Long idAffectation) throws Exception {
+    public ResponseEntity<Boolean> deleteAffectation(@PathVariable("id") Long idAffectation) throws Exception {
         return new ResponseEntity<>(eleveService.deleteAffectation(idAffectation) ,HttpStatus.OK);
     }
 
