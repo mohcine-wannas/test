@@ -1,179 +1,189 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="true">
-
-	<include resource="logback_config.xml" />
-	
-	<property resource="application.yml" /> 
-
-	<!-- Send debug messages to System.out -->
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}	-%msg%n</pattern>
-		</encoder>
-	</appender>
-
-	<!-- Send debug messages to a file application.log -->
-	<appender name="FILE"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${tawassol.logging.application.directory}/application.log</file>
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<FileNamePattern>${tawassol.logging.application.directory}/application.log_%i.zip
-			</FileNamePattern>
-			<MinIndex>1</MinIndex>
-			<MaxIndex>10</MaxIndex>
-		</rollingPolicy>
-
-		<triggeringPolicy
-			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>2MB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-
-	<appender name="MAIL_LOG"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${tawassol.logging.mail.directory}/mail.log</file>
-
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<FileNamePattern>${tawassol.logging.mail.directory}/mail.log_%i.zip
-			</FileNamePattern>
-			<MinIndex>1</MinIndex>
-			<MaxIndex>10</MaxIndex>
-		</rollingPolicy>
-
-		<triggeringPolicy
-			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>2MB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-	
-	<appender name="CACHE_LOG"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-				
-		<file>${tawassol.logging.mail.directory}/cache.log</file>
-
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<FileNamePattern>${tawassol.logging.mail.directory}/cache.log_%i.zip
-			</FileNamePattern>
-			<MinIndex>1</MinIndex>
-			<MaxIndex>10</MaxIndex>
-		</rollingPolicy>
-
-		<triggeringPolicy
-			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>2MB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-
-    <appender name="BUSINESS_LAYER_AUDIT"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${tawassol.logging.application.directory}/business.layer.log</file>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${tawassol.logging.application.directory}/business.layer.log_%i.zip</fileNamePattern>
-            <minIndex>1</minIndex>
-            <maxIndex>10</maxIndex>
-        </rollingPolicy>
-
-        <triggeringPolicy
-                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
-        </triggeringPolicy>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.S Z}|%thread|%-5level|%msg%n
-            </pattern>
-        </encoder>
-    </appender>
-    
-     <appender name="INTERCEPTORS_LOG"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${tawassol.logging.application.directory}/interceptors-resources.log</file>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${tawassol.logging.application.directory}/interceptors-resources.log_%i.zip</fileNamePattern>
-            <minIndex>1</minIndex>
-            <maxIndex>10</maxIndex>
-        </rollingPolicy>
-
-        <triggeringPolicy
-                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
-        </triggeringPolicy>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.S Z}|%thread|%-5level|%msg%n
-            </pattern>
-        </encoder>
-    </appender>
-    
-     <appender name="WORKFLOW_LOG"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${tawassol.logging.application.directory}/workflow.log</file>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${tawassol.logging.application.directory}/workflow.log_%i.zip</fileNamePattern>
-            <minIndex>1</minIndex>
-            <maxIndex>10</maxIndex>
-        </rollingPolicy>
-
-        <triggeringPolicy
-                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
-        </triggeringPolicy>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.S Z}|%thread|%-5level|%msg%n
-            </pattern>
-        </encoder>
-    </appender>
-
-
-	<logger name="org.springframework" level="${org.springframework.log.level:-ERROR}" additivity="false">
-		<appender-ref ref="STDOUT" />
-		<appender-ref ref="FILE" />
-	</logger>
-
-	<logger name="org.hibernate" level="${hibernate.log.level:-ERROR}" additivity="false">
-		<appender-ref ref="STDOUT" />
-		<appender-ref ref="FILE" />
-	</logger>
-	
-	<!-- show sql requests -->
-	<logger name="org.hibernate.SQL" level="${hibernate.sql.log.level:-ERROR}" />
-	
-	<!-- ehcache -->
-	<logger name="net.sf.ehcache" level="${ehcache.log.level:-ERROR}"/> 
-	
-	<logger name="org.apache.cxf.interceptor" level="${org.apache.cxf.log.level:-ERROR}" additivity="false">
-		<appender-ref ref="STDOUT" />
-		<appender-ref ref="INTERCEPTORS_LOG" />
-	</logger>
-
-	<logger name="com.salamgaz.tawassol.mail" level="${mail.log.level:-DEBUG}" additivity="false">
-		<appender-ref ref="MAIL_LOG" />
-	</logger>
-
-    <logger name="com.salamgaz.tawassol.supervision" level="${supervision.log.level:-WARN}" additivity="false">
-        <appender-ref ref="BUSINESS_LAYER_AUDIT" />
-    </logger>
-
-	<logger name="com.salamgaz.tawassol.workflow" level="${workflow.log.level:-WARN}" additivity="false">
-		<appender-ref ref="WORKFLOW_LOG" />
-		<appender-ref ref="STDOUT" />
-	</logger>
-
-	<!-- By default, the root level is set to ERROR -->
-	<root level="${root.level:-ERROR}">
-		<appender-ref ref="STDOUT" />
-	</root>
-
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml"/>
+	<logger name="jdbc" level="OFF"/>
+	<logger name="jdbc.sqltiming" level="DEBUG"/>
+	<logger name="jdbc.resultsettable" level="DEBUG"/>
+	<logger name="org.springframework" level="INFO"/>
+	<logger name="com.ayouris" level="DEBUG"/>
 </configuration>
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<configuration debug="true">-->
+
+	<!--<include resource="logback_config.xml" />-->
+	<!---->
+	<!--<property resource="application.yml" /> -->
+
+	<!--&lt;!&ndash; Send debug messages to System.out &ndash;&gt;-->
+	<!--<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
+		<!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+			<!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}	-%msg%n</pattern>-->
+		<!--</encoder>-->
+	<!--</appender>-->
+
+	<!--&lt;!&ndash; Send debug messages to a file application.log &ndash;&gt;-->
+	<!--<appender name="FILE"-->
+		<!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>${tawassol.logging.application.directory}/application.log</file>-->
+		<!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+			<!--<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>-->
+		<!--</encoder>-->
+
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
+			<!--<FileNamePattern>${tawassol.logging.application.directory}/application.log_%i.zip-->
+			<!--</FileNamePattern>-->
+			<!--<MinIndex>1</MinIndex>-->
+			<!--<MaxIndex>10</MaxIndex>-->
+		<!--</rollingPolicy>-->
+
+		<!--<triggeringPolicy-->
+			<!--class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+			<!--<MaxFileSize>2MB</MaxFileSize>-->
+		<!--</triggeringPolicy>-->
+	<!--</appender>-->
+
+	<!--<appender name="MAIL_LOG"-->
+		<!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>${tawassol.logging.mail.directory}/mail.log</file>-->
+
+		<!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+			<!--<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>-->
+		<!--</encoder>-->
+
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
+			<!--<FileNamePattern>${tawassol.logging.mail.directory}/mail.log_%i.zip-->
+			<!--</FileNamePattern>-->
+			<!--<MinIndex>1</MinIndex>-->
+			<!--<MaxIndex>10</MaxIndex>-->
+		<!--</rollingPolicy>-->
+
+		<!--<triggeringPolicy-->
+			<!--class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+			<!--<MaxFileSize>2MB</MaxFileSize>-->
+		<!--</triggeringPolicy>-->
+	<!--</appender>-->
+	<!---->
+	<!--<appender name="CACHE_LOG"-->
+		<!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+				<!---->
+		<!--<file>${tawassol.logging.mail.directory}/cache.log</file>-->
+
+		<!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+			<!--<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>-->
+		<!--</encoder>-->
+
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
+			<!--<FileNamePattern>${tawassol.logging.mail.directory}/cache.log_%i.zip-->
+			<!--</FileNamePattern>-->
+			<!--<MinIndex>1</MinIndex>-->
+			<!--<MaxIndex>10</MaxIndex>-->
+		<!--</rollingPolicy>-->
+
+		<!--<triggeringPolicy-->
+			<!--class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+			<!--<MaxFileSize>2MB</MaxFileSize>-->
+		<!--</triggeringPolicy>-->
+	<!--</appender>-->
+
+    <!--<appender name="BUSINESS_LAYER_AUDIT"-->
+              <!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<file>${tawassol.logging.application.directory}/business.layer.log</file>-->
+
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
+            <!--<fileNamePattern>${tawassol.logging.application.directory}/business.layer.log_%i.zip</fileNamePattern>-->
+            <!--<minIndex>1</minIndex>-->
+            <!--<maxIndex>10</maxIndex>-->
+        <!--</rollingPolicy>-->
+
+        <!--<triggeringPolicy-->
+                <!--class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+            <!--<maxFileSize>5MB</maxFileSize>-->
+        <!--</triggeringPolicy>-->
+        <!--<encoder>-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.S Z}|%thread|%-5level|%msg%n-->
+            <!--</pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+    <!---->
+     <!--<appender name="INTERCEPTORS_LOG"-->
+              <!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<file>${tawassol.logging.application.directory}/interceptors-resources.log</file>-->
+
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
+            <!--<fileNamePattern>${tawassol.logging.application.directory}/interceptors-resources.log_%i.zip</fileNamePattern>-->
+            <!--<minIndex>1</minIndex>-->
+            <!--<maxIndex>10</maxIndex>-->
+        <!--</rollingPolicy>-->
+
+        <!--<triggeringPolicy-->
+                <!--class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+            <!--<maxFileSize>5MB</maxFileSize>-->
+        <!--</triggeringPolicy>-->
+        <!--<encoder>-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.S Z}|%thread|%-5level|%msg%n-->
+            <!--</pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+    <!---->
+     <!--<appender name="WORKFLOW_LOG"-->
+              <!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<file>${tawassol.logging.application.directory}/workflow.log</file>-->
+
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
+            <!--<fileNamePattern>${tawassol.logging.application.directory}/workflow.log_%i.zip</fileNamePattern>-->
+            <!--<minIndex>1</minIndex>-->
+            <!--<maxIndex>10</maxIndex>-->
+        <!--</rollingPolicy>-->
+
+        <!--<triggeringPolicy-->
+                <!--class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+            <!--<maxFileSize>5MB</maxFileSize>-->
+        <!--</triggeringPolicy>-->
+        <!--<encoder>-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.S Z}|%thread|%-5level|%msg%n-->
+            <!--</pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+
+	<!--<logger name="org.springframework" level="${org.springframework.log.level:-ERROR}" additivity="false">-->
+		<!--<appender-ref ref="STDOUT" />-->
+		<!--<appender-ref ref="FILE" />-->
+	<!--</logger>-->
+
+	<!--<logger name="org.hibernate" level="${hibernate.log.level:-ERROR}" additivity="false">-->
+		<!--<appender-ref ref="STDOUT" />-->
+		<!--<appender-ref ref="FILE" />-->
+	<!--</logger>-->
+	<!---->
+	<!--&lt;!&ndash; show sql requests &ndash;&gt;-->
+	<!--<logger name="org.hibernate.SQL" level="${hibernate.sql.log.level:-ERROR}" />-->
+	<!---->
+	<!--&lt;!&ndash; ehcache &ndash;&gt;-->
+	<!--<logger name="net.sf.ehcache" level="${ehcache.log.level:-ERROR}"/> -->
+	<!---->
+	<!--<logger name="org.apache.cxf.interceptor" level="${org.apache.cxf.log.level:-ERROR}" additivity="false">-->
+		<!--<appender-ref ref="STDOUT" />-->
+		<!--<appender-ref ref="INTERCEPTORS_LOG" />-->
+	<!--</logger>-->
+
+	<!--<logger name="com.salamgaz.tawassol.mail" level="${mail.log.level:-DEBUG}" additivity="false">-->
+		<!--<appender-ref ref="MAIL_LOG" />-->
+	<!--</logger>-->
+
+    <!--<logger name="com.salamgaz.tawassol.supervision" level="${supervision.log.level:-WARN}" additivity="false">-->
+        <!--<appender-ref ref="BUSINESS_LAYER_AUDIT" />-->
+    <!--</logger>-->
+
+	<!--<logger name="com.salamgaz.tawassol.workflow" level="${workflow.log.level:-WARN}" additivity="false">-->
+		<!--<appender-ref ref="WORKFLOW_LOG" />-->
+		<!--<appender-ref ref="STDOUT" />-->
+	<!--</logger>-->
+
+	<!--&lt;!&ndash; By default, the root level is set to ERROR &ndash;&gt;-->
+	<!--<root level="${root.level:-ERROR}">-->
+		<!--<appender-ref ref="STDOUT" />-->
+	<!--</root>-->
+
+<!--</configuration>-->

@@ -32,3 +32,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+tawassol-rest/src/main/resources/static/

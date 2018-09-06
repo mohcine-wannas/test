@@ -1,22 +1,5 @@
 package com.ayouris.tawassol.security.utils;
 
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.cxf.message.Message;
-import org.apache.cxf.phase.PhaseInterceptorChain;
-import org.apache.cxf.transport.http.AbstractHTTPDestination;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Service;
-
 import com.ayouris.tawassol.common.mapper.CustomModelMapper;
 import com.ayouris.tawassol.common.model.bean.CycleBean;
 import com.ayouris.tawassol.common.model.entity.Cycle;
@@ -24,6 +7,22 @@ import com.ayouris.tawassol.common.util.EncodageConstants;
 import com.ayouris.tawassol.common.util.UnicodeStringUtils;
 import com.ayouris.tawassol.security.service.AffectationCycleSecurityService;
 import com.ayouris.tawassol.security.service.CycleSecurityService;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.PhaseInterceptorChain;
+import org.apache.cxf.transport.http.AbstractHTTPDestination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Service;
+import org.springframework.web.util.UrlPathHelper;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class RequestUtil {
@@ -46,12 +45,12 @@ public class RequestUtil {
     	affectationCycleService = affectationCycleServiceAutowired;
     }
     
-    public static List<String> resurceEndPoints = Arrays.asList("tawassol/service", "tawassol/common", "tawassol/admin");
+    public static List<String> resurceEndPoints = Arrays.asList("api", "api/common", "api/admin");
 
     public static List<String> loginEndPoints = Arrays.asList("/authenticate", "/authenticateForm",
             "/authenticateToken", "/authenticatePartner");
 
-    public static final String INDEX_LINK = "/index.html";
+    public static final String INDEX_LINK = "/**";
     public static final String RESOURCES_LINK = "/resources/*";
     public static final String LOGOUT_LINK = "/logout";
     public static final String FREE_LINK = "/__";
@@ -77,19 +76,19 @@ public class RequestUtil {
         response.setCharacterEncoding(EncodageConstants.UTF8);
     }
 
-    public static boolean isRequiresAuthentication(HttpServletRequest request) {
-//        String resourcePath = new UrlPathHelper().getPathWithinApplication(request);
-        if (isLoginRequest(request) || isLogoutRequest(request) || isFreeRequest(request)
-                || "OPTIONS".equalsIgnoreCase(request.getMethod())) {
+    public static boolean isRequiresAuthentication(HttpServletRequest httpRequest) {
+        if (isIndexRequest(httpRequest) ||  isLoginRequest(httpRequest) || isLogoutRequest(httpRequest) || isFreeRequest(httpRequest)
+                || "OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
             return false;
         }
 
         return true; 
     }
 
-    public static boolean isResourcesRequest(String url) {
+    public static boolean isResourcesRequest(HttpServletRequest httpRequest) {
+        String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
         for (String endPoint : resurceEndPoints) {
-            if (url.contains(endPoint)) {
+            if (resourcePath.contains(endPoint)) {
                 return true;
             }
         }
@@ -97,13 +96,12 @@ public class RequestUtil {
     }
 
     public static boolean isIndexRequest(HttpServletRequest httpRequest) {
-        if (new AntPathRequestMatcher(RequestUtil.INDEX_LINK, "GET").matches(httpRequest)
-                || new AntPathRequestMatcher(RequestUtil.RESOURCES_LINK, "GET").matches(httpRequest)) {
+        if ((new AntPathRequestMatcher(RequestUtil.INDEX_LINK, "GET").matches(httpRequest) && !isResourcesRequest(httpRequest))
+                || (new AntPathRequestMatcher(RequestUtil.RESOURCES_LINK, "GET").matches(httpRequest)) && !isResourcesRequest(httpRequest) ){
             return true;
-        } else if (httpRequest.getPathInfo() == null) {
-            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public static boolean isLogoutRequest(HttpServletRequest httpRequest) {

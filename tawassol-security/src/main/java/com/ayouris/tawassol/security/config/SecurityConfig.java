@@ -1,5 +1,8 @@
 package com.ayouris.tawassol.security.config;
 
+import com.ayouris.tawassol.security.filter.Http401UnauthorizedEntryPoint;
+import com.ayouris.tawassol.security.filter.TokenAuthenticationFilter;
+import com.ayouris.tawassol.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +21,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.ayouris.tawassol.security.filter.Http401UnauthorizedEntryPoint;
-import com.ayouris.tawassol.security.filter.TokenAuthenticationFilter;
-import com.ayouris.tawassol.security.service.UserService;
-
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
-    
+
     @Autowired
     public SecurityConfig(UserService userService) {
         super(true);
@@ -45,30 +44,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // we use jwt so that we can disable csrf protection
         http.csrf().disable();
-        
+
         http.antMatcher("/resources/**");
-        
+
         http
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.exceptionHandling().and()
-			.anonymous().and()
-			.servletApi().and()
-			.headers().cacheControl()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling().and()
+                .anonymous().and()
+                .servletApi().and()
+                .headers().cacheControl()
         ;
-        
+
         http.authorizeRequests()
-			.antMatchers("/tawassol/**").authenticated()
-			.antMatchers(HttpMethod.POST, "/tawassol/service/auth").permitAll()
-			.anyRequest().authenticated()
-			.and()
-			.anonymous().disable()
-			.exceptionHandling()
-			.authenticationEntryPoint(new Http401UnauthorizedEntryPoint())
+                .antMatchers("/api/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/auth").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .anonymous().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new Http401UnauthorizedEntryPoint())
         ;
 
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         http.logout().logoutSuccessUrl("/").permitAll();
     }
 
