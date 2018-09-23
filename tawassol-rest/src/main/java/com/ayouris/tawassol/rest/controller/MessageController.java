@@ -78,6 +78,10 @@ public class MessageController extends BaseController {
     public ResponseEntity getAllMessageForParent() throws Exception {
         return new ResponseEntity<>(messageService.getAllMessageForParent(), HttpStatus.OK);
     }
+    @GetMapping("/parent/get-all-favoris")
+    public ResponseEntity getAllFavorisMessageForParent() throws Exception {
+        return new ResponseEntity<>(messageService.getAllFavorisMessageForParent(), HttpStatus.OK);
+    }
 
     @GetMapping("/prof/get-all")
     public ResponseEntity getAllMessageForProf() throws Exception {
@@ -86,7 +90,7 @@ public class MessageController extends BaseController {
 
     @GetMapping("/parent/get-all/{messageType}")
     public ResponseEntity getAllMessageForParentByMessageType(@PathVariable("messageType") MessageType messageType) throws Exception {
-        return new ResponseEntity<>(messageService.getAllMessageForParentByMessageType(messageType), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getAllMessageForParentByMessageType(messageType,false), HttpStatus.OK);
     }
 
     @GetMapping("/admin/get-all/{messageDestinationType}")
@@ -133,6 +137,18 @@ public class MessageController extends BaseController {
     @GetMapping("admin/{id:\\d+}/views")
     public ResponseEntity<List<ViewBean>> getViews(@PathVariable("id") Long id)  {
         return new ResponseEntity<>(messageService.getViewsDetails(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/parent/{id:\\d+}/hide")
+    public ResponseEntity setHide(@PathVariable("id") Long idAffectation) throws Exception {
+        messageService.setHide(idAffectation);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/parent/{id:\\d+}/favoris/{value}")
+    public ResponseEntity setFavoris(@PathVariable("id") Long recipientParentId,@PathVariable("value") Boolean value) throws Exception {
+        messageService.setParentFavoris(recipientParentId, value == null ? false : value);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }
