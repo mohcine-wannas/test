@@ -35,6 +35,7 @@ public final class MessageBean implements Comparable<MessageBean> {
 
     private Long id;
     private Long recipientMessageId;
+    private Long affectationId;
     private UserBean sender;
     private List<AffectationMessageUserBean> recipients;
     private List<AffectationMessageNiveauBean> niveaux;
@@ -49,6 +50,7 @@ public final class MessageBean implements Comparable<MessageBean> {
     private MessageType messageType;
     private UserBean recipient;
     private Boolean seen;
+    private Boolean favoris;
 
     private Date createdOn;
 

@@ -10,6 +10,7 @@ import com.ayouris.tawassol.common.model.bean.ViewBean;
 import com.ayouris.tawassol.common.model.entity.*;
 import com.ayouris.tawassol.common.model.enums.MessageStatus;
 import com.ayouris.tawassol.common.model.enums.MessageType;
+import com.ayouris.tawassol.repository.AffectationMessageUserParentRepository;
 import com.ayouris.tawassol.repository.AffectationMessageUserRepository;
 import com.ayouris.tawassol.repository.MessageRepository;
 import com.ayouris.tawassol.security.utils.SecurityUtils;
@@ -38,6 +39,9 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
 
     @Autowired
     private AffectationMessageUserRepository affectationMessageUserRepository;
+
+    @Autowired
+    private AffectationMessageUserParentRepository affectationMessageUserParentRepository;
 
     @Autowired
     private CustomModelMapper mapper;
@@ -530,10 +534,22 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
         OrderSpecifier<Date> sortOrder = QAffectationMessageUser.affectationMessageUser.createdOn.desc();
         return (List<AffectationMessageUser>) affectationMessageUserRepository.findAll(affectationMessageUser.user.id.eq(user.getId()),sortOrder);
     }
+    private List<AffectationMessageUser> getAllParentFavorisAffectationMessageByUser(User user,Parent parent) {
+
+        QAffectationMessageUser affectationMessageUser = QAffectationMessageUser.affectationMessageUser;
+        OrderSpecifier<Date> sortOrder = QAffectationMessageUser.affectationMessageUser.createdOn.desc();
+        QAffectationMessageUserParent parentRecipient = affectationMessageUser.parentRecipients.any();
+        return (List<AffectationMessageUser>) affectationMessageUserRepository.findAll(affectationMessageUser.user.id.eq(user.getId()).and(parentRecipient.parent.id.eq(parent.getId()).and(parentRecipient.favoris.isTrue())),sortOrder);
+    }
 
     @Override
     public List<MessageBean> getAllMessageForParent() {
-        return getAllMessageForParentByMessageType(null);
+        return getAllMessageForParentByMessageType(null,false);
+    }
+
+    @Override
+    public List<MessageBean> getAllFavorisMessageForParent() {
+        return getAllMessageForParentByMessageType(null,true);
     }
 
     @Override
@@ -572,7 +588,7 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
 
 
     @Override
-    public List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType) {
+    public List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType, boolean onlyFavoris) {
         //  validateIsparent
         List<Message> messages = new ArrayList<>();
 
@@ -585,8 +601,13 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
             if(affectation.getEnabled() != null && affectation.getEnabled()) {
                 Eleve eleve = affectation.getEleve();
                 if(eleve.isEnabled()) {
-                    List<AffectationMessageUser> affectationsMessage = getAllAffectationMessageByUser(eleve);
-                    for(AffectationMessageUser affectationMessage : affectationsMessage) {
+                    List<AffectationMessageUser> affectationsMessage;
+                    if(onlyFavoris) {
+                        affectationsMessage = getAllParentFavorisAffectationMessageByUser(eleve, parent);
+                    }else {
+                        affectationsMessage = getAllAffectationMessageByUser(eleve);
+                    }
+                    messagesFor : for(AffectationMessageUser affectationMessage : affectationsMessage) {
                         final Message message1 = affectationMessage.getMessage();
                         if(message1 == null || message1.getMessageStatus() != MessageStatus.VALIDE) {
                             continue;
@@ -609,13 +630,18 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
                                 if (affectationMessageUserParent.getParent() == null || affectationMessageUserParent.getParent().getId() != parent.getId()) {
                                     continue;
                                 }
+                                if(affectationMessageUserParent.getHide() != null && affectationMessageUserParent.getHide()) {
+                                    continue messagesFor;
+                                }
                                 message.setSeen(affectationMessageUserParent.getSeen());
+                                message.setFavoris(affectationMessageUserParent.getFavoris());
                                 affectationMessageUserParent.setSeenDate(LocalDateTime.now());
+                                message.setRecipientMessageId(affectationMessageUserParent.getId());
                                 break;
                             }
                         }
 
-                        message.setRecipientMessageId(affectationMessage.getId());
+                        message.setAffectationId(affectationMessage.getId());
                         messageBeans.add(message);
                     }
                 }
@@ -689,6 +715,30 @@ public class MessageServiceImpl extends GenericServiceImpl2<Message,Long,Message
                 }
             }
             affectationMessageUserRepository.save(affectation);
+        }
+    }
+
+    @Override
+    public void setHide(Long idAffectation) {
+        AffectationMessageUserParent affectation = affectationMessageUserParentRepository.findOne(idAffectation);
+        if (affectation != null) {
+            User currentParent = SecurityUtils.getCurrentUser();
+            if (affectation.getParent().getId() == currentParent.getId()) {
+                affectation.setHide(true);
+                affectationMessageUserParentRepository.save(affectation);
+            }
+        }
+    }
+
+    @Override
+    public void setParentFavoris(Long parentRecipientId, boolean value) {
+        AffectationMessageUserParent affectation =affectationMessageUserParentRepository.findOne(parentRecipientId);
+        if(affectation != null) {
+                User currentParent = SecurityUtils.getCurrentUser();
+                if(affectation.getParent().getId() == currentParent.getId()) {
+                    affectation.setFavoris(value);
+                    affectationMessageUserParentRepository.save(affectation);
+                }
         }
     }
     @Override

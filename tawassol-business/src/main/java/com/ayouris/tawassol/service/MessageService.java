@@ -45,7 +45,9 @@ public interface MessageService extends GenericService<Message, Long> {
     void setSeen(Long idAffectation);
 
 
-    List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType);
+    List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType, boolean onlyFavoris);
+
+    List<MessageBean> getAllFavorisMessageForParent();
 
     List<MessageBean> getAllMessageByMessageDestinationType(MessageDestinationType messageDestinationType);
 
@@ -53,6 +55,10 @@ public interface MessageService extends GenericService<Message, Long> {
 
     void deleteMessage(Long id) throws Exception;
 
-     List<ViewBean> getViewsDetails(Long id);
+    void setHide(Long idAffectation);
+
+    void setParentFavoris(Long parentRecipientId, boolean value);
+
+    List<ViewBean> getViewsDetails(Long id);
 
 }

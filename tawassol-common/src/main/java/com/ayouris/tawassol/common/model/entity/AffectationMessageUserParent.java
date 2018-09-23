@@ -23,6 +23,8 @@ public class AffectationMessageUserParent extends RefEntity {
 	private AffectationMessageUser affectationMessageUser;
 	private Boolean seen = false;
 	private LocalDateTime seenDate;
+	private Boolean hide = false;
+	private Boolean favoris = false;
 
 	public AffectationMessageUserParent() {}
 
@@ -41,6 +43,12 @@ public class AffectationMessageUserParent extends RefEntity {
 
 	public Boolean getSeen() {
 		return seen;
+	}
+	public Boolean getFavoris() {
+		return favoris;
+	}
+	public Boolean getHide() {
+		return hide;
 	}
 
 	public LocalDateTime getSeenDate() {
