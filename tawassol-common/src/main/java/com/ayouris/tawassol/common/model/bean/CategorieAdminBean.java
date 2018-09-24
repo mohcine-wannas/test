@@ -1,6 +1,7 @@
 package com.ayouris.tawassol.common.model.bean;
 
 import com.ayouris.tawassol.common.model.entity.CategorieAdmin;
+import com.ayouris.tawassol.common.model.enums.CategoryAdminType;
 import com.google.common.reflect.TypeToken;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,4 +29,6 @@ public class CategorieAdminBean implements Serializable {
     private String libelle;
 
     private Long id;
+
+    private CategoryAdminType type;
 }

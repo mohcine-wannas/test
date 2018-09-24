@@ -41,11 +41,12 @@ public class MessageModelServiceImpl implements MessageModelService {
     public List<MessageModelAdminBean> findAllByCategorieAdminId(Long id) {
 
         QMessageModel qMessageModel = QMessageModel.messageModel;
-        OrderSpecifier<Date> sortOrder = qMessageModel.createdOn.desc();
+        OrderSpecifier<Date> sortOrderDate = qMessageModel.createdOn.desc();
+        OrderSpecifier<Boolean> sortOrderFige = qMessageModel.fige.desc();
 
         List<MessageModel> models = (List<MessageModel>) messageModelRepository.findAll(qMessageModel.categorieAdmin.id.eq(id).
                 and(qMessageModel.fige.isTrue().or(qMessageModel.fige.isFalse()
-                        .and(qMessageModel.school.id.eq(SecurityUtils.getCurrentSchool().getId())))), sortOrder);
+                        .and(qMessageModel.school.id.eq(SecurityUtils.getCurrentSchool().getId())))), sortOrderFige, sortOrderDate);
 
         return mapper.map(models, MessageModelAdminBean.LIST_BEAN_TYPE);
     }
@@ -54,11 +55,12 @@ public class MessageModelServiceImpl implements MessageModelService {
     public List<MessageModelProfBean> findAllByCategorieProfId(Long id) {
 
         QMessageModel qMessageModel = QMessageModel.messageModel;
-        OrderSpecifier<Date> sortOrder = qMessageModel.createdOn.desc();
+        OrderSpecifier<Date> sortOrderDate = qMessageModel.createdOn.desc();
+        OrderSpecifier<Boolean> sortOrderFige = qMessageModel.fige.desc();
 
         List<MessageModel> models = (List<MessageModel>) messageModelRepository.findAll(qMessageModel.categorieProf.id.eq(id).
                 and((qMessageModel.fige.isTrue().and(qMessageModel.school.id.eq(SecurityUtils.getCurrentSchool().getId()))).or(qMessageModel.fige.isFalse()
-                        .and(qMessageModel.user.id.eq(SecurityUtils.getCurrentUser().getId())))), sortOrder);
+                        .and(qMessageModel.user.id.eq(SecurityUtils.getCurrentUser().getId())))), sortOrderFige, sortOrderDate);
 
         return mapper.map(models, MessageModelProfBean.LIST_BEAN_TYPE);
     }

@@ -69,6 +69,7 @@ public class Message extends RefEntity {
         return forDate;
     }
 
+    @Column(columnDefinition = "TEXT")
     public String getMessage() {
         return message;
     }
