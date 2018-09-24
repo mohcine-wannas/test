@@ -44,4 +44,10 @@ spring:
     mail.directory: /appli/tawassol/logs/mail 
   
 logging:
-  config: classpath:logback.xml    
+  config: classpath:logback.xml
+
+tawassol:
+  upload:
+    logo:
+      path: c:/test
+

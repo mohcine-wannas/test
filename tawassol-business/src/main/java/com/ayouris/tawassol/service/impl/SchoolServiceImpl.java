@@ -18,6 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -102,6 +107,24 @@ public class SchoolServiceImpl extends GenericServiceImpl2<School, Long, SchoolB
     public School findByCode(String codeSchool) {
         Optional<School> school = schoolRepository.findByCode(codeSchool);
         return school.orElse(null);
+    }
+
+    @Override
+    public void updateLogo(InputStream is) throws IOException {
+        School school =  SecurityUtils.getCurrentSchool();
+        //Path folderPath = Paths.get(propertiesHolder.getUploadPath());
+        Path folderPath = Paths.get("c:/test"); //TODO
+        if(!folderPath.toFile().exists()) {
+            Files.createDirectories(folderPath);
+        }
+        String filename = "logo_" + school.getCode() + ".jpg";
+        java.nio.file.Path path = Paths.get(folderPath.toString(),filename);
+        Files.deleteIfExists(path);
+
+        Files.copy(is, path);
+        school.setLogoPath(path.toRealPath().toString());
+        save(school);
+
     }
 
 }
