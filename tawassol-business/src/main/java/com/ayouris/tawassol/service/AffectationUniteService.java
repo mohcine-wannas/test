@@ -13,4 +13,6 @@ public interface AffectationUniteService extends GenericService<AffectationUnite
 
     List<AffectationUniteBean> getAffectationsUnite();
     List<AffectationUniteBean> getAffectationsUniteBySchoolCodeAndByCycleIdAndCurrentAnneeScolaire(String schoolCode, Long cycleId);
+
+    List<AffectationUniteBean> getAffectationsUniteByCurrentProf();
 }

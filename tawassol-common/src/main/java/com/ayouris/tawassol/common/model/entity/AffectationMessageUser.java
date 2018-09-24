@@ -5,6 +5,8 @@ import com.ayouris.tawassol.common.model.entity.generic.RefEntity;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 
@@ -20,6 +22,8 @@ public class AffectationMessageUser extends RefEntity {
 	private User user;
 	private Message message;
 	private Boolean seen = false;
+	private List<AffectationMessageUserParent> parentRecipients;
+	private LocalDateTime seenDate;
 
 	public AffectationMessageUser() {}
 
@@ -38,5 +42,15 @@ public class AffectationMessageUser extends RefEntity {
 
 	public Boolean getSeen() {
 		return seen;
+	}
+
+	@OneToMany(cascade = {CascadeType.MERGE,CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true,
+			mappedBy = "affectationMessageUser")
+	public List<AffectationMessageUserParent> getParentRecipients() {
+		return parentRecipients;
+	}
+
+	public LocalDateTime getSeenDate() {
+		return seenDate;
 	}
 }

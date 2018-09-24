@@ -31,6 +31,12 @@ public class AffectationUniteController extends BaseController {
                 .getAffectationsUnite(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/by-current-prof")
+    public ResponseEntity<List<AffectationUniteBean>> getAffectationsUniteofCurrentProf() throws Exception {
+        return new ResponseEntity<>(affectationUniteService
+                .getAffectationsUniteByCurrentProf(), HttpStatus.OK);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateAffectationsUnite(@RequestBody List<AffectationUniteBean> affectation) throws Exception {

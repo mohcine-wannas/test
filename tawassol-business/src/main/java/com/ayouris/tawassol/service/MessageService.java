@@ -2,47 +2,63 @@ package com.ayouris.tawassol.service;
 
 import java.util.List;
 
-import com.ayouris.tawassol.common.enums.MessageType;
+import com.ayouris.tawassol.common.enums.MessageDestinationType;
 import com.ayouris.tawassol.common.model.bean.MessageBean;
+import com.ayouris.tawassol.common.model.bean.ViewBean;
 import com.ayouris.tawassol.common.model.entity.Message;
+import com.ayouris.tawassol.common.model.enums.MessageStatus;
+import com.ayouris.tawassol.common.model.enums.MessageType;
 
 /**
- * 
  * @author m.wannas
- *
  */
 
-public interface MessageService extends GenericService<Message,Long> {
+public interface MessageService extends GenericService<Message, Long> {
 
 
-	List<MessageBean> getAll();
+    List<MessageBean> getAll();
 
-	List<MessageBean> getAllForValidation();
+    List<MessageBean> getAllForValidation();
 
-	List<MessageBean> getAllProfMessages(Boolean valid);
+    List<MessageBean> getAllProfMessages(Boolean valid);
 
-	List<MessageBean> getAllBySenderId(Long id);
+    List<MessageBean> getAllProfMessages(MessageStatus messageStatus);
 
-	void sendMessage(MessageBean messageBean); //TODO DELETE
+    List<MessageBean> getAllBySenderId(Long id);
 
-	void sendAdminMessage(MessageBean messageBean);
+    void sendMessage(MessageBean messageBean); //TODO DELETE
 
-	void sendAdminMessageToProf(MessageBean messageBean);
+    void sendAdminMessage(MessageBean messageBean);
 
-	void sendProfMessage(MessageBean messageBean);
+    void sendAdminMessageToProf(MessageBean messageBean);
 
-	void validateMessage(Long messageId) throws Exception;
+    void sendProfMessage(MessageBean messageBean);
 
-	void enableMessage(Long messageId) throws Exception;
+    void validateMessage(Long messageId) throws Exception;
 
-	List<MessageBean> getAllMessageForParent();
+    void enableMessage(Long messageId) throws Exception;
 
-	List<MessageBean> getAllMessageForProf();
+    List<MessageBean> getAllMessageForParent();
 
-	void setSeen(Long idAffectation);
+    List<MessageBean> getAllMessageForProf();
 
-	List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType);
+    void setSeen(Long idAffectation);
 
-	void deleteMessage(Long id) throws Exception;
+
+    List<MessageBean> getAllMessageForParentByMessageType(MessageType messageType, boolean onlyFavoris);
+
+    List<MessageBean> getAllFavorisMessageForParent();
+
+    List<MessageBean> getAllMessageByMessageDestinationType(MessageDestinationType messageDestinationType);
+
+    void rejectMessage(Long id) throws Exception;
+
+    void deleteMessage(Long id) throws Exception;
+
+    void setHide(Long idAffectation);
+
+    void setParentFavoris(Long parentRecipientId, boolean value);
+
+    List<ViewBean> getViewsDetails(Long id);
 
 }

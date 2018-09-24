@@ -40,6 +40,7 @@ public class School extends RefEntity {
 	private String siteWeb;
 	private String tel;
 	private String tel2;
+	private String logoPath;
 	
 	private Ville ville;
 	private Pays pays;
@@ -72,6 +73,9 @@ public class School extends RefEntity {
 	}
 	public String getTel2() {
 		return tel2;
+	}
+	public String getLogoPath() {
+		return logoPath;
 	}
 	
     @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.LAZY, orphanRemoval=true,
