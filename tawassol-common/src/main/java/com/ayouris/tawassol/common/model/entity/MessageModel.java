@@ -51,7 +51,7 @@ public class MessageModel extends RefEntity {
         return titre;
     }
 
-    @Column(length = 10000)
+    @Column(columnDefinition = "TEXT")
     public String getMessage() {
         return message;
     }

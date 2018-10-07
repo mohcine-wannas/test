@@ -1,11 +1,17 @@
 package com.ayouris.tawassol.security.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
+import com.ayouris.tawassol.admin.model.entity.Organization;
+import com.ayouris.tawassol.admin.model.entity.User;
+import com.ayouris.tawassol.common.mapper.CustomModelMapper;
+import com.ayouris.tawassol.common.model.bean.SchoolBean;
+import com.ayouris.tawassol.common.model.entity.AnneeScolaire;
+import com.ayouris.tawassol.common.model.entity.Cycle;
+import com.ayouris.tawassol.common.model.entity.School;
+import com.ayouris.tawassol.security.model.*;
+import com.ayouris.tawassol.security.service.AffectationCycleSecurityService;
+import com.ayouris.tawassol.security.service.AnneeScolaireSecurityService;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,20 +21,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.ayouris.tawassol.admin.model.entity.Organization;
-import com.ayouris.tawassol.admin.model.entity.User;
-import com.ayouris.tawassol.common.mapper.CustomModelMapper;
-import com.ayouris.tawassol.common.model.bean.SchoolBean;
-import com.ayouris.tawassol.common.model.entity.AnneeScolaire;
-import com.ayouris.tawassol.common.model.entity.Cycle;
-import com.ayouris.tawassol.common.model.entity.School;
-import com.ayouris.tawassol.security.model.MemberDetails;
-import com.ayouris.tawassol.security.model.PermissionModel;
-import com.ayouris.tawassol.security.model.SchoolDetails;
-import com.ayouris.tawassol.security.model.UserContext;
-import com.ayouris.tawassol.security.model.UserContextResponse;
-import com.ayouris.tawassol.security.service.AffectationCycleSecurityService;
-import com.ayouris.tawassol.security.service.AnneeScolaireSecurityService;
+import javax.annotation.PostConstruct;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Utility class for Spring Security.
@@ -227,6 +225,39 @@ public final class SecurityUtils {
         MemberDetails details = new MemberDetails();
         SchoolBean school = mapper.map(member.getSchool(),SchoolBean.class);
 
+        if (StringUtils.isNotBlank(school.getLogoPath())) {
+
+
+            FileInputStream fileInputStreamReader = null;
+            try {
+                File file = new File(school.getLogoPath());
+                if(file.exists()) {
+                   String ext =  FilenameUtils.getExtension(file.getName());
+                   if( ext.equals("jpg") || ext.equals("png") || ext.equals("jpeg")) {
+                       String preappend = "data:image/" + ext +";base64,";
+                       fileInputStreamReader = new FileInputStream(file);
+                       byte[] bytes = new byte[(int) file.length()];
+                       fileInputStreamReader.read(bytes);
+                       school.setLogoPath(new String(preappend + Base64.getEncoder().encodeToString(bytes)));
+                   } else {
+                       school.setLogoPath(StringUtils.EMPTY);
+                   }
+                } else {
+                    school.setLogoPath(StringUtils.EMPTY);
+                }
+
+            } catch (IOException e) {
+                school.setLogoPath(StringUtils.EMPTY);
+            } finally {
+                try {
+                    if(fileInputStreamReader != null) {
+                        fileInputStreamReader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         // Organisation info
        // Organization organization = member.getOrganization();
         

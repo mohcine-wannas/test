@@ -41,8 +41,10 @@ public class SchoolBean implements Serializable{
 	private String siteWeb;
 	private String tel;
 	private String tel2;
+	private String logoPath;
 	private VilleBean ville;
 	private PaysBean pays;
+
 	
 	private List<CycleBean> cycles;
 
